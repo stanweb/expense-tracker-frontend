@@ -1,3 +1,5 @@
+import { ElementType } from "react";
+
 export interface ParsedTransaction {
     transactionId: string | null;
     amount: number;
@@ -8,18 +10,61 @@ export interface ParsedTransaction {
     rawMessage: string;
 }
 
-
-export interface RootState {
-    transactions: Transactions;
-    dateRange: DateRange;
+export interface OverviewData {
+    totalSpent: number;
+    transactionCost: number;
+    categoriesCount: number;
+    transactionsCount: number;
 }
 
+export interface RootState {
+    transactions: TransactionsState;
+    dateRange: DateRange;
+    overview: OverviewState;
+}
 
-interface Transactions {
-    items: any[];
+interface TransactionsState {
+    items: UiTransaction[];
+    loading: boolean;
+    error: string | null;
+}
+
+interface OverviewState {
+    data: OverviewData | null;
+    loading: boolean;
+    error: string | null;
 }
 
 interface DateRange {
     fromDate: string; // ISO string
     toDate: string;   // ISO string
+}
+
+export interface ApiTransaction {
+    id: number
+    amount: number
+    date: string
+    type: string
+    categoryId: number
+    recipient: string
+    categoryName?: string
+    categoryIcon: string
+}
+
+export interface UiTransaction {
+    id: number
+    name: string
+    category?: string
+    amount: number
+    date: string // "Today", "Yesterday", etc.
+    recipient?: string
+    categoryName?: string
+    icon: string
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    description: string;
+    categoryIcon: string | null;
 }

@@ -3,6 +3,7 @@
 import { BarChart3, Settings, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {DateRangePicker} from "@/components/DateRangePicker/date-range-picker";
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export function DashboardHeader() {
   return (
@@ -25,6 +26,7 @@ export function DashboardHeader() {
           <Button variant="outline" size="icon">
             <Settings className="h-4 w-4" />
           </Button>
+          <ThemeToggle />
         </div>
       </div>
     </header>

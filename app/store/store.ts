@@ -14,16 +14,18 @@ import {
 
 import transactionsReducer from "./transactionSlice";
 import dateRangeReducer from "./dateSlice";
+import overviewReducer from "./overviewSlice";
 
 const rootReducer = combineReducers({
     transactions: transactionsReducer,
     dateRange: dateRangeReducer,
+    overview: overviewReducer,
 });
 
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["transactions", "dateRange"],
+    whitelist: ["transactions", "dateRange", "overview"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -5,9 +5,11 @@ import { DashboardHeader } from '@/components/dashboard-header'
 import { SpendingOverview } from '@/components/spending-overview'
 import { SpendingChart } from '@/components/spending-chart'
 import { CategoryBreakdown } from '@/components/category-breakdown'
-import { TransactionsList } from '@/components/transactions-list'
+import { TransactionsList } from '@/components/user-transactions-components/transactions-list'
 import { TrendChart } from '@/components/trend-chart'
 import {DateRangePicker} from "@/components/DateRangePicker/date-range-picker";
+import {useSelector} from "react-redux";
+import {RootState} from "@/Interfaces/Interfaces";
 
 interface DashboardData {
   totalSpent: number
@@ -17,36 +19,9 @@ interface DashboardData {
 }
 
 export default function Dashboard() {
-  const [data, setData] = useState<DashboardData>({
-    totalSpent: 0,
-    transactionCost: 0,
-    categoriesCount: 0,
-    transactionsCount: 0,
-  })
-  const [isLoading, setIsLoading] = useState(true)
+    const { loading, } = useSelector((state: RootState) => state.overview);
 
-  useEffect(() => {
-    // Simulated API call with sample data
-    const fetchData = async () => {
-      try {
-        // Replace with actual API calls to your backend
-        setData({
-          totalSpent: 156389.5,
-          transactionCost: 386.75,
-          categoriesCount: 12,
-          transactionsCount: 248,
-        })
-      } catch (error) {
-        console.error('Failed to fetch dashboard data:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -64,7 +39,7 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-8 space-y-8">
           <DateRangePicker/>
         {/* Overview Cards */}
-          <SpendingOverview data={data} />
+          <SpendingOverview />
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

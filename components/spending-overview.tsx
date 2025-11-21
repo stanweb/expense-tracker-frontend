@@ -2,57 +2,13 @@
 
 import { Card, CardContent } from '@/components/ui/card'
 import { TrendingUp, Wallet, Tag, ArrowUpRight } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import axiosClient from "@/utils/axioClient"
-import {useSelector} from "react-redux";
-import {RootState} from "@/Interfaces/Interfaces";
-
-interface OverviewData {
-    totalSpent: number
-    transactionCost: number
-    categoriesCount: number
-    transactionsCount: number
-}
+import { useSelector } from "react-redux";
+import { RootState } from "@/Interfaces/Interfaces";
+import { ActiveCategoryItem } from "@/components/active-category-item";
 
 export function SpendingOverview() {
-    const [data, setData] = useState<OverviewData | null>(null)
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const { data, loading, error } = useSelector((state: RootState) => state.overview);
 
-    //Get Dates
-    const { fromDate, toDate } = useSelector((state:RootState) => state.dateRange)
-
-    useEffect(() => {
-        const fetchSpendingData = async () => {
-            try {
-                setLoading(true)
-                setError(null)
-                const from = fromDate ?? ""
-                const to = toDate ?? ""
-
-                const response = await axiosClient.get(
-                    `/users/1/summary-overview`,
-                    {
-                        params: {
-                            from,
-                            to,
-                        },
-                    }
-                )
-
-                setData(response.data)
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch data')
-                console.error('Error fetching spending data:', err)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchSpendingData()
-    }, [fromDate, toDate]) // ⬅️ refetch whenever user changes dates
-
-    // Loading state
     if (loading) {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -71,7 +27,6 @@ export function SpendingOverview() {
         )
     }
 
-    // Error state
     if (error || !data) {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -126,33 +81,17 @@ export function SpendingOverview() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {metrics.map((metric, index) => {
-                const Icon = metric.icon
-                return (
-                    <Card key={index} className="bg-card hover:bg-card/80 transition-colors">
-                        <CardContent className="pt-6">
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <p className="text-sm font-medium text-foreground/60 mb-2">
-                                        {metric.label}
-                                    </p>
-                                    <p className="text-3xl font-bold text-foreground">{metric.value}</p>
-                                    <p
-                                        className={`text-xs mt-2 ${
-                                            metric.trendUp ? 'text-chart-2' : 'text-destructive'
-                                        }`}
-                                    >
-                                        {metric.trend}
-                                    </p>
-                                </div>
-                                <div className={`p-3 rounded-lg bg-gradient-to-br ${metric.color}`}>
-                                    <Icon className="h-5 w-5 text-primary" />
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                )
-            })}
+            {metrics.map((metric, index) => (
+                <ActiveCategoryItem
+                    key={index}
+                    label={metric.label}
+                    value={metric.value}
+                    icon={metric.icon}
+                    color={metric.color}
+                    trend={metric.trend}
+                    trendUp={metric.trendUp}
+                />
+            ))}
         </div>
     )
 }
