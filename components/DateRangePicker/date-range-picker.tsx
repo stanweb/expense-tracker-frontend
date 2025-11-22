@@ -92,9 +92,10 @@ export function DateRangePicker(): JSX.Element {
     }, [range]);
 
     return (
-        <Card className="bg-card">
+        <Card className="bg-card px-5">
             <div className="flex flex-col gap-3">
-                <Label className="px-1 text-sm font-medium">Date Range</Label>
+                <Label className="font-medium">Date Range</Label>
+                <Label className="text-sm font-normal text-muted-foreground">Select the date for your transactions</Label>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button

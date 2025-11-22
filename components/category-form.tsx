@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Category } from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
-import * as Icons from "lucide-react";
 import {Textarea} from "@/components/ui/textarea";
 
 interface CategoryFormProps {
@@ -50,7 +49,7 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
         })
     }
     
-    const iconList = Object.keys(Icons).filter(key => typeof Icons[key as keyof typeof Icons] === 'object');
+    // const iconList = Object.keys(Icons).filter(key => typeof Icons[key as keyof typeof Icons] === 'object');
 
 
     return (
@@ -71,25 +70,25 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
                         <Label htmlFor="description">Description</Label>
                         <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="bg-input text-foreground border-input" />
                     </div>
-                    <div>
-                        <Label>Icon</Label>
-                        <div className="grid grid-cols-8 gap-2 h-32 overflow-y-auto border p-2 rounded-md border-border">
-                            {iconList.map((iconName) => {
-                                const Icon = Icons[iconName as keyof typeof Icons] as React.ElementType;
-                                return (
-                                    <Button
-                                        key={iconName}
-                                        variant={selectedIcon === iconName ? "default" : "outline"}
-                                        size="icon"
-                                        onClick={() => setSelectedIcon(iconName)}
-                                        className={selectedIcon === iconName ? "" : "bg-secondary border-border text-secondary-foreground"}
-                                    >
-                                        <Icon className="h-4 w-4" />
-                                    </Button>
-                                );
-                            })}
-                        </div>
-                    </div>
+                    {/*<div>*/}
+                    {/*    <Label>Icon</Label>*/}
+                    {/*    <div className="grid grid-cols-8 gap-2 h-32 overflow-y-auto border p-2 rounded-md border-border">*/}
+                    {/*        {iconList.map((iconName) => {*/}
+                    {/*            const Icon = Icons[iconName as keyof typeof Icons] as React.ElementType;*/}
+                    {/*            return (*/}
+                    {/*                <Button*/}
+                    {/*                    key={iconName}*/}
+                    {/*                    variant={selectedIcon === iconName ? "default" : "outline"}*/}
+                    {/*                    size="icon"*/}
+                    {/*                    onClick={() => setSelectedIcon(iconName)}*/}
+                    {/*                    className={selectedIcon === iconName ? "" : "bg-secondary border-border text-secondary-foreground"}*/}
+                    {/*                >*/}
+                    {/*                    <Icon className="h-4 w-4" />*/}
+                    {/*                </Button>*/}
+                    {/*            );*/}
+                    {/*        })}*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
                 <DialogFooter>
                     <Button variant="ghost" onClick={onClose}>Cancel</Button>

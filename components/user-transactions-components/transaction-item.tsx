@@ -3,16 +3,8 @@ import * as Icons from 'lucide-react'
 import { UiTransaction } from "@/Interfaces/Interfaces";
 import {LucideIcon} from "lucide-react";
 
-const getIcon = (iconName: string): LucideIcon => {
-    if(iconName != null && iconName.length > 1) return Icons[iconName as keyof typeof Icons] as LucideIcon
-    return Icons.CreditCard
-};
-
-
 export const TransactionItem = ({ transaction }: { transaction: UiTransaction }) => {
-    const Icon = getIcon(transaction.icon);
-    console.log(transaction.icon)
-
+    const Icon = Icons[transaction.icon as keyof typeof Icons] as LucideIcon || Icons.CreditCard;
 
     return (
         <div

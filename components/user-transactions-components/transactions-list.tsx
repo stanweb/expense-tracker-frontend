@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from "@/components/ui/button";
 import { AddTransactionModal } from "@/components/user-transactions-components/add-transaction-modal";
-import ConfirmTransactionModal from "@/components/confrim-transaction";
+import ConfirmTransactionModal from "@/components/user-transactions-components/confrim-transaction";
 import { ParsedTransaction, RootState } from "@/Interfaces/Interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
@@ -31,7 +31,6 @@ export function TransactionsList() {
                 console.error("Error parsing transaction:", error);
             });
     };
-    console.log(transactions)
     
     const handleSuccess = () => {
         setShowConfirmTransactionModal(false);

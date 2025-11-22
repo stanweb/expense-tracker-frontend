@@ -10,10 +10,9 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectItem, SelectValue, SelectContent } from "@/components/ui/select";
 import axioClient from "@/utils/axioClient";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 interface Category {
     id: number;
@@ -78,45 +77,37 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
                     <DialogTitle>Confirm Transaction</DialogTitle>
                     <DialogDescription>Review the extracted details and confirm the transaction.</DialogDescription>
                 </DialogHeader>
-
                 <div className="mt-2">
                     <div className="border rounded-lg overflow-hidden">
-                        <table className="w-full text-sm">
-                            <tbody>
-                            {transactionData.map((item, index) => (
-                                <tr key={index} className="border-b last:border-b-0">
-                                    <td className="px-4 py-3 font-medium bg-gray-900 w-1/3">
-                                        {item.label}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        {item.value}
-                                    </td>
-                                </tr>
-                            ))}
-                            <tr className="border-b last:border-b-0">
-                                <td className="px-4 py-3 font-medium bg-gray-900 w-1/3">
-                                    Category
-                                </td>
-                                <td className="px-4 py-3">
-                                    <Select onValueChange={setSelectedCategory} value={selectedCategory}>
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select a category" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {categories.map((c) => (
-                                                <SelectItem key={c.id} value={String(c.id)}>
-                                                    {c.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <Table>
+                            <TableBody>
+                                {transactionData.map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell className="font-medium w-1/3 whitespace-pre-wrap break-words">{item.label}</TableCell>
+                                        <TableCell className="whitespace-pre-wrap break-words">{item.value}</TableCell>
+                                    </TableRow>
+                                ))}
+                                <TableRow>
+                                    <TableCell className="font-medium w-1/3">Category</TableCell>
+                                    <TableCell>
+                                        <Select onValueChange={setSelectedCategory} value={selectedCategory}>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select a category" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {categories.map((c) => (
+                                                    <SelectItem key={c.id} value={String(c.id)}>
+                                                        {c.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </div>
                 </div>
-
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose} disabled={isLoading}>
                         Cancel

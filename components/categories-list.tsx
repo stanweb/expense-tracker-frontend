@@ -13,7 +13,6 @@ import { Category } from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
 import axioClient from "@/utils/axioClient";
 import { CategoryForm } from "@/components/category-form";
-import {Dropdown} from "react-day-picker";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -102,7 +101,7 @@ export function CategoriesList() {
                     />
                 </div>
             </div>
-            <Table className="bg-gray-800 rounded-lg">
+            <Table className="rounded-lg">
                 <TableHeader>
                     <TableRow>
                         <TableHead>Name</TableHead>
@@ -111,7 +110,7 @@ export function CategoriesList() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {categories.map((category) => (
+                    {filteredCategories.map((category) => (
                         <TableRow key={category.id}>
                             <TableCell>{category.name}</TableCell>
                             <TableCell>{category.description}</TableCell>
