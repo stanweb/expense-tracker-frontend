@@ -18,26 +18,13 @@ export interface OverviewData {
 }
 
 export interface RootState {
-    transactions: TransactionsState;
-    dateRange: DateRange;
-    overview: OverviewState;
+    dateRange: AppDateRangeState;
 }
 
-interface TransactionsState {
-    items: UiTransaction[];
-    loading: boolean;
-    error: string | null;
-}
-
-interface OverviewState {
-    data: OverviewData | null;
-    loading: boolean;
-    error: string | null;
-}
-
-interface DateRange {
+export interface AppDateRangeState {
     fromDate: string; // ISO string
     toDate: string;   // ISO string
+    transactionType: 'all' | 'spent' | 'received';
 }
 
 export interface ApiTransaction {
@@ -59,7 +46,7 @@ export interface UiTransaction {
     date: string // "Today", "Yesterday", etc.
     recipient?: string
     categoryName?: string
-    icon: string
+    icon: ElementType
 }
 
 export interface Category {
@@ -67,4 +54,25 @@ export interface Category {
     name: string;
     description: string;
     categoryIcon: string | null;
+}
+
+export interface Budget {
+    id: number;
+    amount: number;
+    month: number;
+    year: number;
+    userId: number;
+    categoryId: number;
+    categoryName?: string;
+}
+
+export interface TopSpender {
+    recipient: string;
+    totalSpent: number;
+}
+
+export interface TrendData {
+    week: string;
+    spending: number;
+    forecast: number;
 }

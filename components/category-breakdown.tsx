@@ -1,46 +1,81 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
-import {useEffect, useState} from "react";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
+import { useEffect, useState } from "react";
 import axioClient from "@/utils/axioClient";
+import {COLORS} from "../utils/constants"
+import { useSelector } from "react-redux";
+import { RootState } from "@/Interfaces/Interfaces";
+import Link from "next/link";
+import {Button} from "@/components/ui/button";
+
 
 
 export function CategoryBreakdown() {
+    const { fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const [categoryData, setCategoryData] = useState<any[]>([])
 
-    const [categoryData, setCategoryData] = useState([])
+    useEffect(() => {
+        if (fromDate && toDate) {
+            axioClient.get("users/1/category/summary", {
+                params: {
+                    startDate: fromDate,
+                    endDate: toDate
+                }
+            })
+                .then((res) => {
+                    const data = res.data;
+                    const threshold = 2;
+                    const mainCategories = data.filter((item: any) => item.value >= threshold);
+                    const otherValue = data
+                        .filter((item: any) => item.value < threshold)
+                        .reduce((acc: number, item: any) => acc + item.value, 0);
 
-    useEffect(()=> {
-        axioClient.get("users/1/category/summary")
-            .then((res)=> setCategoryData(res.data) )
-    }, [])
-  return (
-    <Card className="bg-card">
-      <CardHeader>
-        <CardTitle>Category Distribution</CardTitle>
-        <CardDescription>Spending breakdown by category</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={categoryData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={({ name, value }) => `${name}: ${value}%`}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {categoryData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={"oklch(0.205 0 0)"} />
-              ))}
-            </Pie>
-            <Tooltip formatter={(value) => `${value}%`} />
-          </PieChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
-  )
+                    if (otherValue > 0) {
+                        setCategoryData([...mainCategories, { name: 'Others', value: otherValue }]);
+                    } else {
+                        setCategoryData(mainCategories);
+                    }
+                })
+        }
+    }, [fromDate, toDate])
+
+    return (
+        <Card className="bg-card">
+            <CardHeader className={"flex flex-row items-center justify-between"}>
+                <div>
+                    <CardTitle>Category Distribution</CardTitle>
+                    <CardDescription>Spending breakdown by category</CardDescription>
+                </div>
+                <div className="text-center">
+                    <Link href="/top-spenders" passHref>
+                        <Button variant="default">View Top Spenders</Button>
+                    </Link>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                        <Pie
+                            data={categoryData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, value }) => `${name}: ${value.toFixed(2)}%`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                        >
+                            {categoryData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip formatter={(value: number) => `${value.toFixed(2)}%`} />
+                    </PieChart>
+                </ResponsiveContainer>
+
+            </CardContent>
+        </Card>
+    )
 }

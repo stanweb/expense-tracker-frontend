@@ -112,8 +112,8 @@ export function CategoriesList() {
                 <TableBody>
                     {filteredCategories.map((category) => (
                         <TableRow key={category.id}>
-                            <TableCell>{category.name}</TableCell>
-                            <TableCell>{category.description}</TableCell>
+                            <TableCell className="whitespace-pre-wrap break-words">{category.name}</TableCell>
+                            <TableCell className="whitespace-pre-wrap break-words">{category.description}</TableCell>
                             {/*<TableCell>*/}
                             {/*    <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(category)}>*/}
                             {/*        Edit*/}

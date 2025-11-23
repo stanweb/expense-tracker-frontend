@@ -3,11 +3,50 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { TrendingUp, Wallet, Tag, ArrowUpRight } from 'lucide-react'
 import { useSelector } from "react-redux";
-import { RootState } from "@/Interfaces/Interfaces";
+import { RootState, OverviewData } from "@/Interfaces/Interfaces";
 import { ActiveCategoryItem } from "@/components/active-category-item";
+import { useEffect, useState } from 'react';
+import axiosClient from '@/utils/axioClient';
 
 export function SpendingOverview() {
-    const { data, loading, error } = useSelector((state: RootState) => state.overview);
+    const { transactionType, fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const [data, setData] = useState<OverviewData | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const totalSpentLabel = transactionType === 'received' ? 'Total Received' : 'Total Spent';
+
+    useEffect(() => {
+        const fetchSpendingData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                let typeParam = '';
+                if (transactionType === 'spent') {
+                    typeParam = 'paid,sent';
+                } else if (transactionType === 'received') {
+                    typeParam = 'received';
+                }
+
+                const response = await axiosClient.get('/users/1/summary-overview', {
+                    params: {
+                        from: fromDate,
+                        to: toDate,
+                        ...(typeParam && { type: typeParam }),
+                    },
+                });
+                setData(response.data);
+            } catch (err: any) {
+                setError(err.message || 'Failed to fetch data');
+                setData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (fromDate && toDate) {
+            fetchSpendingData();
+        }
+    }, [fromDate, toDate, transactionType]);
 
     if (loading) {
         return (
@@ -27,15 +66,15 @@ export function SpendingOverview() {
         )
     }
 
-    if (error || !data) {
+    if (error || !data || (data.totalSpent === 0 && data.transactionCost === 0 && data.categoriesCount === 0 && data.transactionsCount === 0)) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="col-span-full text-center py-8 text-muted-foreground">
                 <Card className="bg-destructive/10 border-destructive/20">
                     <CardContent className="pt-6">
                         <div className="text-center">
-                            <p className="text-destructive font-medium">Failed to load data</p>
+                            <p className="text-destructive font-medium">No data available for the selected period</p>
                             <p className="text-sm text-muted-foreground mt-1">
-                                {error || 'No data available'}
+                                Please select a different date range or add some transactions.
                             </p>
                         </div>
                     </CardContent>
@@ -46,7 +85,7 @@ export function SpendingOverview() {
 
     const metrics = [
         {
-            label: 'Total Spent',
+            label: totalSpentLabel,
             value: `KES ${(data.totalSpent / 1000).toFixed(1)}k`,
             icon: Wallet,
             color: 'from-primary/20 to-primary/5',
@@ -80,18 +119,20 @@ export function SpendingOverview() {
     ]
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {metrics.map((metric, index) => (
-                <ActiveCategoryItem
-                    key={index}
-                    label={metric.label}
-                    value={metric.value}
-                    icon={metric.icon}
-                    color={metric.color}
-                    trend={metric.trend}
-                    trendUp={metric.trendUp}
-                />
-            ))}
+        <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {metrics.map((metric, index) => (
+                    <ActiveCategoryItem
+                        key={index}
+                        label={metric.label}
+                        value={metric.value}
+                        icon={metric.icon}
+                        color={metric.color}
+                        trend={metric.trend}
+                        trendUp={metric.trendUp}
+                    />
+                ))}
+            </div>
         </div>
     )
 }

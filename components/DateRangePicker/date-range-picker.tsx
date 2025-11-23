@@ -11,12 +11,14 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDispatch, useSelector } from "react-redux";
 import { JSX } from "react";
 import { Card } from "@/components/ui/card";
 import { RootState } from "@/Interfaces/Interfaces";
 import { updateDateRangeAndFetchData } from "@/app/store/thunks";
 import { AppDispatch } from "@/app/store/store";
+
 
 interface PresetRange {
     from: Date;
@@ -52,10 +54,7 @@ const PRESET_RANGES: Record<string, PresetRange> = {
 
 export function DateRangePicker(): JSX.Element {
     const dispatch = useDispatch<AppDispatch>();
-    const { fromDate, toDate } = useSelector((s: RootState) => s.dateRange);
-    const { loading: transactionsLoading } = useSelector((s: RootState) => s.transactions);
-    const { loading: overviewLoading } = useSelector((s: RootState) => s.overview);
-    const isLoading = transactionsLoading || overviewLoading;
+    const { fromDate, toDate, transactionType } = useSelector((s: RootState) => s.dateRange);
 
     const [range, setRangeState] = React.useState<DateRange | undefined>(() => {
         if (!fromDate && !toDate) return undefined;
@@ -67,9 +66,17 @@ export function DateRangePicker(): JSX.Element {
 
     const [open, setOpen] = React.useState(false);
 
-    const handleSelect = (selectedRange: DateRange | undefined) => {
+    const handleSelect = (selectedRange: DateRange | undefined, selectedTransactionType: 'all' | 'spent' | 'received' = transactionType) => {
         setRangeState(selectedRange);
-        dispatch(updateDateRangeAndFetchData(selectedRange ? { from: selectedRange.from?.toISOString(), to: selectedRange.to?.toISOString() } : null));
+        dispatch(updateDateRangeAndFetchData(
+            selectedRange
+                ? {
+                    from: selectedRange.from?.toISOString(),
+                    to: selectedRange.to?.toISOString(),
+                    transactionType: selectedTransactionType,
+                }
+                : { from: null, to: null, transactionType: selectedTransactionType }
+        ));
 
         if (selectedRange?.from && selectedRange?.to) {
             setOpen(false);
@@ -81,8 +88,12 @@ export function DateRangePicker(): JSX.Element {
         handleSelect({ from: presetRange.from, to: presetRange.to });
     };
 
+    const handleTransactionTypeChange = (value: 'all' | 'spent' | 'received') => {
+        handleSelect(range, value);
+    };
+
     const handleReset = () => {
-        handleSelect(undefined);
+        handleSelect(undefined, 'all');
     };
 
     const displayText = React.useMemo(() => {
@@ -99,11 +110,11 @@ export function DateRangePicker(): JSX.Element {
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
+                            type="button"
                             variant="outline"
                             className="w-64 justify-between font-normal"
-                            disabled={isLoading}
                         >
-                            <span>{isLoading ? "Loading..." : displayText}</span>
+                            <span>{displayText}</span>
                             <ChevronDownIcon className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
                         </Button>
                     </PopoverTrigger>
@@ -113,6 +124,7 @@ export function DateRangePicker(): JSX.Element {
                                 <h3 className="mb-2 text-sm font-medium">Presets</h3>
                                 {Object.keys(PRESET_RANGES).map((key) => (
                                     <Button
+                                        type="button"
                                         key={key}
                                         variant="ghost"
                                         size="sm"
@@ -124,6 +136,7 @@ export function DateRangePicker(): JSX.Element {
                                 ))}
                                 {range && (
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="sm"
                                         className="mt-2 text-xs"
@@ -137,7 +150,7 @@ export function DateRangePicker(): JSX.Element {
                                 <Calendar
                                     mode="range"
                                     selected={range}
-                                    onSelect={handleSelect}
+                                    onSelect={(selectedRange) => handleSelect(selectedRange)}
                                     numberOfMonths={2}
                                     disabled={{ after: new Date() }}
                                 />
@@ -145,6 +158,19 @@ export function DateRangePicker(): JSX.Element {
                         </div>
                     </PopoverContent>
                 </Popover>
+            </div>
+            <div className="flex flex-col gap-3 mt-4">
+                <Label className="font-medium">Transaction Type</Label>
+                <Select onValueChange={handleTransactionTypeChange} value={transactionType}>
+                    <SelectTrigger className="w-64">
+                        <SelectValue placeholder="Select Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="spent">Spent</SelectItem>
+                        <SelectItem value="received">Received</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
         </Card>
     );

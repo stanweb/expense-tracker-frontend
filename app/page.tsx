@@ -1,37 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
 import { SpendingOverview } from '@/components/spending-overview'
 import { SpendingChart } from '@/components/spending-chart'
 import { CategoryBreakdown } from '@/components/category-breakdown'
-import { TransactionsList } from '@/components/user-transactions-components/transactions-list'
+import { RecentTransactionsList } from '@/components/user-transactions-components/recent-transactions-list'
 import { TrendChart } from '@/components/trend-chart'
 import {DateRangePicker} from "@/components/DateRangePicker/date-range-picker";
-import {useSelector} from "react-redux";
-import {RootState} from "@/Interfaces/Interfaces";
-
-interface DashboardData {
-  totalSpent: number
-  transactionCost: number
-  categoriesCount: number
-  transactionsCount: number
-}
+import Link from 'next/link'; // Import Link
+import { Button } from '@/components/ui/button'; // Import Button
 
 export default function Dashboard() {
-    const { loading, } = useSelector((state: RootState) => state.overview);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-foreground/60">Loading dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
@@ -54,7 +33,7 @@ export default function Dashboard() {
         {/* Trend and Transactions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <TrendChart />
-          <TransactionsList />
+          <RecentTransactionsList />
         </div>
       </main>
     </div>

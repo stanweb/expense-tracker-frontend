@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, Settings, Download } from 'lucide-react'
+import { BarChart3, Settings, Download, Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
@@ -22,6 +22,12 @@ export function DashboardHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Link href="/budgets">
+            <Button variant="outline">
+              <Wallet className="h-4 w-4 mr-2" />
+              Budgets
+            </Button>
+          </Link>
           <Button variant="outline" size="icon">
             <Download className="h-4 w-4" />
           </Button>

@@ -2,60 +2,183 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import axios from "axios";
+import axiosClient from "../utils/axioClient"
 import {useEffect, useState} from "react";
-
-// const chartData = [
-//   { month: 'Jan', spent: 4000, budget: 5000, cost: 240 },
-//   { month: 'Feb', spent: 3000, budget: 5000, cost: 221 },
-//   { month: 'Mar', spent: 2000, budget: 5000, cost: 229 },
-//   { month: 'Apr', spent: 2780, budget: 5000, cost: 200 },
-//   { month: 'May', spent: 1890, budget: 5000, cost: 229 },
-//   { month: 'Jun', spent: 2390, budget: 5000, cost: 200 },
-//   { month: 'Jul', spent: 3490, budget: 5000, cost: 221 },
-// ]
-
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Category } from '@/Interfaces/Interfaces';
 
 export function SpendingChart() {
+    const [chartData, setChartData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedYear, setSelectedYear] = useState<string>(String(new Date().getFullYear()));
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string>('all'); // 'all' or categoryId
 
-    const  [chartData, setChartData] = useState([])
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 7 }, (_, i) => String(currentYear + 1 - i));
 
-    useEffect(()=>{
-        axios.get('http://localhost:8080/api/users/1/monthly/breakdown')
-            .then(res => {
-                console.log(res)
-                setChartData(res.data)
-            })
-            .catch(err => {console.log(err)})
-    },[])
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axiosClient.get<Category[]>("users/1/categories");
+                setCategories(response.data || []);
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            }
+        };
+        void fetchCategories();
+    }, []);
 
-  return (
-    <Card className="bg-card">
-      <CardHeader>
-        <CardTitle>Spending Overview</CardTitle>
-        <CardDescription>Monthly spending vs budget comparison</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-            <XAxis dataKey="month" stroke="var(--color-foreground)" opacity={0.6} />
-            <YAxis stroke="var(--color-foreground)" opacity={0.6} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'var(--color-card)',
-                border: '1px solid var(--color-border)',
-                borderRadius: '8px'
-              }}
-              cursor={{ fill: 'rgba(0,0,0,0.1)' }}
-            />
-            <Legend />
-            <Bar dataKey="spent" fill="var(--color-chart-1)" radius={[8, 8, 0, 0]} />
-            <Bar dataKey="budget" fill="var(--color-chart-2)" radius={[8, 8, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
-  )
+    useEffect(() => {
+        const fetchChartData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const params: { year: string; categoryId?: string } = { year: selectedYear };
+                if (selectedCategory !== 'all') {
+                    params.categoryId = selectedCategory;
+                }
+                const response = await axiosClient.get(`users/1/monthly/breakdown`, { params });
+                setChartData(response.data);
+            } catch (err: any) {
+                console.error("Error fetching chart data:", err);
+                setError(err.message || "Failed to fetch chart data");
+                setChartData([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        void fetchChartData();
+    }, [selectedYear, selectedCategory]);
+
+    if (loading) {
+        return (
+            <Card className="bg-card">
+                <CardHeader>
+                    <CardTitle>Spending Overview</CardTitle>
+                    <CardDescription>Monthly spending vs budget comparison</CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center h-[300px]">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    const noDataMessage = `No spending data available for ${selectedCategory === 'all' ? 'all categories' : categories.find(c => String(c.id) === selectedCategory)?.name || 'selected category'} in ${selectedYear}.`;
+
+    if (error || chartData.length === 0) {
+        return (
+            <Card className="bg-card">
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                        <CardTitle>Spending Overview</CardTitle>
+                        <CardDescription>Monthly spending vs budget comparison</CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                        <div>
+                            <Label htmlFor="year-filter">Year</Label>
+                            <Select onValueChange={setSelectedYear} value={selectedYear}>
+                                <SelectTrigger className="w-[120px]">
+                                    <SelectValue placeholder="Select Year" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {years.map((y) => (
+                                        <SelectItem key={y} value={y}>
+                                            {y}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <Label htmlFor="category-filter">Category</Label>
+                            <Select onValueChange={setSelectedCategory} value={selectedCategory}>
+                                <SelectTrigger className="w-[150px]">
+                                    <SelectValue placeholder="All Categories" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Categories</SelectItem>
+                                    {categories.map((c) => (
+                                        <SelectItem key={c.id} value={String(c.id)}>
+                                            {c.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center h-[300px]">
+                    <p className="text-muted-foreground">{noDataMessage}</p>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    return (
+        <Card className="bg-card">
+            <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle>Spending Overview</CardTitle>
+                    <CardDescription>Monthly spending vs budget comparison</CardDescription>
+                </div>
+                <div className="flex gap-2">
+                    <div>
+                        <Label htmlFor="year-filter">Year</Label>
+                        <Select onValueChange={setSelectedYear} value={selectedYear}>
+                            <SelectTrigger className="w-[120px]">
+                                <SelectValue placeholder="Select Year" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {years.map((y) => (
+                                    <SelectItem key={y} value={y}>
+                                        {y}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label htmlFor="category-filter">Category</Label>
+                        <Select onValueChange={setSelectedCategory} value={selectedCategory}>
+                            <SelectTrigger className="w-[150px]">
+                                <SelectValue placeholder="All Categories" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All Categories</SelectItem>
+                                {categories.map((c) => (
+                                    <SelectItem key={c.id} value={String(c.id)}>
+                                        {c.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                        <XAxis dataKey="month" stroke="var(--color-foreground)" opacity={0.6} />
+                        <YAxis stroke="var(--color-foreground)" opacity={0.6} />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: 'var(--color-card)',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: '8px'
+                            }}
+                            cursor={{ fill: 'rgba(0,0,0,0.1)' }}
+                        />
+                        <Legend />
+                        <Bar dataKey="spent" fill="var(--color-chart-1)" radius={[8, 8, 0, 0]} />
+                        <Bar dataKey="budget" fill="var(--color-chart-2)" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </CardContent>
+        </Card>
+    );
 }
