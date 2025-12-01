@@ -34,7 +34,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     const [error, setError] = useState<string | null>(null);
     const [showAddRawTransactionModal, setShowAddRawTransactionModal] = useState(false);
     const [showConfirmTransactionModal, setShowConfirmTransactionModal] = useState(false);
-    const [parsedTransactionData, setParsedTransactionData] = useState<ParsedTransaction>();
+    const [parsedTransactionData, setParsedTransactionData] = useState<ParsedTransaction[]>([]); // Ensure it's an array
     const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
     const [transactionToEdit, setTransactionToEdit] = useState<UiTransaction | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -89,7 +89,10 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         axioClient
             .post("/users/raw/transaction", { message })
             .then((response) => {
-                setParsedTransactionData(response.data);
+                const data = response.data;
+                // Ensure data is always an array
+                const transactionsArray = Array.isArray(data) ? data : [data];
+                setParsedTransactionData(transactionsArray);
                 setShowConfirmTransactionModal(true);
             })
             .catch((error) => {
@@ -112,8 +115,11 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             reader.onload = (e) => {
                 const base64 = e.target?.result;
                 axioClient.post('/users/1/transaction/extract', { file: base64 })
-                    .then(() => {
-                        void fetchTransactionsData();
+                    .then((response) => { // Handle response
+                        const data = response.data;
+                        const transactionsArray = Array.isArray(data) ? data : [data];
+                        setParsedTransactionData(transactionsArray);
+                        setShowConfirmTransactionModal(true);
                     })
                     .catch((error) => {
                         console.error("Error uploading file:", error);
@@ -146,7 +152,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             handleSuccess();
         } catch (err: any) {
             console.error("Error deleting transaction:", err);
-            setError(err.message || "Failed to delete transaction.");
+setError(err.message || "Failed to delete transaction.");
         }
     };
 
@@ -223,7 +229,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
                     onClose={() => setShowAddRawTransactionModal(false)}
                     onSubmit={(rawMessage) => parseTransaction(rawMessage)}
                 />
-                {parsedTransactionData != null && (
+                {parsedTransactionData.length > 0 && (
                     <ConfirmTransactionModal
                         isOpen={showConfirmTransactionModal}
                         onClose={() => setShowConfirmTransactionModal(false)}
