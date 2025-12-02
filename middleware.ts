@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   if (sessionCookie) {
     try {
       // The global axios client has a baseURL of 'http://localhost:8080/api/'
-      const validationUrl = 'http://localhost:8080/api/auth/validate-session';
+      const validationUrl = 'http://backend:8080/api/auth/validate-session';
       
       // Forward the cookie to the backend validation endpoint
       const response = await fetch(validationUrl, {
