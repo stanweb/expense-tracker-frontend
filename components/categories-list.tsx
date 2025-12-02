@@ -9,7 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Category } from "@/Interfaces/Interfaces"
+import { Category, RootState } from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
 import axioClient from "@/utils/axioClient";
 import { CategoryForm } from "@/components/category-form";
@@ -22,16 +22,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {MoreHorizontal, Pencil, Plus, Search, Trash2} from "lucide-react";
 import {Input} from "@/components/ui/input";
+import { useSelector } from "react-redux";
 
 export function CategoriesList() {
     const [categories, setCategories] = useState<Category[]>([])
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
+    const userId = useSelector((state: RootState) => state.user.userId);
 
     const fetchCategories = async () => {
+        if (!userId) return;
         try {
-            const response = await axioClient.get<Category[]>("users/1/categories")
+            const response = await axioClient.get<Category[]>(`users/${userId}/categories`)
             setCategories(response.data || [])
         } catch (error) {
             console.error("Error fetching categories:", error)
@@ -41,7 +44,7 @@ export function CategoriesList() {
 
     useEffect(() => {
         void fetchCategories()
-    }, [])
+    }, [userId])
 
     const filteredCategories = categories.filter(
         (category) =>
@@ -59,8 +62,9 @@ export function CategoriesList() {
     }
 
     const handleDelete = async (id: number) => {
+        if (!userId) return;
         try {
-            await axioClient.delete(`users/1/categories/${id}`)
+            await axioClient.delete(`users/${userId}/categories/${id}`)
             await fetchCategories()
         } catch (error) {
             console.error("Error deleting category:", error)
@@ -68,11 +72,12 @@ export function CategoriesList() {
     }
 
     const handleSubmit = async (category: Partial<Category>) => {
+        if (!userId) return;
         try {
             if (category.id) {
-                await axioClient.put(`users/1/categories/${category.id}`, category)
+                await axioClient.put(`users/${userId}/categories/${category.id}`, category)
             } else {
-                await axioClient.post("users/1/categories", category)
+                await axioClient.post(`users/${userId}/categories`, category)
             }
             await fetchCategories()
             setIsFormOpen(false)

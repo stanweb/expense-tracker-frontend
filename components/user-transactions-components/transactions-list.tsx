@@ -17,6 +17,7 @@ import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-co
 
 export function TransactionsList() {
     const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
+    const userId = useSelector((state: RootState) => state.user.userId);
     const [transactions, setTransactions] = useState<UiTransaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -31,6 +32,7 @@ export function TransactionsList() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchTransactionsData = async () => {
+        if (!userId) return;
         setLoading(true);
         setError(null);
         try {
@@ -41,7 +43,7 @@ export function TransactionsList() {
                 typeParam = 'received';
             }
 
-            const response = await axioClient.get<ApiTransaction[]>('/users/1/transactions', {
+            const response = await axioClient.get<ApiTransaction[]>(`/users/${userId}/transactions`, {
                 params: {
                     from: fromDate ?? '',
                     to: toDate ?? '',
@@ -70,11 +72,12 @@ export function TransactionsList() {
 
     useEffect(() => {
         void fetchTransactionsData();
-    }, [fromDate, toDate, transactionType]);
+    }, [fromDate, toDate, transactionType, userId]);
 
     const parseTransaction = (message: string) => {
+        if (!userId) return;
         axioClient
-            .post("/users/raw/transaction", { message })
+            .post(`/users/${userId}/raw/transaction`, { message })
             .then((response) => {
                 setParsedTransactionData(response.data);
                 setShowConfirmTransactionModal(true);
@@ -92,13 +95,14 @@ export function TransactionsList() {
     }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!userId) return;
         const file = event.target.files?.[0];
         if (file) {
             setUploading(true);
             const reader = new FileReader();
             reader.onload = (e) => {
                 const base64 = e.target?.result;
-                axioClient.post('/users/1/transaction/extract', { file: base64 })
+                axioClient.post(`/users/${userId}/transaction/extract`, { file: base64 })
                     .then(() => {
                         void fetchTransactionsData();
                     })
@@ -128,8 +132,9 @@ export function TransactionsList() {
     };
 
     const handleConfirmDelete = async (transactionId: string) => {
+        if (!userId) return;
         try {
-            await axioClient.delete(`/users/1/transactions/${transactionId}`);
+            await axioClient.delete(`/users/${userId}/transactions/${transactionId}`);
             handleSuccess(); // Refresh transactions and close modal
         } catch (err: any) {
             console.error("Error deleting transaction:", err);

@@ -18,9 +18,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { UiTransaction } from '@/Interfaces/Interfaces';
+import { RootState, UiTransaction } from '@/Interfaces/Interfaces';
 import axioClient from '@/utils/axioClient';
 import { getIcon } from '@/utils/helpers';
+import { useSelector } from 'react-redux';
 
 
 interface Category {
@@ -46,10 +47,12 @@ export const EditTransactionCategoryModal = ({
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const userId = useSelector((state: RootState) => state.user.userId);
 
     // Fetch categories only once when the component mounts
     useEffect(() => {
-        axioClient.get<Category[]>('/users/1/categories')
+        if (!userId) return;
+        axioClient.get<Category[]>(`/users/${userId}/categories`)
             .then((res) => {
                 setCategories(res.data);
             })
@@ -57,7 +60,7 @@ export const EditTransactionCategoryModal = ({
                 console.error("Error fetching categories:", err);
                 setError("Failed to load categories.");
             });
-    }, []); // Empty dependency array means this effect runs once on mount
+    }, [userId]); // Empty dependency array means this effect runs once on mount
 
     // Set initial selected category when transaction or categories change
     useEffect(() => {
@@ -68,12 +71,12 @@ export const EditTransactionCategoryModal = ({
     }, [transaction, categories]); // Depend on transaction and categories
 
     const handleSave = async () => {
-        if (!transaction || !selectedCategoryId) return;
+        if (!transaction || !selectedCategoryId || !userId) return;
 
         setLoading(true);
         setError(null);
         try {
-            await axioClient.put(`/users/1/transactions/${transaction.id}`, {
+            await axioClient.put(`/users/${userId}/transactions/${transaction.id}`, {
                 categoryId: selectedCategoryId,
             });
             onSuccess();

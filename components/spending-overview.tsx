@@ -10,6 +10,7 @@ import axiosClient from '@/utils/axioClient';
 
 export function SpendingOverview() {
     const { transactionType, fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const userId = useSelector((state: RootState) => state.user.userId);
     const [data, setData] = useState<OverviewData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -17,6 +18,7 @@ export function SpendingOverview() {
     const totalSpentLabel = transactionType === 'received' ? 'Total Received' : 'Total Spent';
 
     useEffect(() => {
+        if (!userId) return;
         const fetchSpendingData = async () => {
             setLoading(true);
             setError(null);
@@ -28,7 +30,7 @@ export function SpendingOverview() {
                     typeParam = 'received';
                 }
 
-                const response = await axiosClient.get('/users/1/summary-overview', {
+                const response = await axiosClient.get(`/users/${userId}/summary-overview`, {
                     params: {
                         from: fromDate,
                         to: toDate,
@@ -46,7 +48,7 @@ export function SpendingOverview() {
         if (fromDate && toDate) {
             fetchSpendingData();
         }
-    }, [fromDate, toDate, transactionType]);
+    }, [fromDate, toDate, transactionType, userId]);
 
     if (loading) {
         return (

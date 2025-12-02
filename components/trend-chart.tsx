@@ -10,11 +10,13 @@ import { RootState } from '@/Interfaces/Interfaces';
 
 export function TrendChart() {
     const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
+    const userId = useSelector((state: RootState) => state.user.userId);
     const [trendData, setTrendData] = useState<TrendData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!userId) return;
         const fetchTrendData = async () => {
             setLoading(true);
             setError(null);
@@ -26,7 +28,7 @@ export function TrendChart() {
                     typeParam = 'received';
                 }
 
-                const response = await axioClient.get<TrendData[]>('/users/1/transactions/trend', {
+                const response = await axioClient.get<TrendData[]>(`/users/${userId}/transactions/trend`, {
                     params: {
                         from: fromDate ?? '',
                         to: toDate ?? '',
@@ -46,7 +48,7 @@ export function TrendChart() {
         if (fromDate && toDate) {
             void fetchTrendData();
         }
-    }, [fromDate, toDate, transactionType]);
+    }, [fromDate, toDate, transactionType, userId]);
 
     return (
         <Card className="bg-card">

@@ -7,6 +7,8 @@ import {useEffect, useState} from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Category } from '@/Interfaces/Interfaces';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
 
 export function SpendingChart() {
     const [chartData, setChartData] = useState([]);
@@ -15,24 +17,27 @@ export function SpendingChart() {
     const [selectedYear, setSelectedYear] = useState<string>(String(new Date().getFullYear()));
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('all'); // 'all' or categoryId
+    const userId = useSelector((state: RootState) => state.user.userId);
 
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 7 }, (_, i) => String(currentYear + 1 - i));
 
     useEffect(() => {
         const fetchCategories = async () => {
+            if (!userId) return;
             try {
-                const response = await axiosClient.get<Category[]>("users/1/categories");
+                const response = await axiosClient.get<Category[]>(`users/${userId}/categories`);
                 setCategories(response.data || []);
             } catch (err) {
                 console.error("Error fetching categories:", err);
             }
         };
         void fetchCategories();
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
         const fetchChartData = async () => {
+            if (!userId) return;
             setLoading(true);
             setError(null);
             try {
@@ -40,7 +45,7 @@ export function SpendingChart() {
                 if (selectedCategory !== 'all') {
                     params.categoryId = selectedCategory;
                 }
-                const response = await axiosClient.get(`users/1/monthly/breakdown`, { params });
+                const response = await axiosClient.get(`users/${userId}/monthly/breakdown`, { params });
                 setChartData(response.data);
             } catch (err: any) {
                 console.error("Error fetching chart data:", err);
@@ -51,8 +56,22 @@ export function SpendingChart() {
             }
         };
         void fetchChartData();
-    }, [selectedYear, selectedCategory]);
+    }, [selectedYear, selectedCategory, userId]);
 
+    if (!userId) {
+        return (
+            <Card className="bg-card">
+                <CardHeader>
+                    <CardTitle>Spending Overview</CardTitle>
+                    <CardDescription>Please log in to view your spending data.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center h-[300px]">
+                    <p className="text-muted-foreground">No user data available.</p>
+                </CardContent>
+            </Card>
+        );
+    }
+    
     if (loading) {
         return (
             <Card className="bg-card">

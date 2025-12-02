@@ -15,7 +15,8 @@ import axioClient from "@/utils/axioClient";
 import { Table, TableBody, TableCell, TableRow, TableHead, TableHeader } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
-import { ParsedTransaction } from "@/Interfaces/Interfaces";
+import { ParsedTransaction, RootState } from "@/Interfaces/Interfaces";
+import { useSelector } from "react-redux";
 
 interface Category {
     id: number;
@@ -34,14 +35,15 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     const [categories, setCategories] = useState<Category[]>([]);
     const [transactionCategories, setTransactionCategories] = useState<{ [key: number]: string }>({});
     const [isLoading, setIsLoading] = useState(false);
+    const userId = useSelector((state: RootState) => state.user.userId);
 
     useEffect(() => {
-        if (isOpen) {
-            axioClient.get("/users/1/categories").then((res) => setCategories(res.data));
+        if (isOpen && userId) {
+            axioClient.get(`/users/${userId}/categories`).then((res) => setCategories(res.data));
             // Reset categories on new modal open
             setTransactionCategories({});
         }
-    }, [isOpen]);
+    }, [isOpen, userId]);
 
     const handleCategoryChange = (index: number, categoryId: string) => {
         setTransactionCategories(prev => ({ ...prev, [index]: categoryId }));
@@ -50,7 +52,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     const allTransactionsCategorized = parsed.length > 0 && parsed.every((_, index) => transactionCategories[index]);
 
     const handleSubmit = async () => {
-        if (!allTransactionsCategorized) return;
+        if (!allTransactionsCategorized || !userId) return;
 
         setIsLoading(true);
         try {
@@ -59,7 +61,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
                 categoryId: Number(transactionCategories[index])
             }));
 
-            await axioClient.post("/users/1/transactions", transactionsToSave);
+            await axioClient.post(`/users/${userId}/transactions`, transactionsToSave);
             onSuccess();
             onClose();
         } catch (err) {

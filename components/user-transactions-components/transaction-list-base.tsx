@@ -27,6 +27,7 @@ interface TransactionListBaseProps {
 
 export function TransactionListBase({ title, description, limit, showAutoCategorizeButton, children }: TransactionListBaseProps) {
     const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
+    const userId = useSelector((state: RootState) => state.user.userId);
     const [transactions, setTransactions] = useState<UiTransaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -43,6 +44,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchTransactionsData = async () => {
+        if (!userId) return;
         setLoading(true);
         setError(null);
         try {
@@ -53,7 +55,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
                 typeParam = 'received';
             }
 
-            const response = await axioClient.get<ApiTransaction[]>('/users/1/transactions', {
+            const response = await axioClient.get<ApiTransaction[]>(`/users/${userId}/transactions`, {
                 params: {
                     from: fromDate ?? '',
                     to: toDate ?? '',
@@ -83,11 +85,12 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
 
     useEffect(() => {
         void fetchTransactionsData();
-    }, [fromDate, toDate, transactionType, limit]);
+    }, [fromDate, toDate, transactionType, limit, userId]);
 
     const parseTransaction = (message: string) => {
+        if (!userId) return;
         axioClient
-            .post("/users/raw/transaction", { message })
+            .post(`/users/${userId}/raw/transaction`, { message })
             .then((response) => {
                 const data = response.data;
                 // Ensure data is always an array
@@ -108,13 +111,14 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!userId) return;
         const file = event.target.files?.[0];
         if (file) {
             setUploading(true);
             const reader = new FileReader();
             reader.onload = (e) => {
                 const base64 = e.target?.result;
-                axioClient.post('/users/1/transaction/extract', { file: base64 })
+                axioClient.post(`/users/${userId}/transaction/extract`, { file: base64 })
                     .then((response) => { // Handle response
                         const data = response.data;
                         const transactionsArray = Array.isArray(data) ? data : [data];
@@ -147,8 +151,9 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     };
 
     const handleConfirmDelete = async (transactionId: string) => {
+        if (!userId) return;
         try {
-            await axioClient.delete(`/users/1/transactions/${transactionId}`);
+            await axioClient.delete(`/users/${userId}/transactions/${transactionId}`);
             handleSuccess();
         } catch (err: any) {
             console.error("Error deleting transaction:", err);
@@ -157,9 +162,10 @@ setError(err.message || "Failed to delete transaction.");
     };
 
     const handleAutoCategorize = async () => {
+        if (!userId) return;
         setIsCategorizing(true);
         try {
-            await axioClient.post('users/1/categorize', {});
+            await axioClient.post(`/users/${userId}/categorize`, {});
             await fetchTransactionsData(); // Refresh data after categorization
         } catch (error) {
             console.error("Error during auto-categorization:", error);

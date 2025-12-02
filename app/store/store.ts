@@ -13,15 +13,17 @@ import {
 } from 'redux-persist';
 
 import dateRangeReducer from "./dateSlice";
+import userReducer from "./userSlice"; // Import the new user reducer
 
 const rootReducer = combineReducers({
     dateRange: dateRangeReducer,
+    user: userReducer, // Add the user reducer to the root reducer
 });
 
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["dateRange"],
+    whitelist: ["dateRange", "user"], // Add "user" to the whitelist to persist user data
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -11,6 +11,7 @@ import axioClient from '@/utils/axioClient';
 
 export function TopSpendersList() {
     const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
+    const userId = useSelector((state: RootState) => state.user.userId);
     const [topSpenders, setTopSpenders] = useState<TopSpender[]>([]);
     const [categories, setCategories] = useState<Category[]>([]); // State for categories
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined); // State for selected category filter
@@ -19,18 +20,20 @@ export function TopSpendersList() {
 
     // Fetch categories on component mount
     useEffect(() => {
+        if (!userId) return;
         const fetchCategories = async () => {
             try {
-                const response = await axioClient.get<Category[]>('/users/1/categories');
+                const response = await axioClient.get<Category[]>(`/users/${userId}/categories`);
                 setCategories(response.data);
             } catch (err) {
                 console.error("Error fetching categories:", err);
             }
         };
         void fetchCategories();
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
+        if (!userId) return;
         const fetchTopSpenders = async () => {
             setLoading(true);
             setError(null);
@@ -53,7 +56,7 @@ export function TopSpendersList() {
                     params.categoryId = [selectedCategoryId]; // API expects a list of category IDs
                 }
 
-                const response = await axioClient.get<TopSpender[]>('/users/1/transactions/top-spenders', {
+                const response = await axioClient.get<TopSpender[]>(`/users/${userId}/transactions/top-spenders`, {
                     params,
                 });
                 setTopSpenders(response.data);
@@ -69,7 +72,7 @@ export function TopSpendersList() {
         if (fromDate && toDate) {
             void fetchTopSpenders();
         }
-    }, [fromDate, toDate, transactionType, selectedCategoryId]); // Add selectedCategoryId to dependencies
+    }, [fromDate, toDate, transactionType, selectedCategoryId, userId]); // Add selectedCategoryId to dependencies
 
     const totalSpent = topSpenders.reduce((acc, spender) => acc + spender.totalSpent, 0);
 
