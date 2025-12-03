@@ -17,8 +17,14 @@ export interface OverviewData {
     transactionsCount: number;
 }
 
+export interface User {
+    userName: string
+    userId: number
+}
+
 export interface RootState {
     dateRange: AppDateRangeState;
+    user: User;
 }
 
 export interface AppDateRangeState {
