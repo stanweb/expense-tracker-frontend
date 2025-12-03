@@ -17,7 +17,7 @@ export default async function ProtectedLayout({
 
     try {
         // Validate session with backend using axios
-        await axiosClient.get("/auth/validate-session", {
+        await axiosClient.get("http://backend:8080/api/auth/validate-session", {
             headers: {
                 Cookie: `JSESSIONID=${sessionId}`,
             },
