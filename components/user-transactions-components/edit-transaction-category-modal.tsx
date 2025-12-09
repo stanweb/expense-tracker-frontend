@@ -96,7 +96,7 @@ export const EditTransactionCategoryModal = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[40vw]">
                 <DialogHeader>
                     <DialogTitle>Edit Transaction Category</DialogTitle>
                     <DialogDescription>

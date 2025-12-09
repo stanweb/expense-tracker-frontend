@@ -4,10 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from "@/components/ui/button";
 import { AddTransactionModal } from "@/components/user-transactions-components/add-transaction-modal";
-import { ApiTransaction, ParsedTransaction, RootState, UiTransaction } from "@/Interfaces/Interfaces";
+import { BulkUploadModal } from "@/components/user-transactions-components/bulk-upload-modal";
+import { ApiTransaction, AddTransaction, ParsedTransaction, RootState, UiTransaction } from "@/Interfaces/Interfaces";
 import { useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axioClient from '@/utils/axioClient';
 import { getIcon, formatDaysAgo } from '@/utils/helpers';
 import ConfirmTransactionModal from "@/components/user-transactions-components/confrim-transaction";
@@ -21,7 +22,7 @@ interface TransactionListBaseProps {
     title: string;
     description: string;
     limit?: number;
-    showAutoCategorizeButton?: boolean; // New prop
+    showAutoCategorizeButton?: boolean;
     children?: React.ReactNode;
 }
 
@@ -31,17 +32,17 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     const [transactions, setTransactions] = useState<UiTransaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [isCategorizing, setIsCategorizing] = useState(false); // New state for categorization
+    const [isCategorizing, setIsCategorizing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showAddRawTransactionModal, setShowAddRawTransactionModal] = useState(false);
+    const [showBulkUploadModal, setShowBulkUploadModal] = useState(false);
     const [showConfirmTransactionModal, setShowConfirmTransactionModal] = useState(false);
-    const [parsedTransactionData, setParsedTransactionData] = useState<ParsedTransaction[]>([]); // Ensure it's an array
+    const [parsedTransactionData, setParsedTransactionData] = useState<ParsedTransaction[]>([]);
     const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
     const [transactionToEdit, setTransactionToEdit] = useState<UiTransaction | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [transactionToDelete, setTransactionToDelete] = useState<UiTransaction | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchTransactionsData = async () => {
         if (!userId) return;
@@ -87,19 +88,20 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         void fetchTransactionsData();
     }, [fromDate, toDate, transactionType, limit, userId]);
 
-    const parseTransaction = (message: string) => {
+    const addTransaction = (transaction: AddTransaction) => {
         if (!userId) return;
+        setUploading(true);
         axioClient
-            .post(`/users/${userId}/raw/transaction`, { message })
-            .then((response) => {
-                const data = response.data;
-                // Ensure data is always an array
-                const transactionsArray = Array.isArray(data) ? data : [data];
-                setParsedTransactionData(transactionsArray);
-                setShowConfirmTransactionModal(true);
+            .post(`/users/${userId}/transactions`, [transaction])
+            .then(() => {
+                void fetchTransactionsData();
+                setShowAddRawTransactionModal(false);
             })
             .catch((error) => {
-                console.error("Error parsing transaction:", error);
+                console.error("Error adding transaction:", error);
+            })
+            .finally(() => {
+                setUploading(false);
             });
     };
 
@@ -110,34 +112,58 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         void fetchTransactionsData();
     }
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSubmit = (file: File) => {
         if (!userId) return;
-        const file = event.target.files?.[0];
-        if (file) {
-            setUploading(true);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const base64 = e.target?.result;
-                axioClient.post(`/users/${userId}/transaction/extract`, { file: base64 })
-                    .then((response) => { // Handle response
-                        const data = response.data;
-                        const transactionsArray = Array.isArray(data) ? data : [data];
-                        setParsedTransactionData(transactionsArray);
-                        setShowConfirmTransactionModal(true);
-                    })
-                    .catch((error) => {
-                        console.error("Error uploading file:", error);
-                    })
-                    .finally(() => {
-                        setUploading(false);
-                    });
-            };
-            reader.readAsDataURL(file);
-        }
+
+        setUploading(true);
+        setShowBulkUploadModal(false);
+
+        const formData = new FormData();
+        formData.append("pdfFile", file);
+
+        axioClient.post(
+            "http://localhost:3000/api/ai/statement/",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        )
+            .then((response) => {
+                const data = response.data;
+                const transactionsArray = Array.isArray(data) ? data : [data];
+                setParsedTransactionData(transactionsArray);
+                setShowConfirmTransactionModal(true);
+            })
+            .catch((error) => {
+                console.error("Error uploading file:", error);
+            })
+            .finally(() => {
+                setUploading(false);
+            });
     };
 
-    const handleUploadClick = () => {
-        fileInputRef.current?.click();
+
+    const handleTextSubmit = (rawMessage: string) => {
+        if (!userId) return;
+        setUploading(true);
+        setShowBulkUploadModal(false);
+        axioClient
+            .post(`http://localhost:3000/api/raw-text/ai`, { messages: rawMessage })
+            .then((response) => {
+                const data = response.data;
+                console.log(data)
+                const transactionsArray = Array.isArray(data) ? data : [data];
+                setParsedTransactionData(transactionsArray);
+                setShowConfirmTransactionModal(true);
+            })
+            .catch((error) => {
+                console.error("Error processing bulk transactions:", error);
+            })
+            .finally(() => {
+                setUploading(false);
+            });
     };
 
     const handleEditClick = (transaction: UiTransaction) => {
@@ -157,7 +183,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             handleSuccess();
         } catch (err: any) {
             console.error("Error deleting transaction:", err);
-setError(err.message || "Failed to delete transaction.");
+            setError(err.message || "Failed to delete transaction.");
         }
     };
 
@@ -166,7 +192,7 @@ setError(err.message || "Failed to delete transaction.");
         setIsCategorizing(true);
         try {
             await axioClient.post(`/users/${userId}/categorize`, {});
-            await fetchTransactionsData(); // Refresh data after categorization
+            await fetchTransactionsData();
         } catch (error) {
             console.error("Error during auto-categorization:", error);
             setError("Failed to auto-categorize transactions.");
@@ -182,7 +208,7 @@ setError(err.message || "Failed to delete transaction.");
 
     return (
         <Card className="bg-card">
-            {(uploading || isCategorizing) && <LoadingOverlay message={isCategorizing ? "Auto-categorizing transactions..." : "AI is extracting transactions..."} />}
+            {(uploading || isCategorizing || loading) && <LoadingOverlay message={isCategorizing ? "Auto-categorizing transactions..." : uploading ? "AI is extracting transactions..." : "Loading..."} />}
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle>{title}</CardTitle>
@@ -215,17 +241,10 @@ setError(err.message || "Failed to delete transaction.");
                     </Button>
                     <Button
                         variant="outline"
-                        onClick={handleUploadClick}
+                        onClick={() => setShowBulkUploadModal(true)}
                     >
                         Upload Bulk
                     </Button>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        className="hidden"
-                        accept="application/pdf"
-                    />
                 </div>
             </CardHeader>
 
@@ -233,7 +252,15 @@ setError(err.message || "Failed to delete transaction.");
                 <AddTransactionModal
                     isOpen={showAddRawTransactionModal}
                     onClose={() => setShowAddRawTransactionModal(false)}
-                    onSubmit={(rawMessage) => parseTransaction(rawMessage)}
+                    onSubmit={addTransaction}
+                    isLoading={uploading}
+                />
+                <BulkUploadModal
+                    isOpen={showBulkUploadModal}
+                    onClose={() => setShowBulkUploadModal(false)}
+                    onTextSubmit={handleTextSubmit}
+                    onFileSubmit={handleFileSubmit}
+                    isLoading={uploading}
                 />
                 {parsedTransactionData.length > 0 && (
                     <ConfirmTransactionModal
@@ -253,11 +280,10 @@ setError(err.message || "Failed to delete transaction.");
                     isOpen={showDeleteModal}
                     onClose={() => setShowDeleteModal(false)}
                     transaction={transactionToDelete}
-                    onConfirm={handleConfirmDelete}
+                    onConfirm={() => transactionToDelete && handleConfirmDelete(transactionToDelete.id)}
                 />
 
                 <ScrollArea className="h-[320px] pr-4">
-                    {loading && <p>Loading...</p>}
                     {error && <p>Error: {error}</p>}
                     {!loading && !error && filteredTransactions.length === 0 && (
                         <p className="text-center text-muted-foreground">No transactions found.</p>

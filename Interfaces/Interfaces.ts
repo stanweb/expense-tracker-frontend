@@ -6,8 +6,20 @@ export interface ParsedTransaction {
     transactionCost: number;
     date: string; // ISO datetime string
     recipient: string | null;
-    type: "expense" | "income";
+    type: "sent" | "received" | "paid" | "";
     rawMessage: string;
+}
+
+export interface AddTransaction {
+    transactionId: string;
+    amount: number;
+    transactionCost: number;
+    date: string;
+    recipient: string;
+    type: string;
+    rawMessage: string;
+    categoryId: number;
+
 }
 
 export interface OverviewData {

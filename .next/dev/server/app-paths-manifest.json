@@ -1,5 +1,6 @@
 {
-  "/(protected)/all-transactions/page": "app/(protected)/all-transactions/page.js",
   "/(protected)/page": "app/(protected)/page.js",
+  "/(protected)/top-spenders/page": "app/(protected)/top-spenders/page.js",
+  "/api/ai/statement/route": "app/api/ai/statement/route.js",
   "/login/page": "app/login/page.js"
 }

@@ -39,11 +39,19 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
 
     useEffect(() => {
         if (isOpen && userId) {
-            axioClient.get(`/users/${userId}/categories`).then((res) => setCategories(res.data));
-            // Reset categories on new modal open
-            setTransactionCategories({});
+            axioClient.get(`/users/${userId}/categories`).then((res) => {
+                setCategories(res.data);
+                const uncategorized = res.data.find((c: Category) => c.name === "Uncategorized");
+                if (uncategorized) {
+                    const initialCategories = parsed.reduce((acc, _, index) => {
+                        acc[index] = String(uncategorized.id);
+                        return acc;
+                    }, {} as { [key: number]: string });
+                    setTransactionCategories(initialCategories);
+                }
+            });
         }
-    }, [isOpen, userId]);
+    }, [isOpen, userId, parsed]);
 
     const handleCategoryChange = (index: number, categoryId: string) => {
         setTransactionCategories(prev => ({ ...prev, [index]: categoryId }));
@@ -74,7 +82,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             {isLoading && <LoadingOverlay message="AI is processing transactions..." />}
-            <DialogContent className="sm:max-w-[800px]">
+            <DialogContent className="sm:max-w-[60vw]">
                 <DialogHeader>
                     <DialogTitle>Confirm Transactions</DialogTitle>
                     <DialogDescription>Review the extracted transactions and assign a category to each.</DialogDescription>
@@ -93,7 +101,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
                             <TableBody>
                                 {parsed.map((p, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{p.recipient || "N/A"}</TableCell>
+                                        <TableCell>{p.recipient?.slice(0,40) || "N/A"}</TableCell>
                                         <TableCell>{p.amount}</TableCell>
                                         <TableCell>{new Date(p.date).toLocaleString()}</TableCell>
                                         <TableCell>
