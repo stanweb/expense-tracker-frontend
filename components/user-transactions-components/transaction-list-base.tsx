@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AddTransactionModal } from "@/components/user-transactions-components/add-transaction-modal";
 import { BulkUploadModal } from "@/components/user-transactions-components/bulk-upload-modal";
 import { ApiTransaction, AddTransaction, ParsedTransaction, RootState, UiTransaction } from "@/Interfaces/Interfaces";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
 import { useEffect, useState } from 'react';
 import axioClient from '@/utils/axioClient';
@@ -17,6 +17,11 @@ import { EditTransactionCategoryModal } from "@/components/user-transactions-com
 import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-components/confirm-delete-transaction-modal";
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
+import aiAxioClient from "@/utils/aiAxioClient";
+import { addJob, clearJob } from '@/store/jobsSlice';
+import backendAxios from "@/utils/backendAxios";
+import axiosClient from "@/utils/axioClient";
+import {setTransactionTrigger} from "@/store/dateSlice";
 
 interface TransactionListBaseProps {
     title: string;
@@ -27,11 +32,12 @@ interface TransactionListBaseProps {
 }
 
 export function TransactionListBase({ title, description, limit, showAutoCategorizeButton, children }: TransactionListBaseProps) {
-    const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
+    const { fromDate, toDate, transactionType, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
+    const jobs = useSelector((state: RootState) => state.jobs);
+    const dispatch = useDispatch();
     const [transactions, setTransactions] = useState<UiTransaction[]>([]);
     const [loading, setLoading] = useState(false);
-    const [uploading, setUploading] = useState(false);
     const [isCategorizing, setIsCategorizing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showAddRawTransactionModal, setShowAddRawTransactionModal] = useState(false);
@@ -86,11 +92,36 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
 
     useEffect(() => {
         void fetchTransactionsData();
-    }, [fromDate, toDate, transactionType, limit, userId]);
+    }, [fromDate, toDate, transactionType, limit, userId, transactionTrigger]);
+
+    useEffect(() => {
+        if (jobs.length > 0) {
+            const interval = setInterval(() => {
+                axiosClient.get(`/jobs/${jobs[0].jobId}`)
+                    .then(response => {
+                        const { status } = response.data;
+                        if (status === 'COMPLETED') {
+                            dispatch(setTransactionTrigger(Date.now().toString()))
+                            dispatch(clearJob());
+                            clearInterval(interval);
+                        } else if (status === 'FAILED') {
+                            dispatch(clearJob());
+                            clearInterval(interval);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching job status:", error);
+                        dispatch(clearJob());
+                        clearInterval(interval);
+                    });
+            }, 2000);
+
+            return () => clearInterval(interval);
+        }
+    }, [jobs, dispatch]);
 
     const addTransaction = (transaction: AddTransaction) => {
         if (!userId) return;
-        setUploading(true);
         axioClient
             .post(`/users/${userId}/transactions`, [transaction])
             .then(() => {
@@ -100,9 +131,6 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             .catch((error) => {
                 console.error("Error adding transaction:", error);
             })
-            .finally(() => {
-                setUploading(false);
-            });
     };
 
     const handleSuccess = () => {
@@ -115,14 +143,13 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     const handleFileSubmit = (file: File) => {
         if (!userId) return;
 
-        setUploading(true);
         setShowBulkUploadModal(false);
 
         const formData = new FormData();
         formData.append("pdfFile", file);
 
-        axioClient.post(
-            "http://localhost:3000/api/ai/statement/",
+        aiAxioClient.post(
+            "/ai/statement/",
             formData,
             {
                 headers: {
@@ -131,23 +158,17 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             }
         )
             .then((response) => {
-                const data = response.data;
-                const transactionsArray = Array.isArray(data) ? data : [data];
-                setParsedTransactionData(transactionsArray);
-                setShowConfirmTransactionModal(true);
+                const { jobId, status } = response.data;
+                dispatch(addJob({ jobId, status }));
             })
             .catch((error) => {
                 console.error("Error uploading file:", error);
             })
-            .finally(() => {
-                setUploading(false);
-            });
     };
 
 
     const handleTextSubmit = (rawMessage: string) => {
         if (!userId) return;
-        setUploading(true);
         setShowBulkUploadModal(false);
         axioClient
             .post(`http://localhost:3000/api/raw-text/ai`, { messages: rawMessage })
@@ -161,9 +182,6 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             .catch((error) => {
                 console.error("Error processing bulk transactions:", error);
             })
-            .finally(() => {
-                setUploading(false);
-            });
     };
 
     const handleEditClick = (transaction: UiTransaction) => {
@@ -201,6 +219,13 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         }
     };
 
+    const getLoadingMessage = () => {
+        if (jobs.length>0) return "AI is processing your document...";
+        if (isCategorizing) return "Auto-categorizing transactions...";
+        if (loading) return "Loading...";
+        return "Loading..."
+    };
+
     const filteredTransactions = transactions.filter(transaction =>
         transaction.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (transaction.category && transaction.category.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -208,7 +233,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
 
     return (
         <Card className="bg-card">
-            {(uploading || isCategorizing || loading) && <LoadingOverlay message={isCategorizing ? "Auto-categorizing transactions..." : uploading ? "AI is extracting transactions..." : "Loading..."} />}
+            {(isCategorizing || loading || !!jobs[0]?.jobId) && <LoadingOverlay message={getLoadingMessage()} />}
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle>{title}</CardTitle>
@@ -253,14 +278,14 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
                     isOpen={showAddRawTransactionModal}
                     onClose={() => setShowAddRawTransactionModal(false)}
                     onSubmit={addTransaction}
-                    isLoading={uploading}
+                    isLoading={loading}
                 />
                 <BulkUploadModal
                     isOpen={showBulkUploadModal}
                     onClose={() => setShowBulkUploadModal(false)}
                     onTextSubmit={handleTextSubmit}
                     onFileSubmit={handleFileSubmit}
-                    isLoading={uploading}
+                    isLoading={!!jobs[0]?.jobId}
                 />
                 {parsedTransactionData.length > 0 && (
                     <ConfirmTransactionModal
@@ -280,7 +305,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
                     isOpen={showDeleteModal}
                     onClose={() => setShowDeleteModal(false)}
                     transaction={transactionToDelete}
-                    onConfirm={() => transactionToDelete && handleConfirmDelete(transactionToDelete.id)}
+                    onConfirm={() => transactionToDelete && handleConfirmDelete(transactionToDelete.id.toString())}
                 />
 
                 <ScrollArea className="h-[320px] pr-4">

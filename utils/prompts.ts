@@ -26,3 +26,38 @@ Output Requirements
 
 MPESA Statement Text:
 `
+
+
+export const smsExtractPrompt = `
+        You are an intelligent sms extractor 
+        Extract a list of transactions from the following SMS message text.
+            For each transaction, extract the following fields:
+            - transactionId
+            - amount
+            - transactionCost
+            - date (ISO format yyyy-MM-dd'T'HH:mm:ss)
+            - recipient
+            - type ("paid","sent" or "received")
+            - rawMessage (The actual message sent)
+
+            Return only a valid JSON array of transaction objects:
+                    - The root of the response must be a JSON array \`[]\`.
+                    - Do NOT include any backticks, quotes, or explanations outside the JSON array.
+                    - JSON keys must be quoted.
+                    - If no transactions are found, return an empty array \`[]\`.
+
+            Message:`
+
+export const iconPrompt = (icons: string, description:string ) =>{return `
+You are an intelligent classification model.
+        You are given a list of category icons with descriptions:
+
+        ${icons}
+
+        Your task:
+        - Read the user’s transaction description.
+        - Select the single most appropriate icon name from the list.
+        - Return ONLY the icon name, with no explanation and no extra text.
+
+        User message: ${description}
+`}

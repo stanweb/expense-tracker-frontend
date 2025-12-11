@@ -10,3 +10,8 @@ export const getCategories = async (userId: number): Promise<Category[]> => {
         return [];
     }
 };
+
+export const addCategory = async (userId: number, category: Omit<Category, 'id'>): Promise<Category> => {
+    const response = await axiosClient.post<Category>(`users/${userId}/categories`, category);
+    return response.data;
+};

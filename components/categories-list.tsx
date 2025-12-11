@@ -23,6 +23,8 @@ import {
 import {MoreHorizontal, Pencil, Plus, Search, Trash2} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import { useSelector } from "react-redux";
+import { addCategory, getCategories } from "./api-calls/categories";
+import aiAxiosClient from "@/utils/aiAxioClient";
 
 export function CategoriesList() {
     const [categories, setCategories] = useState<Category[]>([])
@@ -34,8 +36,8 @@ export function CategoriesList() {
     const fetchCategories = async () => {
         if (!userId) return;
         try {
-            const response = await axioClient.get<Category[]>(`users/${userId}/categories`)
-            setCategories(response.data || [])
+            const fetchedCategories = await getCategories(userId);
+            setCategories(fetchedCategories);
         } catch (error) {
             console.error("Error fetching categories:", error)
             setCategories([])
@@ -73,11 +75,20 @@ export function CategoriesList() {
 
     const handleSubmit = async (category: Partial<Category>) => {
         if (!userId) return;
+        const {data} = await aiAxiosClient.post('/ai/get-icon', {
+            name: category.name,
+            description: category.description
+        })
         try {
             if (category.id) {
-                await axioClient.put(`users/${userId}/categories/${category.id}`, category)
+                await axioClient.put(`users/${userId}/categories/${category.id}`, {... category, categoryIcon: data.iconName})
             } else {
-                await axioClient.post(`users/${userId}/categories`, category)
+                console.log(data)
+                await addCategory(userId, {
+                    name: category.name!,
+                    description: category.description!,
+                    categoryIcon: data.iconName || null,
+                });
             }
             await fetchCategories()
             setIsFormOpen(false)

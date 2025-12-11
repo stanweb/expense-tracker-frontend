@@ -34,15 +34,23 @@ export interface User {
     userId: number
 }
 
-export interface RootState {
-    dateRange: AppDateRangeState;
-    user: User;
-}
+export interface JobState {
+    jobId: string | null;
+    status: string | null;
+  }
+  
+  export interface RootState {
+      dateRange: AppDateRangeState;
+      user: User;
+      jobs: JobState[];
+  }
+  
 
 export interface AppDateRangeState {
-    fromDate: string; // ISO string
-    toDate: string;   // ISO string
+    fromDate: string | null; // ISO string
+    toDate: string | null;   // ISO string
     transactionType: 'all' | 'spent' | 'received';
+    transactionTrigger: string | null
 }
 
 export interface ApiTransaction {

@@ -16,7 +16,8 @@ import { Table, TableBody, TableCell, TableRow, TableHead, TableHeader } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { ParsedTransaction, RootState } from "@/Interfaces/Interfaces";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setTransactionTrigger} from "@/store/dateSlice";
 
 interface Category {
     id: number;
@@ -36,12 +37,13 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     const [transactionCategories, setTransactionCategories] = useState<{ [key: number]: string }>({});
     const [isLoading, setIsLoading] = useState(false);
     const userId = useSelector((state: RootState) => state.user.userId);
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (isOpen && userId) {
             axioClient.get(`/users/${userId}/categories`).then((res) => {
                 setCategories(res.data);
-                const uncategorized = res.data.find((c: Category) => c.name === "Uncategorized");
+                const uncategorized = res.data.find((c: Category) => c.name.toLowerCase() === "Uncategorized".toLowerCase());
                 if (uncategorized) {
                     const initialCategories = parsed.reduce((acc, _, index) => {
                         acc[index] = String(uncategorized.id);
@@ -72,6 +74,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
             await axioClient.post(`/users/${userId}/transactions`, transactionsToSave);
             onSuccess();
             onClose();
+            dispatch(setTransactionTrigger(Date.now().toString()))
         } catch (err) {
             console.error(err);
         } finally {

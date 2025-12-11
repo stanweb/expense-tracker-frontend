@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import axiosClient from '@/utils/axioClient';
 
 export function SpendingOverview() {
-    const { transactionType, fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const { transactionType, fromDate, toDate, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const [data, setData] = useState<OverviewData | null>(null);
     const [loading, setLoading] = useState(false);
@@ -45,10 +45,8 @@ export function SpendingOverview() {
                 setLoading(false);
             }
         };
-        if (fromDate && toDate) {
-            fetchSpendingData();
-        }
-    }, [fromDate, toDate, transactionType, userId]);
+        fetchSpendingData();
+    }, [fromDate, toDate, transactionType, userId, transactionTrigger]);
 
     if (loading) {
         return (

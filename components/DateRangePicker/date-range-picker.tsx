@@ -21,8 +21,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
 import { RootState } from "@/Interfaces/Interfaces";
-import { updateDateRangeAndFetchData } from "@/app/store/thunks";
-import { AppDispatch } from "@/app/store/store";
+import { updateDateRangeAndFetchData } from "@/store/thunks";
+import { AppDispatch } from "@/store/store";
 
 /** -------------------------
  *  Helpers: local formatting

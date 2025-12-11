@@ -7,7 +7,7 @@ const nextConfig = {
     unoptimized: true,
   },
     experimental: {
-        serverExternalPackages: ["pdf-parse"],
+        serverComponentsExternalPackages: ["pdf-parse"],
     },
 
 

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Category } from '@/Interfaces/Interfaces';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/app/store/store';
+import { RootState } from '@/store/store';
 
 export function SpendingChart() {
     const [chartData, setChartData] = useState([]);
