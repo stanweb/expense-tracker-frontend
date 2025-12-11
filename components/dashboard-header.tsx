@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import axiosClient from '../utils/axioClient';
-import { clearUser } from '../app/store/userSlice';
+import { clearUser } from '@/store/userSlice';
 
 export function DashboardHeader() {
   const dispatch = useDispatch();

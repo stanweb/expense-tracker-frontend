@@ -13,12 +13,12 @@ import {Button} from "@/components/ui/button";
 
 
 export function CategoryBreakdown() {
-    const { fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const { fromDate, toDate, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const [categoryData, setCategoryData] = useState<any[]>([])
 
     useEffect(() => {
-        if (fromDate && toDate && userId) {
+        if (userId) {
             axioClient.get(`users/${userId}/category/summary`, {
                 params: {
                     startDate: fromDate,
@@ -40,7 +40,7 @@ export function CategoryBreakdown() {
                     }
                 })
         }
-    }, [fromDate, toDate, userId])
+    }, [fromDate, toDate, userId, transactionTrigger])
 
     return (
         <Card className="bg-card">

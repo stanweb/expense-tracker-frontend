@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/Interfaces/Interfaces';
 
 export function TrendChart() {
-    const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
+    const { fromDate, toDate, transactionType, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const [trendData, setTrendData] = useState<TrendData[]>([]);
     const [loading, setLoading] = useState(false);
@@ -44,11 +44,9 @@ export function TrendChart() {
                 setLoading(false);
             }
         };
+        void fetchTrendData();
 
-        if (fromDate && toDate) {
-            void fetchTrendData();
-        }
-    }, [fromDate, toDate, transactionType, userId]);
+    }, [fromDate, toDate, transactionType, userId, transactionTrigger]);
 
     return (
         <Card className="bg-card">
