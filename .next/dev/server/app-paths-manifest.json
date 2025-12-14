@@ -1,9 +1,13 @@
 {
   "/(protected)/all-transactions/page": "app/(protected)/all-transactions/page.js",
+  "/(protected)/budgets/page": "app/(protected)/budgets/page.js",
   "/(protected)/categories/page": "app/(protected)/categories/page.js",
+  "/(protected)/onboarding-wizard/page": "app/(protected)/onboarding-wizard/page.js",
   "/(protected)/page": "app/(protected)/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/ai/get-icon/route": "app/api/ai/get-icon/route.js",
+  "/api/ai/generate-budget/route": "app/api/ai/generate-budget/route.js",
+  "/api/ai/generate-category/route": "app/api/ai/generate-category/route.js",
   "/api/ai/statement/route": "app/api/ai/statement/route.js",
-  "/login/page": "app/login/page.js"
+  "/login/page": "app/login/page.js",
+  "/register/page": "app/register/page.js"
 }

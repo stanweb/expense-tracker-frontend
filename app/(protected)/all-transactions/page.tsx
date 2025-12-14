@@ -2,7 +2,7 @@
 
 import { DashboardHeader } from '@/components/dashboard-header';
 import { AllTransactionsList } from '@/components/user-transactions-components/all-transactions-list';
-import { DateRangePicker } from '@/components/DateRangePicker/date-range-picker';
+import { DateRangePicker } from '@/components/date-range-picker/date-range-picker';
 
 export default function AllTransactionsPage() {
   return (

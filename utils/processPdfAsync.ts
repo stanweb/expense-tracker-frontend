@@ -64,6 +64,7 @@ export async function processPdfAsync(file: File, jobId: string, sessionId:strin
 
         await updateJob(jobId, "COMPLETED", sessionId);
     } catch (error: any) {
+        console.log(error)
         await updateJob(jobId, "FAILED", sessionId, error.message);
     }
 }

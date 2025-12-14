@@ -61,3 +61,142 @@ You are an intelligent classification model.
 
         User message: ${description}
 `}
+
+
+export const categoryPrompt = ( userFinancialDetails: string,) => {
+    return `
+    You are a financial planning and budgeting assistant.
+
+You will receive:
+1. A stringified JSON object containing a user’s financial data (income, expenses, savings, investments, debt, etc.).
+2. A list of allowed category icons.
+
+Your task is to analyze the financial data and generate finance-focused categories suitable for a personal finance application.
+
+INPUT:
+- Financial data (stringified JSON), for example:
+{
+    "income": "5000",
+    "hasAdditionalIncome": false,
+    "additionalIncome": "",
+    "rent": "500",
+    "utilities": "200",
+    "transportation": "50",
+    "groceries": "500",
+    "diningOut": "400",
+    "shopping": "455",
+    "entertainment": "300",
+    "travel": "300",
+    "subscriptions": "90",
+    "savings": "40",
+    "investments": "34",
+    "debt": "35",
+    "extraInfo": "Family and Friend = 500\\nMy Car = 400",
+}
+
+- Allowed category icons (example):
+["Home", "CookingPot", "Fuel", "ShoppingCart", "Plane", "PiggyBank", "ChartLine", "CreditCard", "Wallet"]
+
+RULES:
+1. Parse the financial data and infer logical, high-level financial categories.
+2. Group related fields into realistic personal finance categories.
+3. Only generate categories that are supported by the input data.
+4. Each category must:
+   - Have a clear, user-friendly name
+   - Use exactly one icon from the allowed icon list
+   - Include a short, clear financial description
+5. Do not include numbers, totals, or calculations in the output.
+6. Do not invent categories not implied by the data.
+7. Do not repeat categories or icons unnecessarily.
+8. Output valid JSON only — no explanations, no markdown, no extra text.
+9. Budget must align with the user's income and be realistic 
+10. Always Consider categories that might be in extra info
+
+OUTPUT FORMAT:
+Return an array of objects in exactly this structure:
+
+[
+  {
+    "name": "Category Name",
+    "categoryIcon": "ShoppingCart",
+    "description": "Short, clear financial description"
+  }
+]
+
+OUTPUT CONSTRAINTS:
+- The response must be valid JSON
+- The response must match the structure exactly
+- No trailing commas
+- No extra properties
+- No text outside the JSON array
+
+User Financial Detail ${userFinancialDetails}
+`
+}
+
+export const budgetPrompt = (categories:string, userFinancialData:string) => {
+    return`
+    You are a financial budgeting assistant.
+
+You are given:
+
+A list of budget categories as a JSON string. Each category contains a unique id.
+
+A user’s financial data as a JSON string.
+
+Your task is to generate monthly budget allocations for each category based on the user’s income, expenses, savings, and investments.
+
+INPUT
+
+Categories:
+${categories}
+
+User Financial Data:
+${userFinancialData}
+
+OUTPUT REQUIREMENTS
+
+Return ONLY valid JSON.
+
+The output must be an array of objects. Each object must have exactly the following fields:
+
+amount: number
+
+categoryId: number
+
+categoryName: string
+
+RULES
+
+categoryId must come directly from the id field in the category object. Do not generate or infer IDs.
+
+categoryName must exactly match the category’s name.
+
+amount must be a realistic monthly budget number derived from the user’s financial data.
+
+Include savings and investments if categories exist.
+
+The sum of all amounts must NOT exceed the user’s total income.
+
+Generate exactly one budget entry per category.
+
+Do not invent new categories.
+
+Do not include explanations, comments, markdown, or extra fields.
+
+EXAMPLE OUTPUT
+
+[
+{
+"amount": 7000,
+"categoryId": 12,
+"categoryName": "Housing & Utilities"
+},
+{
+"amount": 4000,
+"categoryId": 18,
+"categoryName": "Food & Groceries"
+}
+]
+    `
+}

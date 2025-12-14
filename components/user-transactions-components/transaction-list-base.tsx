@@ -18,10 +18,10 @@ import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-co
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import aiAxioClient from "@/utils/aiAxioClient";
-import { addJob, clearJob } from '@/store/jobsSlice';
+import { addJob, clearJob } from '@/store/jobs-slice';
 import backendAxios from "@/utils/backendAxios";
 import axiosClient from "@/utils/axioClient";
-import {setTransactionTrigger} from "@/store/dateSlice";
+import {setTransactionTrigger} from "@/store/date-slice";
 
 interface TransactionListBaseProps {
     title: string;

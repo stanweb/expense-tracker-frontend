@@ -6,7 +6,7 @@ import { SpendingChart } from '@/components/spending-chart'
 import { CategoryBreakdown } from '@/components/category-breakdown'
 import { RecentTransactionsList } from '@/components/user-transactions-components/recent-transactions-list'
 import { TrendChart } from '@/components/trend-chart'
-import {DateRangePicker} from "@/components/DateRangePicker/date-range-picker";
+import {DateRangePicker} from "@/components/date-range-picker/date-range-picker";
 import Link from 'next/link'; // Import Link
 import { Button } from '@/components/ui/button'; // Import Button
 

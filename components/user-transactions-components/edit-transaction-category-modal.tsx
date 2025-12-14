@@ -22,7 +22,7 @@ import { RootState, UiTransaction } from '@/Interfaces/Interfaces';
 import axioClient from '@/utils/axioClient';
 import { getIcon } from '@/utils/helpers';
 import {useDispatch, useSelector} from 'react-redux';
-import {setTransactionTrigger} from "@/store/dateSlice";
+import {setTransactionTrigger} from "@/store/date-slice";
 
 
 interface Category {

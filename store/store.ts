@@ -12,9 +12,9 @@ import {
     REGISTER,
 } from 'redux-persist';
 
-import dateRangeReducer from "./dateSlice";
-import userReducer from "./userSlice";
-import jobsReducer from "./jobsSlice";
+import dateRangeReducer from "./date-slice";
+import userReducer from "./user-slice";
+import jobsReducer from "./jobs-slice";
 
 const rootReducer = combineReducers({
     dateRange: dateRangeReducer,

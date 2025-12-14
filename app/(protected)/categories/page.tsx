@@ -5,8 +5,7 @@ export default function CategoriesPage() {
   return (
     <div className="">
         <DashboardHeader/>
-        <div className={'border-2 rounded-3xl shadow-2xl mt-3 py-2 px-4 container mx-auto min-h-[50vh]'}>
-            <h1 className="text-2xl font-bold mb-5">Manage Categories</h1>
+        <div className={'bg-background'}>
             <CategoriesList />
         </div>
 

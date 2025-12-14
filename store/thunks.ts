@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setRange } from './dateSlice';
+import { setRange } from './date-slice';
 import { subDays } from 'date-fns';
 
 export const updateDateRangeAndFetchData = createAsyncThunk(

@@ -30,8 +30,9 @@ export interface OverviewData {
 }
 
 export interface User {
-    userName: string
-    userId: number
+    userName: string;
+    userId: number;
+    onboardingCompleted: boolean;
 }
 
 export interface JobState {
@@ -42,7 +43,7 @@ export interface JobState {
   export interface RootState {
       dateRange: AppDateRangeState;
       user: User;
-      jobs: JobState[];
+      jobs: JobState [];
   }
   
 
@@ -50,7 +51,7 @@ export interface AppDateRangeState {
     fromDate: string | null; // ISO string
     toDate: string | null;   // ISO string
     transactionType: 'all' | 'spent' | 'received';
-    transactionTrigger: string | null
+    transactionTrigger: string | null;       // <- added
 }
 
 export interface ApiTransaction {

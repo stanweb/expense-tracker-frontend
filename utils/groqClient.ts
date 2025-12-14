@@ -115,3 +115,117 @@ export async function iconGenerator (prompt: string) {
 
     return parsed
 }
+
+
+export const categoryGenerator = async (prompt: string) => {
+    let parsed;
+    try {
+
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
+            response_format: {
+                type: "json_schema",
+                json_schema: {
+                    name: "category_list",
+                    schema: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                name: {
+                                    type: "string",
+                                    description: "Human-readable category name"
+                                },
+                                categoryIcon: {
+                                    type: "string",
+                                    description: "Icon identifier (e.g., ShoppingCart, PiggyBank, Fuel)"
+                                },
+                                description: {
+                                    type: "string",
+                                    description: "Short, clear financial description of the category"
+                                }
+                            },
+                            required: [
+                                "name",
+                                "categoryIcon",
+                                "description"
+                            ],
+                            additionalProperties: false
+                        }
+                    }
+                }
+            },
+            model: "moonshotai/kimi-k2-instruct-0905",
+        });
+
+
+        const content = chatCompletion.choices[0]?.message?.content || "";
+        parsed = JSON.parse(content);
+
+    }catch (e){
+        throw e
+    }
+    return parsed
+}
+
+
+export const budgetGenerator = async (prompt: string) => {
+    let parsed;
+    try {
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
+            response_format: {
+                type: "json_schema",
+                json_schema: {
+                    name: "budget_list",
+                    schema: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                amount: {
+                                    type: "number",
+                                    description: "Monthly budgeted amount for the category"
+                                },
+                                categoryId: {
+                                    type: "number",
+                                    description: "Existing category ID provided in the categories input"
+                                },
+                                categoryName: {
+                                    type: "string",
+                                    description: "Exact name of the category"
+                                }
+                            },
+                            required: [
+                                "amount",
+                                "categoryId",
+                                "categoryName"
+                            ],
+                            additionalProperties: false
+                        }
+                    }
+                }
+            },
+            model: "moonshotai/kimi-k2-instruct-0905",
+        });
+
+
+        const content = chatCompletion.choices[0]?.message?.content || "";
+        parsed = JSON.parse(content);
+
+    }catch (e){
+        throw e
+    }
+    return parsed
+
+}

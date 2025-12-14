@@ -17,7 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { ParsedTransaction, RootState } from "@/Interfaces/Interfaces";
 import {useDispatch, useSelector} from "react-redux";
-import {setTransactionTrigger} from "@/store/dateSlice";
+import {setTransactionTrigger} from "@/store/date-slice";
 
 interface Category {
     id: number;
