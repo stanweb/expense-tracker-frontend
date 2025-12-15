@@ -1,231 +1,145 @@
 import Groq from "groq-sdk";
-import { NextResponse } from "next/server";
-
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export default groq;
+async function makeGroqRequest(prompt: string, schema: any) {
+    try {
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
+            response_format: {
+                type: "json_schema",
+                json_schema: schema,
+            },
+            model: process.env.GROQ_MODEL || "moonshotai/kimi-k2-instruct-0905",
+        });
+
+        const content = chatCompletion.choices[0]?.message?.content || "";
+        const parsed = JSON.parse(content);
+        const totalTokens = chatCompletion.usage?.total_tokens || 0;
+
+        return { data: parsed, totalTokens };
+    } catch (error) {
+        console.error("Error in Groq API request:", error);
+        throw error;
+    }
+}
 
 export async function transactionExtractor(prompt: string) {
-
-    let parsed;
-    let totalTokens = 0;
-
-    try {
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
-            response_format: {
-                type: "json_schema",
-                json_schema: {
-                    name: "transaction_list",
-                    schema: {
-                        type: "array",
-                        items: {
-                            type: "object",
-                            properties: {
-                                transactionId: { type: "string" },
-                                amount: { type: "number" },
-                                transactionCost: { type: "number" },
-                                date: { type: "string" },
-                                recipient: { type: "string" },
-                                type: {
-                                    type: "string",
-                                    enum: ["paid", "sent", "received"],
-                                },
-                                rawMessage: { type: "string" },
-                            },
-                            required: [
-                                "transactionId",
-                                "amount",
-                                "transactionCost",
-                                "date",
-                                "recipient",
-                                "type",
-                                "rawMessage",
-                            ],
-                            additionalProperties: false,
-                        },
+    const schema = {
+        name: "transaction_list",
+        schema: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    transactionId: { type: "string" },
+                    amount: { type: "number" },
+                    transactionCost: { type: "number" },
+                    date: { type: "string" },
+                    recipient: { type: "string" },
+                    type: {
+                        type: "string",
+                        enum: ["paid", "sent", "received"],
                     },
+                    rawMessage: { type: "string" },
                 },
+                required: [
+                    "transactionId",
+                    "amount",
+                    "transactionCost",
+                    "date",
+                    "recipient",
+                    "type",
+                    "rawMessage",
+                ],
+                additionalProperties: false,
             },
-            model: "moonshotai/kimi-k2-instruct-0905",
-        });
-
-        // Extract actual JSON
-        const content = chatCompletion.choices[0]?.message?.content || "";
-        parsed = JSON.parse(content);
-
-        // Extract total token usage
-        totalTokens = chatCompletion.usage?.total_tokens || 0;
-
-    } catch (err) {
-        throw err;
-    }
-
-    // ✔ Return both values
-    return {
-        data: parsed,
-        totalTokens,
+        },
     };
+    return makeGroqRequest(prompt, schema);
 }
 
-export async function iconGenerator (prompt: string) {
-    let parsed
-    try {
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
+export async function iconGenerator(prompt: string) {
+    const schema = {
+        name: "transaction_list",
+        schema: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    iconName: { type: "string" },
                 },
-            ],
-            response_format: {
-                type: "json_schema",
-                json_schema: {
-                    name: "transaction_list",
-                    schema: {
-                        type: "array",
-                        items: {
-                            type: "object",
-                            properties: {
-                                iconName: { type: "string" },
-                            },
-                            required: [
-                                "iconName",
-                            ],
-                            additionalProperties: false,
-                        },
-                    },
-                },
+                required: ["iconName"],
+                additionalProperties: false,
             },
-            model: "moonshotai/kimi-k2-instruct-0905",
-        });
-        // Extract actual JSON
-        const content = chatCompletion.choices[0]?.message?.content || "";
-        parsed = JSON.parse(content);
-
-    }
-    catch (e){
-        throw e
-    }
-
-    return parsed
+        },
+    };
+    const { data } = await makeGroqRequest(prompt, schema);
+    return data;
 }
-
 
 export const categoryGenerator = async (prompt: string) => {
-    let parsed;
-    try {
-
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
+    const schema = {
+        name: "category_list",
+        schema: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    name: {
+                        type: "string",
+                        description: "Human-readable category name",
+                    },
+                    categoryIcon: {
+                        type: "string",
+                        description: "Icon identifier (e.g., ShoppingCart, PiggyBank, Fuel)",
+                    },
+                    description: {
+                        type: "string",
+                        description: "Short, clear financial description of the category",
+                    },
                 },
-            ],
-            response_format: {
-                type: "json_schema",
-                json_schema: {
-                    name: "category_list",
-                    schema: {
-                        type: "array",
-                        items: {
-                            type: "object",
-                            properties: {
-                                name: {
-                                    type: "string",
-                                    description: "Human-readable category name"
-                                },
-                                categoryIcon: {
-                                    type: "string",
-                                    description: "Icon identifier (e.g., ShoppingCart, PiggyBank, Fuel)"
-                                },
-                                description: {
-                                    type: "string",
-                                    description: "Short, clear financial description of the category"
-                                }
-                            },
-                            required: [
-                                "name",
-                                "categoryIcon",
-                                "description"
-                            ],
-                            additionalProperties: false
-                        }
-                    }
-                }
+                required: ["name", "categoryIcon", "description"],
+                additionalProperties: false,
             },
-            model: "moonshotai/kimi-k2-instruct-0905",
-        });
-
-
-        const content = chatCompletion.choices[0]?.message?.content || "";
-        parsed = JSON.parse(content);
-
-    }catch (e){
-        throw e
-    }
-    return parsed
-}
-
+        },
+    };
+    const { data } = await makeGroqRequest(prompt, schema);
+    return data;
+};
 
 export const budgetGenerator = async (prompt: string) => {
-    let parsed;
-    try {
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
+    const schema = {
+        name: "budget_list",
+        schema: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    amount: {
+                        type: "number",
+                        description: "Monthly budgeted amount for the category",
+                    },
+                    categoryId: {
+                        type: "number",
+                        description: "Existing category ID provided in the categories input",
+                    },
+                    categoryName: {
+                        type: "string",
+                        description: "Exact name of the category",
+                    },
                 },
-            ],
-            response_format: {
-                type: "json_schema",
-                json_schema: {
-                    name: "budget_list",
-                    schema: {
-                        type: "array",
-                        items: {
-                            type: "object",
-                            properties: {
-                                amount: {
-                                    type: "number",
-                                    description: "Monthly budgeted amount for the category"
-                                },
-                                categoryId: {
-                                    type: "number",
-                                    description: "Existing category ID provided in the categories input"
-                                },
-                                categoryName: {
-                                    type: "string",
-                                    description: "Exact name of the category"
-                                }
-                            },
-                            required: [
-                                "amount",
-                                "categoryId",
-                                "categoryName"
-                            ],
-                            additionalProperties: false
-                        }
-                    }
-                }
+                required: ["amount", "categoryId", "categoryName"],
+                additionalProperties: false,
             },
-            model: "moonshotai/kimi-k2-instruct-0905",
-        });
+        },
+    };
+    const { data } = await makeGroqRequest(prompt, schema);
+    return data;
+};
 
-
-        const content = chatCompletion.choices[0]?.message?.content || "";
-        parsed = JSON.parse(content);
-
-    }catch (e){
-        throw e
-    }
-    return parsed
-
-}
+export default groq;

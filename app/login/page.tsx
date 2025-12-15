@@ -7,7 +7,7 @@ import { setUser } from "@/store/user-slice";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import axiosClient from "@/utils/axioClient";
+import axiosClient from "@/utils/servicesAxiosClient";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -21,12 +21,15 @@ const LoginPage = () => {
         setError("");
 
         try {
-            const response = await axiosClient.post("/auth/login", { username, password });
+            const response = await axiosClient.post(
+                "/auth/login",
+                { username, password },
+            );
             const data = response.data;
 
             dispatch(setUser({ userId: data.userId, username: data.username }));
 
-            if (!data.onboardingComplete) {
+            if (!data.onboardingCompleted) {
                 router.push("/onboarding-wizard");
             } else {
                 router.push('/');

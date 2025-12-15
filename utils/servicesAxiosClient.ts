@@ -1,8 +1,9 @@
 // axiosClient.js
 import axios from "axios";
+import {NEXT_PUBLIC_SERVICES_API_BASE_URL} from "@/configs";
 
 const axiosClient = axios.create({
-    baseURL: "http://localhost:8080/api/",
+    baseURL: NEXT_PUBLIC_SERVICES_API_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },

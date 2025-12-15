@@ -14,7 +14,7 @@ import aiAxiosClient from "@/utils/aiAxioClient";
 import {LoadingOverlay} from "@/components/ui/loading-overlay";
 import CategorySuggestions from "@/components/onboarding/CategorySuggestions";
 import axios from "axios";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import {useSelector} from "react-redux";
 import {RootState} from "@/Interfaces/Interfaces";
 import {addCategories} from "@/components/api-calls/categories";
@@ -88,8 +88,11 @@ const OnboardingWizard = () => {
             setError('Please fill in all required fields.');
         }
     };
+    const updateOnboardingComplete = async () => {
+        await axioClient.put(`users/${userId}`, {onboardingCompleted: true})
+    }
     const handleSkip = async () => {
-        await axioClient.put(`users/${userId}`, {onboardingComplete: true})
+       void updateOnboardingComplete()
         router.push('/')
     }
 
@@ -124,6 +127,7 @@ const OnboardingWizard = () => {
                 year: now.getFullYear(),
             }));
             const response = await axioClient.post(`users/${userId}/budgets/batch`, newBudgets);
+            void updateOnboardingComplete()
 
             router.push('/')
         } catch (e){

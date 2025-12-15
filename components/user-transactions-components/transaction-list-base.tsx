@@ -9,7 +9,7 @@ import { ApiTransaction, AddTransaction, ParsedTransaction, RootState, UiTransac
 import { useDispatch, useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
 import { useEffect, useState } from 'react';
-import axioClient from '@/utils/axioClient';
+import axioClient from '@/utils/servicesAxiosClient';
 import { getIcon, formatDaysAgo } from '@/utils/helpers';
 import ConfirmTransactionModal from "@/components/user-transactions-components/confrim-transaction";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
@@ -20,7 +20,7 @@ import { Search } from 'lucide-react';
 import aiAxioClient from "@/utils/aiAxioClient";
 import { addJob, clearJob } from '@/store/jobs-slice';
 import backendAxios from "@/utils/backendAxios";
-import axiosClient from "@/utils/axioClient";
+import axiosClient from "@/utils/servicesAxiosClient";
 import {setTransactionTrigger} from "@/store/date-slice";
 
 interface TransactionListBaseProps {

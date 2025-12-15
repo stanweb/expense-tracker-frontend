@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useSelector } from 'react-redux';
 import { RootState, TopSpender, Category } from '@/Interfaces/Interfaces'; // Import Category interface
 import { useEffect, useState } from 'react';
-import axioClient from '@/utils/axioClient';
+import axioClient from '@/utils/servicesAxiosClient';
 
 export function TopSpendersList() {
     const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);

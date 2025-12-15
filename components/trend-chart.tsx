@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useEffect, useState } from 'react';
-import axioClient from '@/utils/axioClient';
+import axioClient from '@/utils/servicesAxiosClient';
 import { TrendData } from '@/Interfaces/Interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/Interfaces/Interfaces';

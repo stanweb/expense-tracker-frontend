@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import axiosClient from "@/utils/axioClient";
+import axiosClient from "@/utils/servicesAxiosClient";
 import backendAxios from "@/utils/backendAxios";
 
 export default async function ProtectedLayout({

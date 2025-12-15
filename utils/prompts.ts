@@ -1,30 +1,130 @@
-export const pdfExtractPrompt = `You are an LLM tasked with extracting transactions from an MPESA statement. 
-The statement text is provided below.
+export const pdfExtractPrompt = `You are an LLM specialized in extracting structured transactions from raw MPESA statements (PDF or text-converted).
 
-Extraction Rules
+The full MPESA statement text will be provided below.
+Your task is to identify, normalize, and extract each financial transaction exactly as it appears, even when transactions span multiple lines or appear as grouped entries (for example: charges, Fuliza, overdraft).
 
-1. Each transaction must populate this JSON DTO: { “transactionId”: “”, “amount”: 0.0, “transactionCost”: 0.0, “date”: “”, “recipient”: “”, “type”: “”, “rawMessage”: “” }
+TARGET OUTPUT DTO (STRICT)
 
-2. transactionId - Use the Receipt No as the transactionId.
+Each transaction must be emitted as a JSON object using only this structure:
 
-3. amount - Use the numeric value under Paid in or Withdrawn. If both exist, the non‑zero one is the amount. Paid in → positive, Withdrawn → positive.
+{
+"transactionId": "",
+"amount": 0.0,
+"transactionCost": 0.0,
+"date": "",
+"recipient": "",
+"type": "",
+"rawMessage": ""
+}
 
-4. transactionCost - If a transaction has a duplicate receipt number, one entry is a charge. Identify the charge line (labels: “Charge”, “Fuliza”, etc.) and set its Withdrawn amount as transactionCost. Otherwise, 0.
+EXTRACTION RULES (AUTHORITATIVE)
 
-5. date - Use Completion Time as-is (YYYY-MM-DDTHH:MM:SS).
+Transaction Identification
 
-6. recipient - Extract from the Details field. Do not include unrelated lines.
+Use the Receipt No as transactionId
 
-7. type - Withdrawn > 0 → "paid", Paid in > 0 → "received".
+Multiple rows may share the same Receipt No
 
-8. rawMessage - Insert the entire Details text of that entry exactly as it appears.
+Treat all rows with the same Receipt No as one logical transaction group
 
-Output Requirements
+Amount
 
-- Only output valid JSON array of GeminiTransactionDTO objects.
-- No commentary, explanation, or markdown.
+Use the numeric value under Paid in or Withdrawn
 
-MPESA Statement Text:
+If both exist, select the non-zero value
+
+Amount is always positive
+
+Do not include charges in amount
+
+Transaction Cost
+
+If a Receipt No appears multiple times:
+
+Identify the row whose Details indicates a charge
+(keywords include: Charge, Fuliza, OverDraft, OD Loan, Transfer of Funds Charge, Pay Bill Charge, Pay Merchant Charge)
+
+Set transactionCost to the Withdrawn value of that charge row
+
+If no explicit charge exists for that Receipt No, transactionCost = 0
+
+Date
+
+Use Completion Time
+
+Preserve format exactly as:
+YYYY-MM-DDTHH:MM:SS
+
+Recipient
+
+Extract only the recipient or counterparty from the Details field
+
+Exclude status text, balances, and system phrases (for example: Original conversation ID)
+
+Examples:
+Customer Transfer to 254712***146 - LUCIAH NJAMBI MUTUA → LUCIAH NJAMBI MUTUA
+Merchant Payment to 827803 - ASTROL PETROLEUM- UTAWALA → ASTROL PETROLEUM- UTAWALA
+247247 - Equity Paybill Account Acc. 163403-> Equity Paybill Account Acc. 163403
+644811 - DTB MOBILE via API. Original conversation ID is PMMP6N2X1765012456571_118XB2T253400010. -> DTB MOBILE via API
+
+Type
+
+If Withdrawn > 0 → "paid"
+
+If Paid in > 0 → "received"
+
+Raw Message
+
+Copy the entire Details field exactly as printed
+
+Preserve line breaks, spacing, and masking (*** characters)
+
+Do not merge, clean, or rewrite the text
+
+SPECIAL HANDLING RULES
+
+Fuliza / Overdraft
+
+Treat overdraft credit rows (OverDraft of Credit Party) as supporting entries
+
+Do not emit them as standalone transactions
+
+Only extract the actual payment or transfer
+
+Charges
+
+Never emit charge-only rows as standalone transactions
+
+Charges only populate transactionCost
+
+Balances
+
+Ignore the balance column entirely
+
+Headers, footers, disclaimers
+
+Ignore all non-transaction text
+
+OUTPUT REQUIREMENTS (STRICT)
+
+Output only a valid JSON array
+
+One object per logical transaction
+
+No comments
+
+No explanations
+
+No markdown
+
+No trailing commas
+
+Preserve numeric precision exactly as shown
+
+MPESA STATEMENT TEXT
+(Provided below verbatim — do not infer or hallucinate missing data)
+
+<<<STATEMENT_TEXT>>>
 `
 
 

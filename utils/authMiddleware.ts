@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import axiosClient from "@/utils/axioClient";
 import backendAxios from "@/utils/backendAxios";
 
 type AuthenticatedHandler = (req: NextRequest) => Promise<NextResponse>;
@@ -21,6 +20,7 @@ export function withAuth(handler: AuthenticatedHandler): AuthenticatedHandler {
                 },
             });
         } catch (err) {
+            console.error("Session validation failed:", err);
             return new NextResponse("Unauthorized", { status: 401 });
         }
 

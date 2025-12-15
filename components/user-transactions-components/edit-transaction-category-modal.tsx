@@ -19,7 +19,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { RootState, UiTransaction } from '@/Interfaces/Interfaces';
-import axioClient from '@/utils/axioClient';
+import axioClient from '@/utils/servicesAxiosClient';
 import { getIcon } from '@/utils/helpers';
 import {useDispatch, useSelector} from 'react-redux';
 import {setTransactionTrigger} from "@/store/date-slice";

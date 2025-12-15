@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { useEffect, useState } from "react";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import {COLORS} from "../utils/constants"
 import { useSelector } from "react-redux";
 import { RootState } from "@/Interfaces/Interfaces";

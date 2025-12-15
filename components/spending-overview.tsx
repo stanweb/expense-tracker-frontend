@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState, OverviewData } from "@/Interfaces/Interfaces";
 import { ActiveCategoryItem } from "@/components/active-category-item";
 import { useEffect, useState } from 'react';
-import axiosClient from '@/utils/axioClient';
+import axiosClient from '@/utils/servicesAxiosClient';
 
 export function SpendingOverview() {
     const { transactionType, fromDate, toDate, transactionTrigger } = useSelector((state: RootState) => state.dateRange);

@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Category, RootState } from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import { CategoryForm } from "@/components/category-form";
 import {
     DropdownMenu,

@@ -9,9 +9,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import {Budget, RootState} from "@/Interfaces/Interfaces"
+import {Budget, Category, RootState} from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import { BudgetForm } from "@/components/budget/budget-form";
 import { Copy, MoreHorizontal, Pencil, Plus, Trash2} from "lucide-react";
 import {
@@ -27,28 +27,41 @@ import { Label } from "@/components/ui/label";
 import { MONTHS, YEARS } from "@/utils/constants";
 import {useSelector} from "react-redux";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {getCategories} from "@/components/api-calls/categories";
 
 export function BudgetsList() {
     const [budgets, setBudgets] = useState<Budget[]>([])
+    const [lastMonthBudget, setLastMonthBudget] = useState<Budget[]>([])
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null)
     const [selectedMonth, setSelectedMonth] = useState<string>(String(new Date().getMonth() + 1));
     const [selectedYear, setSelectedYear] = useState<string>(String(new Date().getFullYear()));
+    const [categories, setCategories] = useState<Category[]>([])
     const userId = useSelector((state: RootState) => state.user.userId);
 
     const fetchBudgets = async (month: string, year: string) => {
         try {
             const response = await axioClient.get<Budget[]>(`users/${userId}/budgets?month=${month}&year=${year}`)
             setBudgets(response.data || [])
+            const lastMonthBudget = await axioClient.get(`users/${userId}/budgets?month=${Number(month) - 1}&year=${year}`)
+            setLastMonthBudget(lastMonthBudget.data || [])
         } catch (error) {
             console.error("Error fetching budgets:", error)
             setBudgets([])
         }
     }
+    const fetchCategories = async () => {
+        const categories = await getCategories(userId)
+        setCategories(categories)
+    }
 
     useEffect(() => {
         void fetchBudgets(selectedMonth, selectedYear)
     }, [selectedMonth, selectedYear])
+
+    useEffect(() => {
+        void fetchCategories()
+    }, [userId, isFormOpen]);
 
     const handleAdd = () => {
         setSelectedBudget(null)
@@ -72,9 +85,9 @@ export function BudgetsList() {
     const handleSubmit = async (budget: Partial<Budget>) => {
         try {
             if (budget.id) {
-                await axioClient.put(`users/1/budgets/${budget.id}`, budget)
+                await axioClient.put(`users/${userId}/budgets/${budget.id}`, budget)
             } else {
-                await axioClient.post("users/1/budgets", budget)
+                await axioClient.post(`users/${userId}/budgets`, budget)
             }
             await fetchBudgets(selectedMonth, selectedYear)
             setIsFormOpen(false)
@@ -155,11 +168,16 @@ export function BudgetsList() {
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <Button onClick={handleCopyLastMonth} variant="outline">
+                            {lastMonthBudget.length > 0 && <Button onClick={handleCopyLastMonth} variant="outline">
                                 <Copy className="mr-2 h-4 w-4"/>
                                 Copy Last Month's Budgets
-                            </Button>
-                            <Button onClick={handleAdd}>
+                            </Button> }
+
+                            <Button
+                                disabled={categories.length == budgets.length}
+                                className={'cursor-pointer'}
+                                onClick={handleAdd}>
+
                                 <Plus className="mr-2 h-4 w-4"/>
                                 Add Budget
                             </Button>
@@ -223,6 +241,7 @@ export function BudgetsList() {
                         onClose={() => setIsFormOpen(false)}
                         onSubmit={handleSubmit}
                         budget={selectedBudget}
+                        categories={categories}
                     />
                 </CardContent>
             </Card>
