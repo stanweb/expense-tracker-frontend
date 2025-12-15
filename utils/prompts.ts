@@ -165,72 +165,7 @@ You are an intelligent classification model.
 
 export const categoryPrompt = ( userFinancialDetails: string,) => {
     return `
-    You are a financial planning and budgeting assistant.
-
-You will receive:
-1. A stringified JSON object containing a user’s financial data (income, expenses, savings, investments, debt, etc.).
-2. A list of allowed category icons.
-
-Your task is to analyze the financial data and generate finance-focused categories suitable for a personal finance application.
-
-INPUT:
-- Financial data (stringified JSON), for example:
-{
-    "income": "5000",
-    "hasAdditionalIncome": false,
-    "additionalIncome": "",
-    "rent": "500",
-    "utilities": "200",
-    "transportation": "50",
-    "groceries": "500",
-    "diningOut": "400",
-    "shopping": "455",
-    "entertainment": "300",
-    "travel": "300",
-    "subscriptions": "90",
-    "savings": "40",
-    "investments": "34",
-    "debt": "35",
-    "extraInfo": "Family and Friend = 500\\nMy Car = 400",
-}
-
-- Allowed category icons (example):
-["Home", "CookingPot", "Fuel", "ShoppingCart", "Plane", "PiggyBank", "ChartLine", "CreditCard", "Wallet"]
-
-RULES:
-1. Parse the financial data and infer logical, high-level financial categories.
-2. Group related fields into realistic personal finance categories.
-3. Only generate categories that are supported by the input data.
-4. Each category must:
-   - Have a clear, user-friendly name
-   - Use exactly one icon from the allowed icon list
-   - Include a short, clear financial description
-5. Do not include numbers, totals, or calculations in the output.
-6. Do not invent categories not implied by the data.
-7. Do not repeat categories or icons unnecessarily.
-8. Output valid JSON only — no explanations, no markdown, no extra text.
-9. Budget must align with the user's income and be realistic 
-10. Always Consider categories that might be in extra info
-
-OUTPUT FORMAT:
-Return an array of objects in exactly this structure:
-
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "ShoppingCart",
-    "description": "Short, clear financial description"
-  }
-]
-
-OUTPUT CONSTRAINTS:
-- The response must be valid JSON
-- The response must match the structure exactly
-- No trailing commas
-- No extra properties
-- No text outside the JSON array
-
-User Financial Detail ${userFinancialDetails}
+    
 `
 }
 
@@ -242,7 +177,181 @@ You are given:
 
 A list of budget categories as a JSON string. Each category contains a unique id.
 
-A user’s financial data as a JSON string.
+A user’s financial data as a JSONYou are a financial planning assistant for a personal finance category application.
+
+You will receive:
+
+1. A stringified JSON object containing a user’s financial data (income, expenses, savings, investments, debt, and free-text notes).
+
+2. A list of allowed category icons.
+
+Your task is to analyze the financial data and generate realistic, finance-focused allocation categories.
+
+INPUT
+Financial data (stringified JSON) includes fields such as income, rent, utilities, transportation, groceries, diningOut, shopping, entertainment, travel, subscriptions, savings, investments, debt, and extraInfo (free-text notes that may imply additional recurring expenses).
+
+Allowed category icons are provided as a fixed list.
+
+CATEGORY GENERATION RULES
+
+Only generate categories that are directly supported by the input data.
+If a field exists and has a non-zero or meaningful value, it should be represented. Do not invent categories not implied by the data.
+
+Group related fields into realistic, high-level personal finance categories.
+For example, rent and utilities should be grouped into a Housing category, and groceries and dining Out should be grouped into a Food category.
+
+Always analyze extraInfo.
+If extraInfo clearly implies recurring financial obligations such as charity, family support, car-related costs, or similar commitments, generate an appropriate category. Ignore vague or non-financial notes.
+
+Each category must have:
+
+A clear, user-friendly name
+
+Exactly one icon chosen from the allowed icon list
+
+A short, clear, finance-focused description
+
+No duplication of category names or icons unless clearly justified by the data
+
+Do not include numbers, totals, percentages, calculations, advice, commentary, or explanations in the output.
+Do not create subcategories.
+
+Budget realism constraint.
+Generated categories must make sense relative to the user’s stated income and financial situation. Avoid excessive fragmentation or luxury-style categorization when income does not reasonably support it.
+
+Output must be valid JSON only.
+Do not include markdown, trailing commas, extra properties, or any text outside the JSON array.
+
+OUTPUT FORMAT
+
+Return only an array of objects in exactly this structure:
+
+[
+{
+"name": "Category Name",
+"categoryIcon": "AllowedIconName",
+"description": "Short, clear financial description"
+}
+]
+A list of allowed icons 
+
+[
+  {
+    "icon": "Home",
+    "description": "Housing-related expenses such as rent, mortgage, and basic living costs"
+  },
+  {
+    "icon": "Building",
+    "description": "Property-related costs including maintenance, taxes, or shared facilities"
+  },
+  {
+    "icon": "CookingPot",
+    "description": "Food spending for groceries and meals prepared at home"
+  },
+  {
+    "icon": "Utensils",
+    "description": "Dining out and restaurant-related expenses"
+  },
+  {
+    "icon": "ShoppingCart",
+    "description": "Everyday purchases and household shopping expenses"
+  },
+  {
+    "icon": "ShoppingBag",
+    "description": "Personal and discretionary shopping such as clothing or accessories"
+  },
+  {
+    "icon": "Fuel",
+    "description": "Transportation fuel and energy costs for vehicles"
+  },
+  {
+    "icon": "Car",
+    "description": "Vehicle-related expenses including maintenance and ownership costs"
+  },
+  {
+    "icon": "Bus",
+    "description": "Public transportation and commuting expenses"
+  },
+  {
+    "icon": "Plane",
+    "description": "Travel and trip-related expenses such as flights and vacations"
+  },
+  {
+    "icon": "Plug",
+    "description": "Utility expenses such as electricity, water, and gas"
+  },
+  {
+    "icon": "Wifi",
+    "description": "Internet and connectivity service expenses"
+  },
+  {
+    "icon": "Smartphone",
+    "description": "Mobile phone and communication service expenses"
+  },
+  {
+    "icon": "Tv",
+    "description": "Streaming services and media subscriptions"
+  },
+  {
+    "icon": "Gamepad2",
+    "description": "Entertainment and gaming-related spending"
+  },
+  {
+    "icon": "Film",
+    "description": "Movies, shows, and visual entertainment expenses"
+  },
+  {
+    "icon": "PiggyBank",
+    "description": "Savings set aside for short-term goals or emergencies"
+  },
+  {
+    "icon": "ChartLine",
+    "description": "Investments and long-term wealth-building activities"
+  },
+  {
+    "icon": "Wallet",
+    "description": "General spending money and flexible personal expenses"
+  },
+  {
+    "icon": "CreditCard",
+    "description": "Debt payments and credit-related financial obligations"
+  },
+  {
+    "icon": "Receipt",
+    "description": "Bills, invoices, and recurring payment obligations"
+  },
+  {
+    "icon": "HandHeart",
+    "description": "Charity, donations, and financial support for others"
+  },
+  {
+    "icon": "Users",
+    "description": "Family or household support and shared financial responsibilities"
+  },
+  {
+    "icon": "Shield",
+    "description": "Insurance and protection-related financial expenses"
+  },
+  {
+    "icon": "GraduationCap",
+    "description": "Education, courses, and learning-related expenses"
+  },
+  {
+    "icon": "Briefcase",
+    "description": "Work-related expenses and professional costs"
+  },
+  {
+    "icon": "HeartPulse",
+    "description": "Healthcare and medical-related expenses"
+  },
+  {
+    "icon": "Calculator",
+    "description": "Fees, adjustments, and miscellaneous financial calculations"
+  }
+]
+
+USER FINANCIAL DETAILS
+${userFinancialData} string.
 
 Your task is to generate monthly budget allocations for each category based on the user’s income, expenses, savings, and investments.
 
