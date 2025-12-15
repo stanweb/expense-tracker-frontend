@@ -1,8 +1,9 @@
 // axiosClient.js
 import axios from "axios";
+import {NEXT_PUBLIC_AI_API_BASE_URL} from "@/configs";
 
-const axiosClient = axios.create({
-    baseURL: "http://localhost:8080/api/",
+const aiAxiosClient = axios.create({
+    baseURL: NEXT_PUBLIC_AI_API_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -10,7 +11,7 @@ const axiosClient = axios.create({
 });
 
 // Automatic 401 handler
-axiosClient.interceptors.response.use(
+aiAxiosClient.interceptors.response.use(
     (response) => response,
     (error) => {
 
@@ -28,4 +29,4 @@ axiosClient.interceptors.response.use(
     }
 );
 
-export default axiosClient;
+export default aiAxiosClient;

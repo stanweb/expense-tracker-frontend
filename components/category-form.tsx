@@ -18,7 +18,7 @@ import {Textarea} from "@/components/ui/textarea";
 interface CategoryFormProps {
     isOpen: boolean
     onClose: () => void
-    onSubmit: (category: Partial<Category>) => void
+    onSubmit: (categories: Partial<Category>) => void
     category?: Category | null
 }
 

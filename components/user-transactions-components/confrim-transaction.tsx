@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectItem, SelectValue, SelectContent } from "@/components/ui/select";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import { Table, TableBody, TableCell, TableRow, TableHead, TableHeader } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { ParsedTransaction, RootState } from "@/Interfaces/Interfaces";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setTransactionTrigger} from "@/store/date-slice";
 
 interface Category {
     id: number;
@@ -36,14 +37,23 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     const [transactionCategories, setTransactionCategories] = useState<{ [key: number]: string }>({});
     const [isLoading, setIsLoading] = useState(false);
     const userId = useSelector((state: RootState) => state.user.userId);
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (isOpen && userId) {
-            axioClient.get(`/users/${userId}/categories`).then((res) => setCategories(res.data));
-            // Reset categories on new modal open
-            setTransactionCategories({});
+            axioClient.get(`/users/${userId}/categories`).then((res) => {
+                setCategories(res.data);
+                const uncategorized = res.data.find((c: Category) => c.name.toLowerCase() === "Uncategorized".toLowerCase());
+                if (uncategorized) {
+                    const initialCategories = parsed.reduce((acc, _, index) => {
+                        acc[index] = String(uncategorized.id);
+                        return acc;
+                    }, {} as { [key: number]: string });
+                    setTransactionCategories(initialCategories);
+                }
+            });
         }
-    }, [isOpen, userId]);
+    }, [isOpen, userId, parsed]);
 
     const handleCategoryChange = (index: number, categoryId: string) => {
         setTransactionCategories(prev => ({ ...prev, [index]: categoryId }));
@@ -64,6 +74,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
             await axioClient.post(`/users/${userId}/transactions`, transactionsToSave);
             onSuccess();
             onClose();
+            dispatch(setTransactionTrigger(Date.now().toString()))
         } catch (err) {
             console.error(err);
         } finally {
@@ -74,7 +85,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             {isLoading && <LoadingOverlay message="AI is processing transactions..." />}
-            <DialogContent className="sm:max-w-[800px]">
+            <DialogContent className="sm:max-w-[60vw]">
                 <DialogHeader>
                     <DialogTitle>Confirm Transactions</DialogTitle>
                     <DialogDescription>Review the extracted transactions and assign a category to each.</DialogDescription>
@@ -93,7 +104,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
                             <TableBody>
                                 {parsed.map((p, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{p.recipient || "N/A"}</TableCell>
+                                        <TableCell>{p.recipient?.slice(0,40) || "N/A"}</TableCell>
                                         <TableCell>{p.amount}</TableCell>
                                         <TableCell>{new Date(p.date).toLocaleString()}</TableCell>
                                         <TableCell>

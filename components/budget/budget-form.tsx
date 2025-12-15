@@ -11,34 +11,37 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Budget, Category } from "@/Interfaces/Interfaces"
+import {Budget, Category, RootState} from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import { MONTHS, YEARS } from "@/utils/constants";
+import {useSelector} from "react-redux";
 
 interface BudgetFormProps {
     isOpen: boolean
     onClose: () => void
     onSubmit: (budget: Partial<Budget>) => void
     budget?: Budget | null
+    categories: Category []
 }
 
-export function BudgetForm({ isOpen, onClose, onSubmit, budget }: BudgetFormProps) {
+export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories }: BudgetFormProps) {
     const [amount, setAmount] = useState<number | string>("")
     const [month, setMonth] = useState<string>("")
     const [year, setYear] = useState<string>("")
     const [categoryId, setCategoryId] = useState<string>("")
-    const [categories, setCategories] = useState<Category[]>([])
+    // const [categories, setCategories] = useState<Category[]>([])
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const userId = useSelector((state:RootState) => state.user.userId)
 
-    useEffect(() => {
-        if (isOpen) {
-            axioClient.get<Category[]>("users/1/categories").then((res) => {
-                setCategories(res.data || [])
-            })
-        }
-    }, [isOpen])
+    // useEffect(() => {
+    //     if (isOpen) {
+    //         axioClient.get<Category[]>(`users/${userId}/categories`).then((res) => {
+    //             setCategories(res.data || [])
+    //         })
+    //     }
+    // }, [isOpen])
 
     useEffect(() => {
         if (budget) {
@@ -97,12 +100,12 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget }: BudgetFormProp
                 </DialogHeader>
                 <div className="space-y-4">
                     <div>
-                        <Label htmlFor="amount">Amount</Label>
+                        <Label htmlFor="amount my-2">Amount</Label>
                         <Input id="amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="bg-input text-foreground border-input" />
                         {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="month">Month</Label>
+                        <Label htmlFor="month my-2">Month</Label>
                         <Select onValueChange={setMonth} value={month}>
                             <SelectTrigger className="w-full bg-input text-foreground border-input">
                                 <SelectValue placeholder="Select a month" />
@@ -118,7 +121,7 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget }: BudgetFormProp
                         {errors.month && <p className="text-red-500 text-sm mt-1">{errors.month}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="year">Year</Label>
+                        <Label htmlFor="year my-2">Year</Label>
                         <Select onValueChange={setYear} value={year}>
                             <SelectTrigger className="w-full bg-input text-foreground border-input">
                                 <SelectValue placeholder="Select a year" />
@@ -134,7 +137,7 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget }: BudgetFormProp
                         {errors.year && <p className="text-red-500 text-sm mt-1">{errors.year}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="category">Category</Label>
+                        <Label htmlFor="category my-2">Category</Label>
                         <Select onValueChange={setCategoryId} value={categoryId}>
                             <SelectTrigger className="w-full bg-input text-foreground border-input">
                                 <SelectValue placeholder="Select a category" />

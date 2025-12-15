@@ -6,14 +6,13 @@ import { useSelector } from "react-redux";
 import { RootState, OverviewData } from "@/Interfaces/Interfaces";
 import { ActiveCategoryItem } from "@/components/active-category-item";
 import { useEffect, useState } from 'react';
-import axiosClient from '@/utils/axioClient';
+import axiosClient from '@/utils/servicesAxiosClient';
 
 export function SpendingOverview() {
-    const { transactionType, fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const { transactionType, fromDate, toDate, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const [data, setData] = useState<OverviewData | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     const totalSpentLabel = transactionType === 'received' ? 'Total Received' : 'Total Spent';
 
@@ -21,7 +20,6 @@ export function SpendingOverview() {
         if (!userId) return;
         const fetchSpendingData = async () => {
             setLoading(true);
-            setError(null);
             try {
                 let typeParam = '';
                 if (transactionType === 'spent') {
@@ -39,16 +37,14 @@ export function SpendingOverview() {
                 });
                 setData(response.data);
             } catch (err: any) {
-                setError(err.message || 'Failed to fetch data');
+                console.error(err.message || 'Failed to fetch data');
                 setData(null);
             } finally {
                 setLoading(false);
             }
         };
-        if (fromDate && toDate) {
-            fetchSpendingData();
-        }
-    }, [fromDate, toDate, transactionType, userId]);
+        fetchSpendingData().catch(console.error);
+    }, [fromDate, toDate, transactionType, userId, transactionTrigger]);
 
     if (loading) {
         return (
@@ -67,20 +63,17 @@ export function SpendingOverview() {
             </div>
         )
     }
-
-    if (error || !data || (data.totalSpent === 0 && data.transactionCost === 0 && data.categoriesCount === 0 && data.transactionsCount === 0)) {
+    
+    if (!data) {
         return (
-            <div className="col-span-full text-center py-8 text-muted-foreground">
-                <Card className="bg-destructive/10 border-destructive/20">
-                    <CardContent className="pt-6">
-                        <div className="text-center">
-                            <p className="text-destructive font-medium">No data available for the selected period</p>
-                            <p className="text-sm text-muted-foreground mt-1">
-                                Please select a different date range or add some transactions.
-                            </p>
-                        </div>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {Array.from({ length: 4 }).map((_, index) => (
+                    <Card key={index} className="bg-card">
+                        <CardContent className="pt-6">
+                            <p>No data available</p>
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
         )
     }

@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/userSlice";
+import { setUser } from "@/store/user-slice";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
+import axiosClient from "@/utils/servicesAxiosClient";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -20,26 +21,35 @@ const LoginPage = () => {
         setError("");
 
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password }),
-                credentials: 'include', // Added this line
-            });
+            const response = await axiosClient.post(
+                "/auth/login",
+                { username, password },
+            );
+            const data = response.data;
 
-            if (response.ok) {
-                const data = await response.json();
-                dispatch(setUser({ userId: data.userId, username: data.username }));
-                router.push("/"); // Redirect to home page or dashboard
-            } else if (response.status === 403) {
-                setError("Invalid username or password.");
+            dispatch(setUser({ userId: data.userId, username: data.username }));
+
+            if (!data.onboardingCompleted) {
+                router.push("/onboarding-wizard");
             } else {
-                setError("An unexpected error occurred. Please try again.");
+                router.push('/');
             }
-        } catch (err) {
-            setError("Failed to connect to the server. Please check your network.");
+
+        } catch (err: any) {
+            // Check if it's an Axios error with a response
+            if (err.response) {
+                if (err.response.status === 401) {
+                    setError("Invalid username or password.");
+                } else {
+                    setError(`Server returned status ${err.response.status}: ${err.response.data?.message || 'Unknown error'}`);
+                }
+            } else if (err.request) {
+                // Request was made but no response received
+                setError("Failed to connect to the server. Please check your network.");
+            } else {
+                // Something else happened
+                setError("An unexpected error occurred.");
+            }
         }
     };
 
@@ -102,8 +112,8 @@ const LoginPage = () => {
 
                         <div>
                             <Button
+                                variant="default"
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Sign in
                             </Button>

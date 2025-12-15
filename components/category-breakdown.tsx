@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { useEffect, useState } from "react";
-import axioClient from "@/utils/axioClient";
+import axioClient from "@/utils/servicesAxiosClient";
 import {COLORS} from "../utils/constants"
 import { useSelector } from "react-redux";
 import { RootState } from "@/Interfaces/Interfaces";
@@ -13,12 +13,12 @@ import {Button} from "@/components/ui/button";
 
 
 export function CategoryBreakdown() {
-    const { fromDate, toDate } = useSelector((state: RootState) => state.dateRange);
+    const { fromDate, toDate, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const [categoryData, setCategoryData] = useState<any[]>([])
 
     useEffect(() => {
-        if (fromDate && toDate && userId) {
+        if (userId) {
             axioClient.get(`users/${userId}/category/summary`, {
                 params: {
                     startDate: fromDate,
@@ -40,7 +40,7 @@ export function CategoryBreakdown() {
                     }
                 })
         }
-    }, [fromDate, toDate, userId])
+    }, [fromDate, toDate, userId, transactionTrigger])
 
     return (
         <Card className="bg-card">

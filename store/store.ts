@@ -12,18 +12,20 @@ import {
     REGISTER,
 } from 'redux-persist';
 
-import dateRangeReducer from "./dateSlice";
-import userReducer from "./userSlice"; // Import the new user reducer
+import dateRangeReducer from "./date-slice";
+import userReducer from "./user-slice";
+import jobsReducer from "./jobs-slice";
 
 const rootReducer = combineReducers({
     dateRange: dateRangeReducer,
-    user: userReducer, // Add the user reducer to the root reducer
+    user: userReducer,
+    jobs: jobsReducer,
 });
 
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["dateRange", "user"], // Add "user" to the whitelist to persist user data
+    whitelist: ["dateRange", "user", "jobs"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

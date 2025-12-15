@@ -6,8 +6,20 @@ export interface ParsedTransaction {
     transactionCost: number;
     date: string; // ISO datetime string
     recipient: string | null;
-    type: "expense" | "income";
+    type: "sent" | "received" | "paid" | "";
     rawMessage: string;
+}
+
+export interface AddTransaction {
+    transactionId: string;
+    amount: number;
+    transactionCost: number;
+    date: string;
+    recipient: string;
+    type: string;
+    rawMessage: string;
+    categoryId: number;
+
 }
 
 export interface OverviewData {
@@ -17,14 +29,29 @@ export interface OverviewData {
     transactionsCount: number;
 }
 
-export interface RootState {
-    dateRange: AppDateRangeState;
+export interface User {
+    userName: string;
+    userId: number;
+    onboardingCompleted: boolean;
 }
 
+export interface JobState {
+    jobId: string | null;
+    status: string | null;
+  }
+  
+  export interface RootState {
+      dateRange: AppDateRangeState;
+      user: User;
+      jobs: JobState [];
+  }
+  
+
 export interface AppDateRangeState {
-    fromDate: string; // ISO string
-    toDate: string;   // ISO string
+    fromDate: string | null; // ISO string
+    toDate: string | null;   // ISO string
     transactionType: 'all' | 'spent' | 'received';
+    transactionTrigger: string | null;       // <- added
 }
 
 export interface ApiTransaction {

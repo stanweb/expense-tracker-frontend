@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import axiosClient from "@/utils/axioClient";
+import axiosClient from "@/utils/servicesAxiosClient";
+import backendAxios from "@/utils/backendAxios";
 
 export default async function ProtectedLayout({
                                                   children,
@@ -17,7 +18,7 @@ export default async function ProtectedLayout({
 
     try {
         // Validate session with backend using axios
-        await axiosClient.get("/auth/validate-session", {
+        await backendAxios.get("/auth/validate-session", {
             headers: {
                 Cookie: `JSESSIONID=${sessionId}`,
             },

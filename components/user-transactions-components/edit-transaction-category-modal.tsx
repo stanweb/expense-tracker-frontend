@@ -19,9 +19,10 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { RootState, UiTransaction } from '@/Interfaces/Interfaces';
-import axioClient from '@/utils/axioClient';
+import axioClient from '@/utils/servicesAxiosClient';
 import { getIcon } from '@/utils/helpers';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {setTransactionTrigger} from "@/store/date-slice";
 
 
 interface Category {
@@ -48,6 +49,7 @@ export const EditTransactionCategoryModal = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const userId = useSelector((state: RootState) => state.user.userId);
+    const dispatch = useDispatch()
 
     // Fetch categories only once when the component mounts
     useEffect(() => {
@@ -81,6 +83,7 @@ export const EditTransactionCategoryModal = ({
             });
             onSuccess();
             onClose();
+            dispatch(setTransactionTrigger(Date.now().toString()))
         } catch (err: any) {
             console.error("Error updating transaction category:", err);
             setError(err.message || "Failed to update category.");
@@ -96,7 +99,7 @@ export const EditTransactionCategoryModal = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[40vw]">
                 <DialogHeader>
                     <DialogTitle>Edit Transaction Category</DialogTitle>
                     <DialogDescription>

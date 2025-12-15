@@ -6,8 +6,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import axiosClient from '../utils/axioClient';
-import { clearUser } from '../app/store/userSlice';
+import axiosClient from '../utils/servicesAxiosClient';
+import { clearUser } from '@/store/user-slice';
 
 export function DashboardHeader() {
   const dispatch = useDispatch();

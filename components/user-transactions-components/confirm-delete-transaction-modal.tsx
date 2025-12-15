@@ -32,7 +32,7 @@ export const ConfirmDeleteTransactionModal = ({
         if (transaction) {
             setLoading(true);
             try {
-                await onConfirm(transaction.id);
+                await onConfirm(transaction.id.toString());
                 onClose();
             } finally {
                 setLoading(false);

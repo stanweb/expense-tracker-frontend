@@ -2,7 +2,7 @@
 
 import { DashboardHeader } from '@/components/dashboard-header';
 import { TopSpendersList } from '@/components/user-transactions-components/top-spenders-list';
-import { DateRangePicker } from '@/components/DateRangePicker/date-range-picker';
+import { DateRangePicker } from '@/components/date-range-picker/date-range-picker';
 
 export default function TopSpendersPage() {
   return (
