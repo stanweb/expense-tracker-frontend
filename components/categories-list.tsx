@@ -20,16 +20,19 @@ import {
     DropdownMenuLabel, DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {MoreHorizontal, Pencil, Plus, Search, Trash2} from "lucide-react";
+import {LucideIcon, MoreHorizontal, Pencil, Plus, Search, Trash2} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import { useSelector } from "react-redux";
 import { addCategory, getCategories } from "./api-calls/categories";
 import aiAxiosClient from "@/utils/aiAxioClient";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {useToast} from "@/components/ui/ToastProvider";
+import {getIcon} from "@/utils/helpers";
 
 export function CategoriesList() {
     const [categories, setCategories] = useState<Category[]>([])
     const [isFormOpen, setIsFormOpen] = useState(false)
+    const { showToast } = useToast();
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
     const userId = useSelector((state: RootState) => state.user.userId);
@@ -68,9 +71,20 @@ export function CategoriesList() {
         if (!userId) return;
         try {
             await axioClient.delete(`users/${userId}/categories/${id}`)
+            showToast({
+                title: "Success!",
+                description: ` ${categories.find(category => category.id === id)?.name} category has been deleted.`,
+                variant: "success",
+                duration: 5000,
+            })
             await fetchCategories()
-        } catch (error) {
-            console.error("Error deleting category:", error)
+        } catch (error: any) {
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while deleting",
+                variant: "error",
+                duration: 5000,
+            })
         }
     }
 
@@ -84,16 +98,27 @@ export function CategoriesList() {
             if (category.id) {
                 await axioClient.put(`users/${userId}/categories/${category.id}`, {... category, categoryIcon: data.iconName})
             } else {
-                console.log(data)
                 await addCategory(userId, {
                     name: category.name!,
                     description: category.description!,
                     categoryIcon: data.iconName || null,
                 });
             }
+            showToast({
+                title: "Success!",
+                description: "Your category has been saved.",
+                variant: "success",
+                duration: 5000,
+            })
             await fetchCategories()
             setIsFormOpen(false)
-        } catch (error) {
+        } catch (error: any) {
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while saving your category.",
+                variant: "error",
+                duration: 5000,
+            })
             console.error("Error saving category:", error)
         }
     }
@@ -142,37 +167,44 @@ export function CategoriesList() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {filteredCategories.map((category) => (
+                            {filteredCategories.map((category) => {
+                                const Icon = getIcon(category.categoryIcon || 'CreditCard') as LucideIcon;
+                                return (
                                 <TableRow key={category.id} className={'hover:bg-transparent border'}>
-                                    <TableCell className="whitespace-pre-wrap break-words">{category.name}</TableCell>
-                                    <TableCell className="whitespace-pre-wrap break-words">{category.description}</TableCell>
+                                    <TableCell className="whitespace-pre-wrap break-words flex items-center">
+                                        <Icon className="h-5 w-5 text-primary mr-2"/>
+                                        {category.name}</TableCell>
+                                    <TableCell
+                                        className="whitespace-pre-wrap break-words">{category.description}</TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <span className="sr-only h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">Open menu</span>
-                                                    <MoreHorizontal className="h-4 w-4" />
+                                                    <span
+                                                        className="sr-only h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">Open menu</span>
+                                                    <MoreHorizontal className="h-4 w-4"/>
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                 <DropdownMenuItem onClick={() => handleEdit(category)}>
-                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    <Pencil className="mr-2 h-4 w-4"/>
                                                     Edit
                                                 </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
+                                                <DropdownMenuSeparator/>
                                                 <DropdownMenuItem
                                                     className="text-red-600 focus:text-red-600"
                                                     onClick={() => handleDelete(category.id)}
                                                 >
-                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    <Trash2 className="mr-2 h-4 w-4"/>
                                                     Delete
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                                )
+                            })}
                         </TableBody>
                     </Table>
                     <CategoryForm

@@ -99,12 +99,12 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories }: Bu
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
-                    <div>
+                    <div className='grid gap-2'>
                         <Label htmlFor="amount my-2">Amount</Label>
                         <Input id="amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="bg-input text-foreground border-input" />
                         {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount}</p>}
                     </div>
-                    <div>
+                    <div className={'grid gap-2'}>
                         <Label htmlFor="month my-2">Month</Label>
                         <Select onValueChange={setMonth} value={month}>
                             <SelectTrigger className="w-full bg-input text-foreground border-input">
@@ -120,7 +120,7 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories }: Bu
                         </Select>
                         {errors.month && <p className="text-red-500 text-sm mt-1">{errors.month}</p>}
                     </div>
-                    <div>
+                    <div className={'grid gap-2'}>
                         <Label htmlFor="year my-2">Year</Label>
                         <Select onValueChange={setYear} value={year}>
                             <SelectTrigger className="w-full bg-input text-foreground border-input">
@@ -136,7 +136,7 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories }: Bu
                         </Select>
                         {errors.year && <p className="text-red-500 text-sm mt-1">{errors.year}</p>}
                     </div>
-                    <div>
+                    <div className={'grid gap-2'}>
                         <Label htmlFor="category my-2">Category</Label>
                         <Select onValueChange={setCategoryId} value={categoryId}>
                             <SelectTrigger className="w-full bg-input text-foreground border-input">

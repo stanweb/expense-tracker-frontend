@@ -8,6 +8,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import axiosClient from "@/utils/servicesAxiosClient";
+import {Card} from "@/components/ui/card";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -55,9 +56,9 @@ const LoginPage = () => {
 
     return (
         <div className="flex min-h-screen min-w-screen items-center flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-card">
-            <div className={"rounded-3xl shadow-2xl px-4 py-2 sm:w-full md:w-[25vw]"} >
+            <Card className={"rounded-3xl shadow-2xl px-4 py-2 sm:w-full md:w-[25vw]"} >
                 <div className="">
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
                         Sign in to your account
                     </h2>
                 </div>
@@ -67,7 +68,7 @@ const LoginPage = () => {
                         <div>
                             <Label
                                 htmlFor="username"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6 text-foreground"
                             >
                                 Username
                             </Label>
@@ -80,7 +81,7 @@ const LoginPage = () => {
                                     required
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -89,7 +90,7 @@ const LoginPage = () => {
                             <div className="flex items-center justify-between">
                                 <Label
                                     htmlFor="password"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                    className="block text-sm font-medium leading-6 text-foreground"
                                 >
                                     Password
                                 </Label>
@@ -103,7 +104,7 @@ const LoginPage = () => {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -120,17 +121,17 @@ const LoginPage = () => {
                         </div>
                     </form>
 
-                    <p className="mt-10 text-center text-sm text-gray-500">
+                    <p className="mt-10 text-center text-sm text-muted-foreground">
                         Not a member?{" "}
                         <a
                             href="/register"
-                            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                            className="font-semibold leading-6 text-primary hover:text-primary/80"
                         >
                             Register for free
                         </a>
                     </p>
                 </div>
-            </div>
+            </Card>
 
         </div>
     );

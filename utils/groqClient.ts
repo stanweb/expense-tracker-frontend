@@ -14,9 +14,8 @@ async function makeGroqRequest(prompt: string, schema: any) {
                 type: "json_schema",
                 json_schema: schema,
             },
-            model: process.env.GROQ_MODEL || "moonshotai/kimi-k2-instruct-0905",
+            model: process.env.GROQ_MODEL || "meta-llama/llama-4-maverick-17b-128e-instruct",
         });
-
         const content = chatCompletion.choices[0]?.message?.content || "";
         const parsed = JSON.parse(content);
         const totalTokens = chatCompletion.usage?.total_tokens || 0;

@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/utils/authMiddleware";
-
-import { cookies } from "next/headers";
-import axios from "axios";
-import {budgetPrompt, iconPrompt} from "@/utils/prompts";
-import {budgetGenerator, iconGenerator} from "@/utils/groqClient";
+import {budgetGenerator} from "@/utils/groqClient";
+import {loadPrompt} from "@/utils/loadPrompts";
+import {BUDGET_PROMPT_GIST_URL} from "@/configs";
 
 
 async function handler(req: NextRequest) {
     const {categories, userFinancialData} = await req.json();
     try {
-
-        const prompt = budgetPrompt(categories, userFinancialData)
+        const gistPrompt = await loadPrompt(BUDGET_PROMPT_GIST_URL)
+        const prompt = gistPrompt.replace("<<<CATEGORIES>>>", categories).replace("<<<USER_FINANCIAL_DATA>>>", userFinancialData )
         const budgets = await budgetGenerator(prompt)
 
         return NextResponse.json( budgets, { status: 200 });

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,9 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import aiAxioClient from "@/utils/aiAxioClient";
 import { addJob, clearJob } from '@/store/jobs-slice';
-import backendAxios from "@/utils/backendAxios";
 import axiosClient from "@/utils/servicesAxiosClient";
 import {setTransactionTrigger} from "@/store/date-slice";
+import {useToast} from "@/components/ui/ToastProvider";
 
 interface TransactionListBaseProps {
     title: string;
@@ -49,6 +50,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [transactionToDelete, setTransactionToDelete] = useState<UiTransaction | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const {showToast} = useToast()
 
     const fetchTransactionsData = async () => {
         if (!userId) return;
@@ -122,14 +124,19 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
 
     const addTransaction = (transaction: AddTransaction) => {
         if (!userId) return;
+        setLoading(true)
         axioClient
             .post(`/users/${userId}/transactions`, [transaction])
             .then(() => {
                 void fetchTransactionsData();
                 setShowAddRawTransactionModal(false);
             })
-            .catch((error) => {
+            .catch((error: any) => {
+
                 console.error("Error adding transaction:", error);
+            })
+            .finally(()=> {
+                setLoading(false)
             })
     };
 
@@ -160,9 +167,24 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             .then((response) => {
                 const { jobId, status } = response.data;
                 dispatch(addJob({ jobId, status }));
+                showToast({
+                    title: 'Success',
+                    duration: 4000,
+                    variant: 'success',
+                    description: 'PDF uploaded successfully'
+                })
             })
             .catch((error) => {
                 console.error("Error uploading file:", error);
+                showToast({
+                    title: "Error!",
+                    description: error.response.data.message || "An error occurred while saving your category.",
+                    variant: "error",
+                    duration: 5000,
+                })
+            })
+            .finally(()=> {
+                setLoading(false)
             })
     };
 
@@ -170,17 +192,33 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     const handleTextSubmit = (rawMessage: string) => {
         if (!userId) return;
         setShowBulkUploadModal(false);
-        axioClient
-            .post(`http://localhost:3000/api/raw-text/ai`, { messages: rawMessage })
+        setLoading(true)
+
+        aiAxioClient
+            .post(`ai/raw-text`, { messages: rawMessage })
             .then((response) => {
                 const data = response.data;
-                console.log(data)
+
                 const transactionsArray = Array.isArray(data) ? data : [data];
                 setParsedTransactionData(transactionsArray);
                 setShowConfirmTransactionModal(true);
+                showToast({
+                    title: 'Success',
+                    duration: 4000,
+                    variant: 'success',
+                    description: 'Successfully processed transactions'
+                })
             })
             .catch((error) => {
-                console.error("Error processing bulk transactions:", error);
+                showToast({
+                    title: "Error!",
+                    description: error.response.data.message || "An error occurred while saving your category",
+                    variant: "error",
+                    duration: 5000,
+                })
+            })
+            .finally(()=>{
+                setLoading(false)
             })
     };
 
@@ -199,9 +237,20 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         try {
             await axioClient.delete(`/users/${userId}/transactions/${transactionId}`);
             handleSuccess();
-        } catch (err: any) {
-            console.error("Error deleting transaction:", err);
-            setError(err.message || "Failed to delete transaction.");
+            showToast({
+                title: "Success!",
+                description: "Your transaction has been deleted.",
+                variant: "success",
+                duration: 5000,
+            })
+        } catch (error: any) {
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while deleting",
+                variant: "error",
+                duration: 5000,
+            })
+            setError(error.message || "Failed to delete transaction.");
         }
     };
 
@@ -210,10 +259,20 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         setIsCategorizing(true);
         try {
             await axioClient.post(`/users/${userId}/categorize`, {});
+            showToast({
+                title: "Success!",
+                description: "Your transactions have been auto-categorized.",
+                variant: "success",
+                duration: 5000,
+            })
             await fetchTransactionsData();
-        } catch (error) {
-            console.error("Error during auto-categorization:", error);
-            setError("Failed to auto-categorize transactions.");
+        } catch (error: any) {
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while auto-categorizing",
+                variant: "error",
+                duration: 5000,
+            })
         } finally {
             setIsCategorizing(false);
         }
@@ -225,6 +284,8 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         if (loading) return "Loading...";
         return "Loading..."
     };
+
+
 
     const filteredTransactions = transactions.filter(transaction =>
         transaction.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

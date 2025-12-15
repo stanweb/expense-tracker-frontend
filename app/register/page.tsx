@@ -7,6 +7,8 @@ import { setUser } from "@/store/user-slice";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import axiosClient from "@/utils/servicesAxiosClient";
+import {Card} from "@/components/ui/card";
 
 const RegisterPage = () => {
     const [username, setUsername] = useState("");
@@ -20,33 +22,28 @@ const RegisterPage = () => {
         setError("");
 
         try {
-            const response = await fetch("http://localhost:8080/api/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                dispatch(setUser({ userId: data.userId, username: data.username }));
-                router.push("/"); // Redirect to home page or dashboard
-            } else if (response.status === 403) {
-                setError("Username already exists.");
+            const response = await axiosClient.post("/auth/register", { username, password });
+            const data = response.data;
+            dispatch(setUser({ userId: data.userId, username: data.username }));
+            router.push("/");
+        } catch (err: any) {
+            if (err.response) {
+                if (err.response.status === 403) {
+                    setError("Username already exists.");
+                } else {
+                    setError("An unexpected error occurred. Please try again.");
+                }
             } else {
-                setError("An unexpected error occurred. Please try again.");
+                setError("Failed to connect to the server. Please check your network.");
             }
-        } catch (err) {
-            setError("Failed to connect to the server. Please check your network.");
         }
     };
 
     return (
         <div className="flex min-h-screen min-w-screen items-center flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-card">
-            <div className={"rounded-3xl shadow-2xl px-4 py-2 sm:w-full md:w-[25vw]"}>
+            <Card className={"rounded-3xl shadow-2xl px-4 py-2 sm:w-full md:w-[25vw]"}>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
                         Register for an account
                     </h2>
                 </div>
@@ -56,7 +53,7 @@ const RegisterPage = () => {
                         <div>
                             <Label
                                 htmlFor="username"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6 text-foreground"
                             >
                                 Username
                             </Label>
@@ -69,7 +66,7 @@ const RegisterPage = () => {
                                     required
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -78,7 +75,7 @@ const RegisterPage = () => {
                             <div className="flex items-center justify-between">
                                 <Label
                                     htmlFor="password"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                    className="block text-sm font-medium leading-6 text-foreground"
                                 >
                                     Password
                                 </Label>
@@ -92,7 +89,7 @@ const RegisterPage = () => {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -109,17 +106,17 @@ const RegisterPage = () => {
                         </div>
                     </form>
 
-                    <p className="mt-10 text-center text-sm text-gray-500">
+                    <p className="mt-10 text-center text-sm text-muted-foreground">
                         Already a member?{" "}
                         <a
                             href="/login"
-                            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                            className="font-semibold leading-6 text-primary hover:text-primary/80"
                         >
                             Sign in
                         </a>
                     </p>
                 </div>
-            </div>
+            </Card>
 
         </div>
     );

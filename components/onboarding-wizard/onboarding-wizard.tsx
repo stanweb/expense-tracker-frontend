@@ -19,6 +19,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/Interfaces/Interfaces";
 import {addCategories} from "@/components/api-calls/categories";
 import {Card} from "@/components/ui/card";
+import {useToast} from "@/components/ui/ToastProvider";
 
 const OnboardingWizard = () => {
 
@@ -48,6 +49,7 @@ const OnboardingWizard = () => {
     const [error, setError] = useState('')
     const [submitting, setSubmitting] = useState(false)
     const [categories, setCategories] = useState([])
+    const {showToast} = useToast()
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -126,12 +128,25 @@ const OnboardingWizard = () => {
                 month: now.getMonth() + 1, // 1–12
                 year: now.getFullYear(),
             }));
-            const response = await axioClient.post(`users/${userId}/budgets/batch`, newBudgets);
+            await axioClient.post(`users/${userId}/budgets/batch`, newBudgets);
+
+            showToast({
+                title: "Success!",
+                description: "Your budgets has been saved.",
+                variant: "success",
+                duration: 5000,
+            })
+
             void updateOnboardingComplete()
 
             router.push('/')
-        } catch (e){
-            console.error(e)
+        } catch (error: any){
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while saving your category.",
+                variant: "error",
+                duration: 5000,
+            })
         } finally {
             setSubmitting(false)
         }

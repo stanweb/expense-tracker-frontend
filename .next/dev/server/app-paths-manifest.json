@@ -4,5 +4,11 @@
   "/(protected)/categories/page": "app/(protected)/categories/page.js",
   "/(protected)/onboarding-wizard/page": "app/(protected)/onboarding-wizard/page.js",
   "/(protected)/page": "app/(protected)/page.js",
-  "/login/page": "app/login/page.js"
+  "/api/ai/generate-budget/route": "app/api/ai/generate-budget/route.js",
+  "/api/ai/generate-category/route": "app/api/ai/generate-category/route.js",
+  "/api/ai/get-icon/route": "app/api/ai/get-icon/route.js",
+  "/api/ai/raw-text/route": "app/api/ai/raw-text/route.js",
+  "/api/ai/statement/route": "app/api/ai/statement/route.js",
+  "/login/page": "app/login/page.js",
+  "/register/page": "app/register/page.js"
 }
