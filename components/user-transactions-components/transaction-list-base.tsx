@@ -130,10 +130,20 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
             .then(() => {
                 void fetchTransactionsData();
                 setShowAddRawTransactionModal(false);
+                showToast({
+                    title: 'Success',
+                    duration: 4000,
+                    variant: 'success',
+                    description: 'Successfully added transaction'
+                })
             })
             .catch((error: any) => {
-
-                console.error("Error adding transaction:", error);
+                showToast({
+                    title: "Error!",
+                    description: error.response.data.message || "An error occurred while saving your category",
+                    variant: "error",
+                    duration: 5000,
+                })
             })
             .finally(()=> {
                 setLoading(false)

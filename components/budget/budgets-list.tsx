@@ -28,6 +28,8 @@ import { MONTHS, YEARS } from "@/utils/constants";
 import {useSelector} from "react-redux";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {getCategories} from "@/components/api-calls/categories";
+import {getIcon} from "@/utils/helpers";
+import {useToast} from "@/components/ui/ToastProvider";
 
 export function BudgetsList() {
     const [budgets, setBudgets] = useState<Budget[]>([])
@@ -38,6 +40,7 @@ export function BudgetsList() {
     const [selectedYear, setSelectedYear] = useState<string>(String(new Date().getFullYear()));
     const [categories, setCategories] = useState<Category[]>([])
     const userId = useSelector((state: RootState) => state.user.userId);
+    const {showToast} = useToast()
 
     const fetchBudgets = async (month: string, year: string) => {
         try {
@@ -77,8 +80,19 @@ export function BudgetsList() {
         try {
             await axioClient.delete(`users/${userId}/budgets/${id}`)
             await fetchBudgets(selectedMonth, selectedYear)
-        } catch (error) {
-            console.error("Error deleting budget:", error)
+            showToast({
+                title: "Success!",
+                description: ` ${budgets.find(budget => budget.id === id)?.categoryName} budget deleted`,
+                variant: "success",
+                duration: 5000,
+            })
+        } catch (error:any) {
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while deleting",
+                variant: "error",
+                duration: 5000,
+            })
         }
     }
 
@@ -86,13 +100,30 @@ export function BudgetsList() {
         try {
             if (budget.id) {
                 await axioClient.put(`users/${userId}/budgets/${budget.id}`, budget)
+                showToast({
+                    title: "Success!",
+                    description: "Your budget has been updated.",
+                    variant: "success",
+                    duration: 5000,
+                })
             } else {
                 await axioClient.post(`users/${userId}/budgets`, budget)
+                showToast({
+                    title: "Success!",
+                    description: "Your budget has been saved.",
+                    variant: "success",
+                    duration: 5000,
+                })
             }
             await fetchBudgets(selectedMonth, selectedYear)
             setIsFormOpen(false)
-        } catch (error) {
-            console.error("Error saving budget:", error)
+        } catch (error:any) {
+            showToast({
+                title: "Error!",
+                description: error.response.data.message || "An error occurred while saving your budget.",
+                variant: "error",
+                duration: 5000,
+            })
         }
     }
 
@@ -114,6 +145,7 @@ export function BudgetsList() {
             }));
 
             await axioClient.post(`users/${userId}/budgets/batch`, newBudgets);
+
             await fetchBudgets(selectedMonth, selectedYear);
         } catch (error) {
             console.error("Error copying last month's budgets:", error);
@@ -200,9 +232,15 @@ export function BudgetsList() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {budgets.map((budget) => (
+                                {budgets.map((budget) => {
+                                    const Icon = getIcon(categories.find(c => c.id === budget.categoryId)?.categoryIcon || '')
+                                    return (
                                     <TableRow key={budget.id}>
-                                        <TableCell>{budget.categoryName}</TableCell>
+
+                                            <TableCell className={"whitespace-pre-wrap break-words flex items-center"}>
+                                                <Icon className="h-5 w-5 text-primary mr-2"/>
+                                                {budget.categoryName}
+                                            </TableCell>
                                         <TableCell>{budget.amount}</TableCell>
                                         <TableCell>{formatMonth(budget.month)}</TableCell>
                                         <TableCell>{budget.year}</TableCell>
@@ -211,28 +249,28 @@ export function BudgetsList() {
                                                 <DropdownMenuTrigger asChild>
                                                     <Button variant="ghost" className="h-8 w-8 p-0">
                                                         <span className="sr-only">Open menu</span>
-                                                        <MoreHorizontal className="h-4 w-4" />
+                                                        <MoreHorizontal className="h-4 w-4"/>
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                     <DropdownMenuItem onClick={() => handleEdit(budget)}>
-                                                        <Pencil className="mr-2 h-4 w-4" />
+                                                        <Pencil className="mr-2 h-4 w-4"/>
                                                         Edit
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuSeparator/>
                                                     <DropdownMenuItem
                                                         className="text-red-600 focus:text-red-600"
                                                         onClick={() => handleDelete(budget.id)}
                                                     >
-                                                        <Trash2 className="mr-2 h-4 w-4" />
+                                                        <Trash2 className="mr-2 h-4 w-4"/>
                                                         Delete
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                    )})}
                             </TableBody>
                         </Table>
                     )}

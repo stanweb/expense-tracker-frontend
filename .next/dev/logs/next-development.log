@@ -1,527 +1,95 @@
-[00:00:01.691] Server  LOG      ✓ Ready in 1201ms
-[00:00:21.627] Server  LOG      ○ Compiling / ...
-[00:00:37.130] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:00:41.233] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:41.233] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:41.233] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804164975}
-[00:00:41.233] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804165022}
-[00:02:22.663] Server  LOG      ✓ Compiled in 183ms
-[00:02:37.579] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:02:37.579] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/register","route":"/register"}
-[00:02:37.579] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/register color: rgb(120, 120, 120) color: inherit {"dp":"/register","o":"http://localhost:3000/register","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804281375}
-[00:02:42.828] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804286591}
-[00:02:43.175] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804286968}
-[00:02:51.037] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804294824}
-[00:04:26.320] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804390112}
-[00:04:34.168] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804397952}
-[00:07:23.076] Server  LOG        Reload env: .env
-[00:07:25.714] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:07:27.743] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:07:27.743] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/onboarding-wizard","route":"/onboarding-wizard"}
-[00:07:27.743] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804571526}
-[00:11:32.695] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804815748}
-[00:11:35.526] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804819093}
-[00:12:56.451] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765804899731}
-[00:13:41.429] Browser LOG     [{"amount":2000,"date":"2025-12-13T18:57:00","rawMessage":"TLDCF0VD1M Confirmed. Ksh2,000.00 sent to LUCIAH  MUTUA 0712493146 on 13/12/25 at 6:57 PM. New M-PESA balance is Ksh2,666.69. Transaction cost, Ksh33.00.","recipient":"LUCIAH  MUTUA 0712493146","transactionCost":33,"transactionId":"TLDCF0VD1M","type":"sent"},{"amount":5000,"date":"2025-12-13T18:57:00","rawMessage":"TLDCF0VBID Confirmed.You have received Ksh5,000.00 from DTB MOBILE 644811 on 13/12/25 at 6:57 PM New M-PESA balance is Ksh5,000.00.","recipient":"DTB MOBILE 644811","transactionCost":0,"transactionId":"TLDCF0VBID","type":"received"},{"amount":100,"date":"2025-12-14T06:59:00","rawMessage":"TLECF0WME9 Confirmed. Ksh100.00 sent to Safaricom Offers for account Tunukiwa on 14/12/25 at 6:59 AM. New M-PESA balance is Ksh2,566.69. Transaction cost, Ksh0.00.","recipient":"Safaricom Offers for account Tunukiwa","transactionCost":0,"transactionId":"TLECF0WME9","type":"sent"},{"amount":50,"date":"2025-12-14T12:48:00","rawMessage":"TLECF0X6DK Confirmed. Ksh50.00 sent to EVERLINE  OMBATI 0112634254 on 14/12/25 at 12:48 PM. New M-PESA balance is Ksh2,516.69. Transaction cost, Ksh0.00.","recipient":"EVERLINE  OMBATI 0112634254","transactionCost":0,"transactionId":"TLECF0X6DK","type":"sent"},{"amount":100,"date":"2025-12-14T16:26:00","rawMessage":"TLECF0XY1P Confirmed. Ksh100.00 sent to Faith  Kalani 0708516491 on 14/12/25 at 4:26 PM. New M-PESA balance is Ksh2,416.69. Transaction cost, Ksh0.00.","recipient":"Faith  Kalani 0708516491","transactionCost":0,"transactionId":"TLECF0XY1P","type":"sent"},{"amount":60,"date":"2025-12-14T17:34:00","rawMessage":"TLECF0Y93D Confirmed. Ksh60.00 sent to Leah  kuruga on 14/12/25 at 5:34 PM. New M-PESA balance is Ksh2,356.69. Transaction cost, Ksh0.00.","recipient":"Leah  kuruga","transactionCost":0,"transactionId":"TLECF0Y93D","type":"sent"},{"amount":60,"date":"2025-12-15T08:18:00","rawMessage":"TLFCF0ZM3Z Confirmed. Ksh60.00 paid to SPRINGS OF OLIVE CATERERS. on 15/12/25 at 8:18 AM.New M-PESA balance is Ksh2,296.69. Transaction cost, Ksh0.00.","recipient":"SPRINGS OF OLIVE CATERERS","transactionCost":0,"transactionId":"TLFCF0ZM3Z","type":"paid"},{"amount":60,"date":"2025-12-15T14:14:00","rawMessage":"TLFCF10O3J Confirmed. Ksh60.00 paid to SWAN CUISINE LIMITED 2. on 15/12/25 at 2:14 PM.New M-PESA balance is Ksh2,236.69. Transaction cost, Ksh0.00.","recipient":"SWAN CUISINE LIMITED 2","transactionCost":0,"transactionId":"TLFCF10O3J","type":"paid"},{"amount":200,"date":"2025-12-15T14:35:00","rawMessage":"TLFCF10OF7 Confirmed. Ksh200.00 sent to PATSHEBA  GIKUNDA 0741148045 on 15/12/25 at 2:35 PM. New M-PESA balance is Ksh2,029.69. Transaction cost, Ksh7.00.","recipient":"PATSHEBA  GIKUNDA 0741148045","transactionCost":7,"transactionId":"TLFCF10OF7","type":"sent"}]
-[00:13:45.612] Browser LOG     [{"amount":2000,"date":"2025-12-13T18:57:00","rawMessage":"Ksh2,000.00 sent to LUCIAH  MUTUA 0712493146 on 13/12/25 at 6:57 PM. New M-PESA balance is Ksh2,666.69. Transaction cost, Ksh33.00.","recipient":"LUCIAH MUTUA 0712493146","transactionCost":33,"transactionId":"TLDCF0VD1M","type":"sent"},{"amount":5000,"date":"2025-12-13T18:57:00","rawMessage":"You have received Ksh5,000.00 from DTB MOBILE 644811 on 13/12/25 at 6:57 PM New M-PESA balance is Ksh5,000.00.","recipient":"DTB MOBILE 644811","transactionCost":0,"transactionId":"TLDCF0VBID","type":"received"},{"amount":100,"date":"2025-12-14T06:59:00","rawMessage":"Ksh100.00 sent to Safaricom Offers for account Tunukiwa on 14/12/25 at 6:59 AM. New M-PESA balance is Ksh2,566.69. Transaction cost, Ksh0.00.","recipient":"Safaricom Offers for account Tunukiwa","transactionCost":0,"transactionId":"TLECF0WME9","type":"sent"},{"amount":50,"date":"2025-12-14T12:48:00","rawMessage":"Ksh50.00 sent to EVERLINE  OMBATI 0112634254 on 14/12/25 at 12:48 PM. New M-PESA balance is Ksh2,516.69. Transaction cost, Ksh0.00.","recipient":"EVERLINE OMBATI 0112634254","transactionCost":0,"transactionId":"TLECF0X6DK","type":"sent"},{"amount":100,"date":"2025-12-14T16:26:00","rawMessage":"Ksh100.00 sent to Faith  Kalani 0708516491 on 14/12/25 at 4:26 PM. New M-PESA balance is Ksh2,416.69. Transaction cost, Ksh0.00.","recipient":"Faith Kalani 0708516491","transactionCost":0,"transactionId":"TLECF0XY1P","type":"sent"},{"amount":60,"date":"2025-12-14T17:34:00","rawMessage":"Ksh60.00 sent to Leah  kuruga on 14/12/25 at 5:34 PM. New M-PESA balance is Ksh2,356.69. Transaction cost, Ksh0.00.","recipient":"Leah kuruga","transactionCost":0,"transactionId":"TLECF0Y93D","type":"sent"},{"amount":60,"date":"2025-12-15T08:18:00","rawMessage":"Ksh60.00 paid to SPRINGS OF OLIVE CATERERS. on 15/12/25 at 8:18 AM.New M-PESA balance is Ksh2,296.69. Transaction cost, Ksh0.00.","recipient":"SPRINGS OF OLIVE CATERERS","transactionCost":0,"transactionId":"TLFCF0ZM3Z","type":"paid"},{"amount":60,"date":"2025-12-15T14:14:00","rawMessage":"Ksh60.00 paid to SWAN CUISINE LIMITED 2. on 15/12/25 at 2:14 PM.New M-PESA balance is Ksh2,236.69. Transaction cost, Ksh0.00.","recipient":"SWAN CUISINE LIMITED 2.","transactionCost":0,"transactionId":"TLFCF10O3J","type":"paid"},{"amount":200,"date":"2025-12-15T14:35:00","rawMessage":"Ksh200.00 sent to PATSHEBA  GIKUNDA 0741148045 on 15/12/25 at 2:35 PM. New M-PESA balance is Ksh2,029.69. Transaction cost, Ksh7.00.","recipient":"PATSHEBA GIKUNDA 0741148045","transactionCost":7,"transactionId":"TLFCF10OF7","type":"sent"}]
-[00:22:54.177] Server  LOG      ✓ Compiled in 649ms
-[00:24:48.216] Server  LOG      ✓ Compiled in 150ms
-[00:30:28.947] Server  LOG      ✓ Compiled in 268ms
-[00:30:54.678] Browser LOG     [{"amount":2000,"date":"2025-12-13T18:57:00","rawMessage":"TLDCF0VD1M Confirmed. Ksh2,000.00 sent to LUCIAH  MUTUA 0712493146 on 13/12/25 at 6:57 PM. New M-PESA balance is Ksh2,666.69. Transaction cost, Ksh33.00.","recipient":"LUCIAH MUTUA 0712493146","transactionCost":33,"transactionId":"TLDCF0VD1M","type":"sent"},{"amount":5000,"date":"2025-12-13T18:57:00","rawMessage":"TLDCF0VBID Confirmed.You have received Ksh5,000.00 from DTB MOBILE 644811 on 13/12/25 at 6:57 PM New M-PESA balance is Ksh5,000.00.","recipient":"DTB MOBILE 644811","transactionCost":0,"transactionId":"TLDCF0VBID","type":"received"},{"amount":100,"date":"2025-12-14T06:59:00","rawMessage":"TLECF0WME9 Confirmed. Ksh100.00 sent to Safaricom Offers for account Tunukiwa on 14/12/25 at 6:59 AM. New M-PESA balance is Ksh2,566.69. Transaction cost, Ksh0.00.","recipient":"Safaricom Offers for account Tunukiwa","transactionCost":0,"transactionId":"TLECF0WME9","type":"sent"},{"amount":50,"date":"2025-12-14T12:48:00","rawMessage":"TLECF0X6DK Confirmed. Ksh50.00 sent to EVERLINE  OMBATI 0112634254 on 14/12/25 at 12:48 PM. New M-PESA balance is Ksh2,516.69. Transaction cost, Ksh0.00.","recipient":"EVERLINE OMBATI 0112634254","transactionCost":0,"transactionId":"TLECF0X6DK","type":"sent"},{"amount":100,"date":"2025-12-14T16:26:00","rawMessage":"TLECF0XY1P Confirmed. Ksh100.00 sent to Faith  Kalani 0708516491 on 14/12/25 at 4:26 PM. New M-PESA balance is Ksh2,416.69. Transaction cost, Ksh0.00.","recipient":"Faith Kalani 0708516491","transactionCost":0,"transactionId":"TLECF0XY1P","type":"sent"},{"amount":60,"date":"2025-12-14T17:34:00","rawMessage":"TLECF0Y93D Confirmed. Ksh60.00 sent to Leah  kuruga on 14/12/25 at 5:34 PM. New M-PESA balance is Ksh2,356.69. Transaction cost, Ksh0.00.","recipient":"Leah kuruga","transactionCost":0,"transactionId":"TLECF0Y93D","type":"sent"},{"amount":60,"date":"2025-12-15T08:18:00","rawMessage":"TLFCF0ZM3Z Confirmed. Ksh60.00 paid to SPRINGS OF OLIVE CATERERS. on 15/12/25 at 8:18 AM.New M-PESA balance is Ksh2,296.69. Transaction cost, Ksh0.00.","recipient":"SPRINGS OF OLIVE CATERERS","transactionCost":0,"transactionId":"TLFCF0ZM3Z","type":"paid"},{"amount":60,"date":"2025-12-15T14:14:00","rawMessage":"TLFCF10O3J Confirmed. Ksh60.00 paid to SWAN CUISINE LIMITED 2. on 15/12/25 at 2:14 PM.New M-PESA balance is Ksh2,236.69. Transaction cost, Ksh0.00.","recipient":"SWAN CUISINE LIMITED 2.","transactionCost":0,"transactionId":"TLFCF10O3J","type":"paid"},{"amount":200,"date":"2025-12-15T14:35:00","rawMessage":"TLFCF10OF7 Confirmed. Ksh200.00 sent to PATSHEBA  GIKUNDA 0741148045 on 15/12/25 at 2:35 PM. New M-PESA balance is Ksh2,029.69. Transaction cost, Ksh7.00.","recipient":"PATSHEBA GIKUNDA 0741148045","transactionCost":7,"transactionId":"TLFCF10OF7","type":"sent"}]
-[00:32:48.024] Server  LOG      ✓ Compiled in 173ms
-[00:41:14.746] Server  LOG      ✓ Compiled in 289ms
-[01:17:35.436] Server  LOG      ✓ Compiled in 191ms
-[01:18:06.301] Server  LOG      ✓ Compiled in 148ms
-[01:18:15.607] Server  LOG      ✓ Compiled in 341ms
-[01:18:52.756] Server  LOG      ✓ Compiled in 308ms
-[01:21:35.595] Server  LOG      ✓ Compiled in 388ms
-[01:34:00.480] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[01:34:02.323] Browser ERROR   uncaughtError: TypeError: Failed to execute 'measure' on 'Performance': '​ProtectedLayout' cannot have a negative time stamp.
-[01:34:03.303] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:34:03.303] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:34:03.303] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/login","route":"/login"}
-[01:34:03.303] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822496725}
-[01:34:03.303] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822496725}
-[01:34:16.435] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822508663}
-[01:34:25.193] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822518598}
-[01:34:40.956] Server  ERROR   PDF error: TypeError: Cannot read properties of undefined (reading 'toString')
-[01:34:41.070] Browser ERROR   unhandledRejection: AxiosError: Request failed with status code 500
-[01:34:53.479] Server  ERROR   PDF error: TypeError: Cannot read properties of undefined (reading 'toString')
-[01:34:53.590] Browser ERROR   unhandledRejection: AxiosError: Request failed with status code 500
-[01:35:35.853] Server  LOG     Loading prompts: https://gist.githubusercontent.com/stanweb/4554fb546cdc69e17360bb10e3b3cfff/raw/iconPrompt.txt
-[01:35:44.563] Browser LOG     {"iconName":"HandHeart"}
-[01:35:56.284] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822607427}
-[01:37:03.077] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822676492}
-[01:37:07.571] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[01:37:10.084] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:37:10.084] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/login","route":"/login"}
-[01:37:10.084] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822683506}
-[01:37:21.547] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:37:21.547] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/register","route":"/register"}
-[01:37:21.547] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/register color: rgb(120, 120, 120) color: inherit {"dp":"/register","o":"http://localhost:3000/register","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822694969}
-[01:37:27.484] Browser ERROR   uncaughtError: TypeError: Failed to execute 'measure' on 'Performance': '​ProtectedLayout' cannot have a negative time stamp.
-[01:37:27.485] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822700734}
-[01:37:28.085] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822701503}
-[01:37:41.178] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765822714575}
-[01:38:41.212] Server  ERROR   Error in Groq API request: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[ ]"}}
-[01:38:41.524] Server  ERROR   PDF error: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[ ]"}}
-[01:38:41.652] Browser ERROR   {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:3000/api","data":"{\"income\":\"40000\",\"hasAdditionalIncome\":false,\"additionalIncome\":\"\",\"rent\":\"10000\",\"utilities\":\"200\",\"transportation\":\"5000\",\"groceries\":\"3000\",\"diningOut\":\"3000\",\"shopping\":\"2000\",\"entertainment\":\"4000\",\"travel\":\"2000\",\"subscriptions\":\"1000\",\"savings\":\"3000\",\"investments\":\"1000\",\"debt\":\"6000\",\"extraInfo\":\"Family and friends =7000\"}","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"post","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"ai/generate-category","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async handleFinish (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_b0c5dfc3._.js:2131:30)","status":500}
-[01:39:18.822] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-
-Stringified JSON of a user’s financial data (income, expenses, savings, investments, debt, and extraInfo notes).
-
-A fixed list of allowed category icons.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories supported by the data.
-
-RULES:
-
-Only generate categories directly implied by non-zero or meaningful data fields.
-
-Group related expenses into realistic personal finance categories (e.g., rent + utilities → Housing).
-
-Always analyze extraInfo and include clearly implied recurring obligations; ignore vague notes.
-
-Do not invent categories, create subcategories, or duplicate category names or icons.
-
-Categories must be reasonable relative to the user’s income.
-
-Each category must include:
-
-name (clear and user-friendly)
-
-categoryIcon (exactly one from the allowed list)
-
-description (short, finance-focused)
-
-Do not include numbers, calculations, advice, or commentary.
-
-a list of allowed Icons are
-
-Home = Housing & Utilities
-Description: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-
-Wifi = Internet & Connectivity
-Description: Internet, broadband, and online service costs for home and personal use.
-
-Smartphone = Mobile & Communication
-Description: Mobile phone plans, airtime, and communication-related expenses.
-
-Tv = Subscriptions & Streaming
-Description: Streaming platforms, digital subscriptions, and recurring media services.
-
-Car = Vehicle Ownership
-Description: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-
-Bus = Public Transportation
-Description: Bus, train, taxi, and daily commuting expenses.
-
-Plane = Travel & Trips
-Description: Flights, accommodation, and travel-related spending for trips and vacations.
-
-CreditCard = Debt & Loans
-Description: Loan repayments, credit card payments, and other debt obligations.
-
-HandHeart = Donations & Support
-Description: Charity contributions, gifts, and financial support to others.
-
-Shield = Insurance
-Description: Health, vehicle, or property insurance premiums and protection costs.
-
-GraduationCap = Education & Learning
-Description: School fees, courses, training, and learning-related expenses.
-
-Briefcase = Work & Professional Expenses
-Description: Work-related costs such as equipment, transport, or professional services.
-
-HeartPulse = Healthcare
-Description: Medical visits, medication, and healthcare-related expenses.
-
-Receipt = Bills & Recurring Payments
-Description: Regular bills and recurring financial obligations not covered elsewhere.
-
-Wallet = Personal Spending
-Description: Flexible personal expenses and day-to-day discretionary spending.
-
-
-Output valid JSON only.
-
-OUTPUT FORMAT:
-[
-{
-"name": "Category Name",
-"categoryIcon": "AllowedIconName",
-"description": "Short financial description"
-}
-]
-[01:39:23.613] Server  ERROR   Error in Groq API request: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:39:23.824] Server  ERROR   PDF error: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:39:23.957] Browser ERROR   {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:3000/api","data":"{\"income\":\"40000\",\"hasAdditionalIncome\":false,\"additionalIncome\":\"\",\"rent\":\"10000\",\"utilities\":\"200\",\"transportation\":\"5000\",\"groceries\":\"3000\",\"diningOut\":\"3000\",\"shopping\":\"2000\",\"entertainment\":\"4000\",\"travel\":\"2000\",\"subscriptions\":\"1000\",\"savings\":\"3000\",\"investments\":\"1000\",\"debt\":\"6000\",\"extraInfo\":\"Family and friends =7000\"}","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"post","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"ai/generate-category","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async handleFinish (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_b0c5dfc3._.js:2131:30)","status":500}
-[01:45:02.968] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-JSON object containing a user’s financial data:
-[object Object]
-
-ALLOWED CATEGORY ICONS:
-- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.
-- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.
-- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.
-- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.
-- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.
-- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.
-- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.
-- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.
-- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.
-- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.
-- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.
-- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.
-- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.
-
-STRICT RULES:
-- Only generate categories that are directly implied by the data.
-- Group related expenses into realistic personal finance categories.
-- Always analyze extraInfo and include clearly implied recurring obligations.
-- Ignore vague, one-off, or unclear notes.
-- Do NOT invent categories or assumptions.
-- Do NOT create subcategories.
-- Do NOT duplicate category names or icons.
-- Categories must be reasonable relative to income.
-- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.
-- If absolutely no meaningful financial activity exists, return an empty JSON array [].
-
-CATEGORY OBJECT FORMAT:
-Each category MUST include exactly:
-- name
-- categoryIcon (must match one allowed icon exactly)
-- description (short, finance-focused)
-
-IMPORTANT OUTPUT RULES:
-- Output ONLY raw JSON
-- Do NOT include markdown
-- Do NOT include explanations
-- Do NOT include comments
-- Do NOT include trailing text
-
-OUTPUT FORMAT:
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "AllowedIconName",
-    "description": "Short financial description"
-  }
-]
-
-[01:45:04.493] Server  ERROR   Error in Groq API request: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:45:04.699] Server  ERROR   PDF error: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:45:04.812] Browser ERROR   {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:3000/api","data":"{\"income\":\"40000\",\"hasAdditionalIncome\":false,\"additionalIncome\":\"\",\"rent\":\"10000\",\"utilities\":\"200\",\"transportation\":\"5000\",\"groceries\":\"3000\",\"diningOut\":\"3000\",\"shopping\":\"2000\",\"entertainment\":\"4000\",\"travel\":\"2000\",\"subscriptions\":\"1000\",\"savings\":\"3000\",\"investments\":\"1000\",\"debt\":\"6000\",\"extraInfo\":\"Family and friends =7000\"}","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"post","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"ai/generate-category","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async handleFinish (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_b0c5dfc3._.js:2131:30)","status":500}
-[01:47:10.671] Server  LOG        Reload env: .env
-[01:47:20.276] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-JSON object containing a user’s financial data:
-[object Object]
-
-ALLOWED CATEGORY ICONS:
-- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.
-- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.
-- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.
-- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.
-- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.
-- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.
-- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.
-- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.
-- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.
-- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.
-- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.
-- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.
-- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.
-
-STRICT RULES:
-- Only generate categories that are directly implied by the data.
-- Group related expenses into realistic personal finance categories.
-- Always analyze extraInfo and include clearly implied recurring obligations.
-- Ignore vague, one-off, or unclear notes.
-- Do NOT invent categories or assumptions.
-- Do NOT create subcategories.
-- Do NOT duplicate category names or icons.
-- Categories must be reasonable relative to income.
-- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.
-- If absolutely no meaningful financial activity exists, return an empty JSON array [].
-
-CATEGORY OBJECT FORMAT:
-Each category MUST include exactly:
-- name
-- categoryIcon (must match one allowed icon exactly)
-- description (short, finance-focused)
-
-IMPORTANT OUTPUT RULES:
-- Output ONLY raw JSON
-- Do NOT include markdown
-- Do NOT include explanations
-- Do NOT include comments
-- Do NOT include trailing text
-
-OUTPUT FORMAT:
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "AllowedIconName",
-    "description": "Short financial description"
-  }
-]
-
-[01:47:22.645] Server  ERROR   Error in Groq API request: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:47:22.845] Server  ERROR   PDF error: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:47:22.963] Browser ERROR   {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:3000/api","data":"{\"income\":\"40000\",\"hasAdditionalIncome\":false,\"additionalIncome\":\"\",\"rent\":\"10000\",\"utilities\":\"200\",\"transportation\":\"5000\",\"groceries\":\"3000\",\"diningOut\":\"3000\",\"shopping\":\"2000\",\"entertainment\":\"4000\",\"travel\":\"2000\",\"subscriptions\":\"1000\",\"savings\":\"3000\",\"investments\":\"1000\",\"debt\":\"6000\",\"extraInfo\":\"Family and friends =7000\"}","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"post","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"ai/generate-category","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async handleFinish (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_b0c5dfc3._.js:2131:30)","status":500}
-[01:55:48.780] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-JSON object containing a user’s financial data:
-[object Object]
-
-ALLOWED CATEGORY ICONS:
-- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.
-- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.
-- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.
-- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.
-- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.
-- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.
-- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.
-- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.
-- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.
-- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.
-- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.
-- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.
-- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.
-
-STRICT RULES:
-- Only generate categories that are directly implied by the data.
-- Group related expenses into realistic personal finance categories.
-- Always analyze extraInfo and include clearly implied recurring obligations.
-- Ignore vague, one-off, or unclear notes.
-- Do NOT invent categories or assumptions.
-- Do NOT create subcategories.
-- Do NOT duplicate category names or icons.
-- Categories must be reasonable relative to income.
-- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.
-- If absolutely no meaningful financial activity exists, return an empty JSON array [].
-
-CATEGORY OBJECT FORMAT:
-Each category MUST include exactly:
-- name
-- categoryIcon (must match one allowed icon exactly)
-- description (short, finance-focused)
-
-IMPORTANT OUTPUT RULES:
-- Output ONLY raw JSON
-- Do NOT include markdown
-- Do NOT include explanations
-- Do NOT include comments
-- Do NOT include trailing text
-
-OUTPUT FORMAT:
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "AllowedIconName",
-    "description": "Short financial description"
-  }
-]
-
-[01:55:51.315] Server  ERROR   Error in Groq API request: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:55:51.524] Server  ERROR   PDF error: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[01:55:51.635] Browser ERROR   {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:3000/api","data":"{\"income\":\"40000\",\"hasAdditionalIncome\":false,\"additionalIncome\":\"\",\"rent\":\"10000\",\"utilities\":\"200\",\"transportation\":\"5000\",\"groceries\":\"3000\",\"diningOut\":\"3000\",\"shopping\":\"2000\",\"entertainment\":\"4000\",\"travel\":\"2000\",\"subscriptions\":\"1000\",\"savings\":\"3000\",\"investments\":\"1000\",\"debt\":\"6000\",\"extraInfo\":\"Family and friends =7000\"}","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"post","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"ai/generate-category","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async handleFinish (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_b0c5dfc3._.js:2131:30)","status":500}
-[01:58:22.900] Server  LOG     [
-{"name":"Housing & Utilities","categoryIcon":"Home","description":"Rent, mortgage, utilities, and essential living costs required to maintain your home"},{"name":"Internet & Connectivity","categoryIcon":"Wifi","description":"Internet, broadband, and online service costs for home and personal use"},{"name":"Mobile & Communication","categoryIcon":"Smartphone","description":"Mobile phone plans, airtime, and communication-related expenses"},{"name":"Subscriptions & Streaming","categoryIcon":"Tv","description":"Streaming platforms, digital subscriptions, and recurring media services"},{"name":"Vehicle Ownership","categoryIcon":"Car","description":"Vehicle maintenance, repairs, insurance, and ownership-related costs"},{"name":"Public Transportation","categoryIcon":"Bus","description":"Bus, train, taxi, and daily commuting expenses"},{"name":"Travel & Trips","categoryIcon":"Plane","description":"Flights, accommodation, and travel-related spending for trips and vacations"},{"name":"Debt & Loans","categoryIcon":"CreditCard","description":"Loan repayments, credit card payments, and other debt obligations"},{"name":"Donations & Support","categoryIcon":"HandHeart","description":"Charity contributions, gifts, and financial support to others"},{"name":"Insurance","categoryIcon":"Shield","description":"Health, vehicle, or property insurance premiums and protection costs"},{"name":"Education & Learning","categoryIcon":"GraduationCap","description":"School fees, courses, training, and learning-related expenses"},{"name":"Work & Professional Expenses","categoryIcon":"Briefcase","description":"Work-related costs such as equipment, transport, or professional services"},{"name":"Healthcare","categoryIcon":"HeartPulse","description":"Medical visits, medication, and healthcare-related expenses"},{"name":"Bills & Recurring Payments","categoryIcon":"Receipt","description":"Regular bills and recurring financial obligations not covered elsewhere"},{"name":"Personal Spending","categoryIcon":"Wallet","description":"Flexible personal expenses and day-to-day discretionary spending"}
-]
-[01:58:48.088] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765823978700}
-[01:58:59.851] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765823992000}
-[01:59:09.363] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765824002761}
-[01:59:16.523] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765824008171}
-[01:59:30.530] Server  WARN    Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
-[01:59:30.577] Server  WARN    Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
-[01:59:30.624] Server  WARN    Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
-[02:10:28.670] Server  LOG      ✓ Compiled in 672ms
-[02:11:50.111] Server  LOG      ✓ Compiled in 643ms
-[02:13:17.295] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:13:24.486] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:13:24.486] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:13:24.486] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765824857845}
-[02:13:35.674] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765824869035}
-[02:14:48.632] Server  LOG      ✓ Compiled in 366ms
-[02:15:18.457] Server  LOG      ✓ Compiled in 353ms
-[02:16:06.155] Server  LOG      ✓ Compiled in 518ms
-[02:16:06.916] Browser ERROR   uncaughtError: Error: useToast must be used within a ToastProvider
-[02:16:50.081] Server  LOG      ✓ Compiled in 392ms
-[02:16:50.097] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[02:16:51.018] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:16:51.198] Browser ERROR   uncaughtError: Error: useToast must be used within a ToastProvider
-[02:16:51.198] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765825063690}
-[02:16:53.821] Browser ERROR   uncaughtError: Error: useToast must be used within a ToastProvider
-[02:18:17.705] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[02:18:18.655] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:18:21.328] Server  LOG      ✓ Compiled in 4.6s
-[02:18:22.809] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:18:22.809] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/categories","route":"/categories"}
-[02:18:22.809] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765825156232}
-[02:20:15.816] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./spending-tracker/frontend/components/ui/ToastProvider.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[02:20:15.840] Server  LOG      ✓ Compiled in 475ms
-[02:20:16.816] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:20:20.959] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:20:20.959] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/categories","route":"/categories"}
-[02:20:20.959] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765825274381}
-[02:23:49.370] Server  LOG      ✓ Compiled in 224ms
-[02:24:09.587] Browser ERROR   Error deleting category: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/16","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:7504:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8019:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async handleDelete (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_e68c0834._.js?id=%255Bproject%255D%252Fspending-tracker%252Ffrontend%252Fcomponents%252Fcategories-list.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:13)","status":500}
-[02:24:18.564] Browser ERROR   Error deleting category: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/13","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:7504:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8019:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async handleDelete (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_e68c0834._.js?id=%255Bproject%255D%252Fspending-tracker%252Ffrontend%252Fcomponents%252Fcategories-list.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:13)","status":500}
-[02:24:23.816] Browser ERROR   Error deleting category: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/1","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:7504:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8019:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async handleDelete (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_e68c0834._.js?id=%255Bproject%255D%252Fspending-tracker%252Ffrontend%252Fcomponents%252Fcategories-list.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:13)","status":500}
-[02:29:02.882] Browser ERROR   Error deleting category: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/15","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 409","name":"AxiosError","stack":"AxiosError: Request failed with status code 409\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:7504:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8019:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async handleDelete (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_e68c0834._.js?id=%255Bproject%255D%252Fspending-tracker%252Ffrontend%252Fcomponents%252Fcategories-list.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:13)","status":409}
-[02:31:26.752] Server  LOG      ✓ Compiled in 185ms
-[02:31:35.548] Browser ERROR   Error deleting category: undefined
-[02:32:01.371] Server  LOG      ✓ Compiled in 162ms
-[02:32:05.145] Browser ERROR   unhandledRejection: TypeError: Cannot read properties of undefined (reading 'data')
-[02:32:32.007] Server  LOG      ✓ Compiled in 129ms
-[02:32:34.395] Browser ERROR   Error deleting category: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/9","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 409","name":"AxiosError","stack":"AxiosError: Request failed with status code 409\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:7504:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8019:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async handleDelete (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_e68c0834._.js?id=%255Bproject%255D%252Fspending-tracker%252Ffrontend%252Fcomponents%252Fcategories-list.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:13)","status":409}
-[02:33:05.640] Server  LOG      ✓ Compiled in 152ms
-[02:33:08.737] Browser LOG     Error deleting category: undefined
-[02:33:25.767] Server  LOG      ✓ Compiled in 118ms
-[02:33:28.949] Browser LOG     Error deleting category: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/10","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 409","name":"AxiosError","stack":"AxiosError: Request failed with status code 409\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:7504:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8019:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async handleDelete (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_e68c0834._.js?id=%255Bproject%255D%252Fspending-tracker%252Ffrontend%252Fcomponents%252Fcategories-list.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:13)","status":409}
-[02:35:33.156] Server  LOG      ✓ Compiled in 215ms
-[02:35:38.652] Browser LOG     Error deleting category: Request failed with status code 409
-[02:35:50.214] Server  LOG      ✓ Compiled in 146ms
-[02:35:52.912] Browser LOG     Error deleting category: {"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/5","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"}
-[02:36:03.524] Server  LOG      ✓ Compiled in 162ms
-[02:36:06.154] Browser LOG     Error deleting category: {"config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"delete","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories/5","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"data":{"message":"Cannot delete category with associated budgets","status":409,"timestamp":"2025-12-15T22:16:59.345193374"},"headers":{"cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json","expires":"0","pragma":"no-cache"},"request":{},"status":409,"statusText":""}
-[02:36:15.317] Server  LOG      ✓ Compiled in 131ms
-[02:36:17.823] Browser LOG     Error deleting category: {"message":"Cannot delete category with associated budgets","status":409,"timestamp":"2025-12-15T22:17:10.97554671"}
-[02:36:24.649] Server  LOG      ✓ Compiled in 118ms
-[02:36:26.979] Browser LOG     Error deleting category: Cannot delete category with associated budgets
-[02:36:50.768] Server  LOG      ✓ Compiled in 121ms
-[02:36:53.442] Browser LOG     Error deleting category:
-[02:37:48.415] Server  LOG      ✓ Compiled in 103ms
-[02:49:09.996] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765826999897}
-[02:50:44.463] Server  LOG      ○ Compiling /all-transactions ...
-[02:50:47.273] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827099111}
-[02:51:25.997] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827138653}
-[02:51:25.997] Browser ERROR   Network Error
-[02:51:25.997] Browser ERROR   Error fetching categories: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async useSpendingChartData.useEffect.fetchCategories (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:1293:42)"}
-[02:51:25.997] Browser ERROR   Error fetching chart data: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"year":"2025"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/monthly/breakdown","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async useSpendingChartData.useEffect.fetchChartData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:1319:42)"}
-[02:51:25.997] Browser ERROR   Error fetching trend data: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions/trend","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async TrendChart.useEffect.fetchTrendData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:5459:42)"}
-[02:51:25.997] Browser ERROR   Error fetching categories: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/categories","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)"}
-[02:51:25.997] Browser ERROR   Error fetching transactions: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","limit":20,"to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async fetchTransactionsData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:4899:30)"}
-[02:51:25.997] Browser ERROR   Network Error
-[02:51:25.997] Browser ERROR   Error fetching categories: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/categories","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async useSpendingChartData.useEffect.fetchCategories (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:1293:42)"}
-[02:51:25.997] Browser ERROR   Error fetching chart data: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"year":"2025"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"users/1/monthly/breakdown","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async useSpendingChartData.useEffect.fetchChartData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:1319:42)"}
-[02:51:25.997] Browser ERROR   Error fetching trend data: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions/trend","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async TrendChart.useEffect.fetchTrendData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:5459:42)"}
-[02:51:25.997] Browser ERROR   Error fetching categories: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/categories","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)"}
-[02:51:25.997] Browser ERROR   Error fetching transactions: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","limit":20,"to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8065:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_850dbe99._.js:8823:49)\n    at async fetchTransactionsData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:4899:30)"}
-[02:51:25.997] Browser ERROR   unhandledRejection: AxiosError: Network Error
-[02:51:25.997] Browser ERROR   unhandledRejection: AxiosError: Network Error
-[02:52:06.378] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:52:11.630] Browser ERROR   Error fetching transactions: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","limit":20,"to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async fetchTransactionsData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:4899:30)","status":500}
-[02:52:11.630] Browser ERROR   Error fetching transactions: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","limit":20,"to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async fetchTransactionsData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:4899:30)","status":500}
-[02:52:12.161] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:52:12.161] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:52:12.161] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827185437}
-[02:52:25.422] Browser ERROR   Error fetching transactions: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","limit":20,"to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async fetchTransactionsData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:4899:30)","status":500}
-[02:52:25.422] Browser ERROR   Error fetching transactions: {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:8080/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"from":"2025-12-09T00:00:00.000+03:00","limit":20,"to":"2025-12-15T23:59:59.999+03:00","type":"paid,sent"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/users/1/transactions","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:1954:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:2469:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/ffac5_axios_lib_951f9c0d._.js:3273:49)\n    at async fetchTransactionsData (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_fc47c193._.js:4899:30)","status":500}
-[02:52:25.780] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:52:25.780] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:52:25.780] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827199045}
-[02:53:17.747] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:53:17.747] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:53:17.747] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827251098}
-[02:53:44.278] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827276403}
-[02:53:48.536] Browser ERROR   uncaughtError: TypeError: Failed to execute 'measure' on 'Performance': '​ProtectedLayout' cannot have a negative time stamp.
-[02:53:49.648] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:53:49.648] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:53:49.648] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/login","route":"/login"}
-[02:53:49.648] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827283069}
-[02:53:49.648] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827283070}
-[02:55:05.872] Server  LOG      ✓ Compiled in 369ms
-[02:56:02.361] Server  LOG      ✓ Compiled in 168ms
-[02:56:13.835] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:56:16.607] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:56:16.607] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/register","route":"/register"}
-[02:56:16.608] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/register color: rgb(120, 120, 120) color: inherit {"dp":"/register","o":"http://localhost:3000/register","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827430028}
-[02:57:01.191] Server  LOG      ✓ Compiled in 177ms
-[02:57:25.013] Server  LOG      ✓ Compiled in 167ms
-[02:57:31.207] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[02:57:33.654] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:57:33.654] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/login","route":"/login"}
-[02:57:33.654] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827507076}
-[02:57:47.808] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827517417}
-[02:57:59.454] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827531668}
-[03:00:48.710] Server  LOG      ✓ Compiled in 154ms
-[03:01:25.128] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765827738525}
-[03:10:25.187] Server  LOG      ✓ Compiled in 249ms
-[03:10:25.913] Browser ERROR   ./spending-tracker/frontend/components/onboarding/CategorySuggestions.tsx:89:17
-Parsing ecmascript source code failed
-  87 |                         )
-  88 |                     }
-> 89 |                 </div>
-     |                 ^
-  90 |         </Card>
-  91 |     )
-  92 | }
-
-Expected a semicolon
-
-Import traces:
-  Client Component Browser:
-    ./spending-tracker/frontend/components/onboarding/CategorySuggestions.tsx [Client Component Browser]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Client Component Browser]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Server Component]
-    ./spending-tracker/frontend/app/(protected)/onboarding-wizard/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./spending-tracker/frontend/components/onboarding/CategorySuggestions.tsx [Client Component SSR]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Client Component SSR]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Server Component]
-    ./spending-tracker/frontend/app/(protected)/onboarding-wizard/page.tsx [Server Component]
-[03:10:25.913] Browser ERROR   ./spending-tracker/frontend/components/onboarding/CategorySuggestions.tsx:89:18
-Parsing ecmascript source code failed
-  87 |                         )
-  88 |                     }
-> 89 |                 </div>
-     |                  ^^^^^
-  90 |         </Card>
-  91 |     )
-  92 | }
-
-Unterminated regexp literal
-
-Import traces:
-  Client Component Browser:
-    ./spending-tracker/frontend/components/onboarding/CategorySuggestions.tsx [Client Component Browser]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Client Component Browser]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Server Component]
-    ./spending-tracker/frontend/app/(protected)/onboarding-wizard/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./spending-tracker/frontend/components/onboarding/CategorySuggestions.tsx [Client Component SSR]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Client Component SSR]
-    ./spending-tracker/frontend/components/onboarding-wizard/onboarding-wizard.tsx [Server Component]
-    ./spending-tracker/frontend/app/(protected)/onboarding-wizard/page.tsx [Server Component]
-[03:17:25.901] Server  LOG      ✓ Compiled in 2.1s
-[03:18:05.600] Server  LOG      ✓ Compiled in 183ms
-[03:18:14.775] Server  LOG      ✓ Compiled in 204ms
-[03:18:48.452] Server  LOG      ✓ Compiled in 119ms
+[00:00:03.466] Server  LOG      ✓ Ready in 2.1s
+[00:00:22.893] Server  LOG      ○ Compiling / ...
+[00:00:45.755] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:00:50.151] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:50.151] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:50.151] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765868354738}
+[00:00:50.152] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765868354789}
+[00:01:06.980] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765868370164}
+[00:01:12.490] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765868376659}
+[00:01:16.704] Server  LOG      ○ Compiling /categories ...
+[00:01:19.007] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765868383644}
+[00:01:21.953] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765868386166}
+[00:07:53.125] Server  LOG      ✓ Compiled in 3.2s
+[00:07:54.278] Browser ERROR   In HTML, %s cannot be a child of <%s>.%s
+This will cause a hydration error.%s <td> div  
+
+  ...
+    <BudgetsPage>
+      <DashboardHeader>
+      <BudgetsPage>
+        <div className={"bg-backg..."}>
+          ...
+            <Card className="px-8">
+              <div data-slot="card" className="bg-card te...">
+                <CardHeader>
+                <CardContent className="space-y-6">
+                  <div data-slot="card-content" className="px-6 space...">
+                    <div>
+                    <Table className="rounded-lg">
+                      <div data-slot="table-cont..." className="relative w...">
+                        <table data-slot="table" className="w-full cap...">
+                          <TableHeader>
+                          <TableBody>
+                            <tbody data-slot="table-body" className={"[&_tr:la..."}>
+                              <TableRow>
+                                <tr data-slot="table-row" className="hover:bg-m...">
+>                                 <div className="grid gap-2">
+                                    <CreditCard>
+                                    <TableCell>
+>                                     <td
+>                                       data-slot="table-cell"
+>                                       className={"p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 ..."}
+>                                     >
+                                  ...
+                              ...
+                    ...
+
+[00:07:54.278] Browser ERROR   <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. div <td>
+[00:07:54.278] Browser ERROR   In HTML, %s cannot be a child of <%s>.%s
+This will cause a hydration error.%s <div> tr  
+
+  ...
+    <SegmentViewNode type="page" pagePath="/spending-...">
+      <SegmentTrieNode>
+      <BudgetsPage>
+        <DashboardHeader>
+        <BudgetsPage>
+          <div className={"bg-backg..."}>
+            ...
+              <Card className="px-8">
+                <div data-slot="card" className="bg-card te...">
+                  <CardHeader>
+                  <CardContent className="space-y-6">
+                    <div data-slot="card-content" className="px-6 space...">
+                      <div>
+                      <Table className="rounded-lg">
+                        <div data-slot="table-cont..." className="relative w...">
+                          <table data-slot="table" className="w-full cap...">
+                            <TableHeader>
+                            <TableBody>
+                              <tbody data-slot="table-body" className={"[&_tr:la..."}>
+                                <TableRow>
+>                                 <tr
+>                                   data-slot="table-row"
+>                                   className="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-co..."
+>                                 >
+>                                   <div className="grid gap-2">
+                                    ...
+                                ...
+                      ...
+
+[00:07:54.278] Browser ERROR   <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. tr <div>
+[00:08:48.204] Server  LOG      ✓ Compiled in 354ms
+[00:15:58.736] Server  LOG      ✓ Compiled in 418ms
+[00:17:10.889] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./spending-tracker/frontend/components/ui/ToastProvider.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:17:10.931] Server  LOG      ✓ Compiled in 613ms
+[00:17:12.076] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:17:15.218] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:17:15.218] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/budgets","route":"/budgets"}
+[00:17:15.218] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765869339868}
+[00:21:21.722] Server  LOG      ✓ Compiled in 1952ms
+[00:21:33.562] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765869597032}
+[00:30:44.206] Server  LOG      ✓ Compiled in 625ms

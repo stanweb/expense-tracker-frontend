@@ -51,9 +51,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, []);
 
     const variantStyles = {
-        success: "border-green-500 dark:text-white dark:bg-green-600 border-l-4 border-green-600 dark:border-green-700",
-        error: "border-red-500 dark:text-white dark:bg-red-600 border-l-4 border-red-600 dark:border-red-700",
-        info: "border-blue-500 dark:text-white dark:bg-blue-600 border-l-4 border-blue-600 dark:border-blue-700",
+        success: "border-green-500 bg-gray-50 dark:text-white dark:bg-green-600 border-l-4 border-green-600 dark:border-green-700",
+        error: "border-red-500 bg-gray-50 dark:text-white dark:bg-red-600 border-l-4 border-red-600 dark:border-red-700",
+        info: "border-blue-500 bg-gray-50 dark:text-white dark:bg-blue-600 border-l-4 border-blue-600 dark:border-blue-700",
     };
 
     const variantIcons = {
