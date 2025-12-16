@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/utils/authMiddleware";
-import { smsExtractPrompt } from "@/utils/prompts";
 import { transactionExtractor } from "@/utils/groqClient";
+import {loadPrompt} from "@/utils/loadPrompts";
+import {SMS_STATEMENT_PROMPT_GIST_URL} from "@/configs";
 
 async function handler(req: NextRequest) {
     try {
@@ -10,7 +11,8 @@ async function handler(req: NextRequest) {
         if (!messages) {
             return NextResponse.json({ error: "SMS messages are required" }, { status: 400 });
         }
-        const prompt = smsExtractPrompt + messages;
+        const gistPrompt = await loadPrompt(SMS_STATEMENT_PROMPT_GIST_URL)
+        const prompt = gistPrompt.replace('<<<MESSAGE>>>', messages);
 
         const {data} = await transactionExtractor(prompt);
 

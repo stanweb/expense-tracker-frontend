@@ -1,8 +1,6 @@
 {
-  "/(protected)/all-transactions/page": "app/(protected)/all-transactions/page.js",
   "/(protected)/budgets/page": "app/(protected)/budgets/page.js",
   "/(protected)/categories/page": "app/(protected)/categories/page.js",
-  "/(protected)/onboarding-wizard/page": "app/(protected)/onboarding-wizard/page.js",
   "/(protected)/page": "app/(protected)/page.js",
   "/login/page": "app/login/page.js"
 }

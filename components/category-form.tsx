@@ -62,33 +62,14 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
-                    <div>
+                    <div className={'grid gap-2'}>
                         <Label htmlFor="name">Name</Label>
                         <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="bg-input text-foreground border-input" />
                     </div>
-                    <div>
+                    <div className={'grid gap-2'}>
                         <Label htmlFor="description">Description</Label>
                         <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="bg-input text-foreground border-input" />
                     </div>
-                    {/*<div>*/}
-                    {/*    <Label>Icon</Label>*/}
-                    {/*    <div className="grid grid-cols-8 gap-2 h-32 overflow-y-auto border p-2 rounded-md border-border">*/}
-                    {/*        {iconList.map((iconName) => {*/}
-                    {/*            const Icon = Icons[iconName as keyof typeof Icons] as React.ElementType;*/}
-                    {/*            return (*/}
-                    {/*                <Button*/}
-                    {/*                    key={iconName}*/}
-                    {/*                    variant={selectedIcon === iconName ? "default" : "outline"}*/}
-                    {/*                    size="icon"*/}
-                    {/*                    onClick={() => setSelectedIcon(iconName)}*/}
-                    {/*                    className={selectedIcon === iconName ? "" : "bg-secondary border-border text-secondary-foreground"}*/}
-                    {/*                >*/}
-                    {/*                    <Icon className="h-4 w-4" />*/}
-                    {/*                </Button>*/}
-                    {/*            );*/}
-                    {/*        })}*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
                 </div>
                 <DialogFooter>
                     <Button variant="ghost" onClick={onClose}>Cancel</Button>

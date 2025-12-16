@@ -1,9 +1,9 @@
-import { pdfExtractPrompt } from "@/utils/prompts";
 import { transactionExtractor } from "@/utils/groqClient";
 import { pdfToText } from "@/utils/pdfToText";
-import axios from "axios";
 import backendAxios from "@/utils/backendAxios";
 import {updateJob} from "@/utils/jobHelper";
+import {loadPrompt} from "@/utils/loadPrompts";
+import {PDF_STATEMENT_PROMPT_GIST_URL} from "@/configs";
 const RPM_LIMIT = 60;
 const TPM_LIMIT = 10000;
 
@@ -45,7 +45,9 @@ export async function processPdfAsync(file: File, jobId: string, sessionId:strin
                 resetMinuteIfNeeded();
             }
 
-            const prompt = pdfExtractPrompt + pageText;
+            const gistPrompt = await loadPrompt(PDF_STATEMENT_PROMPT_GIST_URL)
+
+            const prompt = gistPrompt.replace('<<<STATEMENT_TEXT>>>', pageText);
             const { data, totalTokens } = await transactionExtractor(prompt);
 
             requestsThisMinute++;

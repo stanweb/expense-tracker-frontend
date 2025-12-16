@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/utils/authMiddleware";
-
-import {categoryPrompt} from "@/utils/prompts";
 import {categoryGenerator} from "@/utils/groqClient";
+import {loadPrompt} from "@/utils/loadPrompts";
+import {CATEGORY_PROMPT_GIST_URL} from "@/configs";
 
 
 async function handler(req: NextRequest) {
     const requestBody = await req.json();
     try {
-        const prompt = categoryPrompt(requestBody.toString())
+        const gistPrompt = await loadPrompt(CATEGORY_PROMPT_GIST_URL)
+        const prompt = gistPrompt.replace("<<<USER_FINANCIAL_DATA>>>", requestBody)
 
         const categories = await categoryGenerator(prompt)
         return NextResponse.json( categories, { status: 200 });

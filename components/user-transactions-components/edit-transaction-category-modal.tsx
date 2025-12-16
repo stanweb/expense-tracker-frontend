@@ -23,6 +23,7 @@ import axioClient from '@/utils/servicesAxiosClient';
 import { getIcon } from '@/utils/helpers';
 import {useDispatch, useSelector} from 'react-redux';
 import {setTransactionTrigger} from "@/store/date-slice";
+import {useToast} from "@/components/ui/ToastProvider";
 
 
 interface Category {
@@ -50,6 +51,7 @@ export const EditTransactionCategoryModal = ({
     const [error, setError] = useState<string | null>(null);
     const userId = useSelector((state: RootState) => state.user.userId);
     const dispatch = useDispatch()
+    const {showToast} = useToast()
 
     // Fetch categories only once when the component mounts
     useEffect(() => {
@@ -59,7 +61,6 @@ export const EditTransactionCategoryModal = ({
                 setCategories(res.data);
             })
             .catch((err) => {
-                console.error("Error fetching categories:", err);
                 setError("Failed to load categories.");
             });
     }, [userId]); // Empty dependency array means this effect runs once on mount
@@ -81,12 +82,23 @@ export const EditTransactionCategoryModal = ({
             await axioClient.put(`/users/${userId}/transactions/${transaction.id}`, {
                 categoryId: selectedCategoryId,
             });
+            showToast({
+                title: "Success",
+                description: "Successfully updated transaction category",
+                variant: "success",
+                duration: 5000,
+            })
             onSuccess();
             onClose();
             dispatch(setTransactionTrigger(Date.now().toString()))
-        } catch (err: any) {
-            console.error("Error updating transaction category:", err);
-            setError(err.message || "Failed to update category.");
+        } catch (error: any) {
+            showToast({
+                title: "Error",
+                description: error.response?.data?.message || "Failed to update category",
+                variant: "error",
+                duration: 5000,
+            })
+            setError(error.message || "Failed to update category.");
         } finally {
             setLoading(false);
         }

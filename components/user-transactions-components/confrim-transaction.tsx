@@ -18,6 +18,7 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { ParsedTransaction, RootState } from "@/Interfaces/Interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {setTransactionTrigger} from "@/store/date-slice";
+import {useToast} from "@/components/ui/ToastProvider";
 
 interface Category {
     id: number;
@@ -38,6 +39,7 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
     const [isLoading, setIsLoading] = useState(false);
     const userId = useSelector((state: RootState) => state.user.userId);
     const dispatch = useDispatch()
+    const {showToast} = useToast()
 
     useEffect(() => {
         if (isOpen && userId) {
@@ -72,11 +74,22 @@ export default function ConfirmTransactionModal({ isOpen, onClose, parsed, onSuc
             }));
 
             await axioClient.post(`/users/${userId}/transactions`, transactionsToSave);
+            showToast({
+                title: "Success",
+                description: "Successfully saved transactions",
+                variant: "success",
+                duration: 3000,
+            })
             onSuccess();
             onClose();
             dispatch(setTransactionTrigger(Date.now().toString()))
-        } catch (err) {
-            console.error(err);
+        } catch (error: any) {
+            showToast({
+                title: "Error",
+                description: error.response?.data?.message || "Failed to save transactions",
+                variant: "error",
+                duration: 3000,
+            })
         } finally {
             setIsLoading(false);
         }

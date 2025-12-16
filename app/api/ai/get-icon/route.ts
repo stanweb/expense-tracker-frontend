@@ -1,23 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/utils/authMiddleware";
-
-import { cookies } from "next/headers";
-import {createJob} from "@/utils/jobHelper";
-import axios from "axios";
-import {iconPrompt} from "@/utils/prompts";
 import {iconGenerator} from "@/utils/groqClient";
-import backendAxios from "@/utils/backendAxios";
+import {loadPrompt} from "@/utils/loadPrompts";
+import {ICON_PROMPT_GIST_URL} from "@/configs";
 
-const GIST_URL = "https://gist.githubusercontent.com/stanweb/2a2ff78133f9e1d39c0f0705833b1dbe/raw/gistfile1.txt"
 
 async function handler(req: NextRequest) {
-    const cookieStore =  await cookies();
-    const sessionId = cookieStore.get("JSESSIONID")?.value;
     const { name, description } = await req.json();
     try {
-        const {data} = await axios.get(GIST_URL)
+        const gistPrompt = await loadPrompt(ICON_PROMPT_GIST_URL)
 
-        const prompt = iconPrompt(data, name + description).toString()
+        const prompt = gistPrompt.replace('<<<USER_MESSAGE>>>', name + description)
         const {iconName}  = await iconGenerator(prompt)
         return NextResponse.json( {iconName}, { status: 200 });
 
