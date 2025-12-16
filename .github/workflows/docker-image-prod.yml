@@ -1,7 +1,7 @@
-name: Build & Push Docker Image (PR)
+name: Build & Push Docker Image (prod)
 
 on:
-  pull_request:
+  push:
     branches:
       - prod
 
@@ -24,4 +24,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-services:base
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-frontend:latest
