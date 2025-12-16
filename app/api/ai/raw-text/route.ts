@@ -12,7 +12,7 @@ async function handler(req: NextRequest) {
             return NextResponse.json({ error: "SMS messages are required" }, { status: 400 });
         }
         const gistPrompt = await loadPrompt(SMS_STATEMENT_PROMPT_GIST_URL)
-        const prompt = gistPrompt.replace('<<<MESSAGE>>>', messages);
+        const prompt = gistPrompt.replace('<<<MESSAGE>>>',  JSON.stringify(messages, null, 2));
 
         const {data} = await transactionExtractor(prompt);
 
