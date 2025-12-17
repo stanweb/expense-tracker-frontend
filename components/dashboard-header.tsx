@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, Settings, Download, Wallet, ListCheck, LogOut } from 'lucide-react'
+import { BarChart3, Wallet, ListCheck, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
@@ -39,30 +39,30 @@ export function DashboardHeader() {
             </div>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Spending Tracker</h1>
-            <p className="text-sm text-foreground/60">Monitor your expenses in real-time</p>
+            <h1 className="text-lg sm:text-2xl font-bold text-foreground">Spending Tracker</h1>
+            <p className="hidden sm:block text-sm text-foreground/60">Monitor your expenses in real-time</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
             <Link href="/categories">
-                <Button variant="outline">
+                <Button variant="outline" size="icon" className="sm:hidden">
+                    <ListCheck className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" className="hidden sm:flex">
                     <ListCheck className="h-4 w-4 mr-2" />
                     Categories
                 </Button>
             </Link>
           <Link href="/budgets">
-            <Button variant="outline">
+            <Button variant="outline" size="icon" className="sm:hidden">
+              <Wallet className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" className="hidden sm:flex">
               <Wallet className="h-4 w-4 mr-2" />
               Budgets
             </Button>
           </Link>
-          {/*<Button variant="outline" size="icon">*/}
-          {/*  <Download className="h-4 w-4" />*/}
-          {/*</Button>*/}
-          {/*<Button variant="outline" size="icon">*/}
-          {/*  <Settings className="h-4" />*/}
-          {/*</Button>*/}
           <ThemeToggle />
           <Button variant="outline" size="icon" onClick={handleLogout}>
             <LogOut className="h-4 w-4" />

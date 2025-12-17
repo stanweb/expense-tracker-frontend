@@ -157,21 +157,21 @@ export function BudgetsList() {
     }
 
     return (
-        <div className={'container mx-auto py-8 px-8 max-w-7xl'}>
-            <Card className={'px-8'}>
+        <div className={'container mx-auto py-8 px-4 sm:px-8 max-w-7xl'}>
+            <Card className={'px-4 sm:px-8'}>
                 <CardHeader className="space-y-1 pb-6">
-                    <CardTitle className="text-3xl font-semibold tracking-tight">Budgets</CardTitle>
-                    <CardDescription className="text-base mt-1.5">
+                    <CardTitle className="text-2xl sm:text-3xl font-semibold tracking-tight">Budgets</CardTitle>
+                    <CardDescription className="text-sm sm:text-base mt-1.5">
                         Manage and organize your financial Budgets
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <div className="flex justify-between mb-4">
-                        <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row justify-between mb-4 gap-4">
+                        <div className="flex flex-col sm:flex-row gap-2">
                             <div>
                                 <Label htmlFor="month-filter">Month</Label>
                                 <Select onValueChange={setSelectedMonth} value={selectedMonth}>
-                                    <SelectTrigger className="w-[180px]">
+                                    <SelectTrigger className="w-full sm:w-[180px]">
                                         <SelectValue placeholder="Select Month" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -186,7 +186,7 @@ export function BudgetsList() {
                             <div>
                                 <Label htmlFor="year-filter">Year</Label>
                                 <Select onValueChange={setSelectedYear} value={selectedYear}>
-                                    <SelectTrigger className="w-[180px]">
+                                    <SelectTrigger className="w-full sm:w-[180px]">
                                         <SelectValue placeholder="Select Year" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -200,14 +200,28 @@ export function BudgetsList() {
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            {lastMonthBudget.length > 0 && <Button onClick={handleCopyLastMonth} variant="outline">
-                                <Copy className="mr-2 h-4 w-4"/>
-                                Copy Last Month's Budgets
-                            </Button> }
+                            {lastMonthBudget.length > 0 && 
+                            <>
+                                <Button onClick={handleCopyLastMonth} variant="outline" size="icon" className="sm:hidden">
+                                    <Copy className="h-4 w-4"/>
+                                </Button>
+                                <Button onClick={handleCopyLastMonth} variant="outline" className="hidden sm:flex">
+                                    <Copy className="mr-2 h-4 w-4"/>
+                                    Copy Last Month's Budgets
+                                </Button>
+                            </>
+                             }
 
                             <Button
                                 disabled={categories.length == budgets.length}
-                                className={'cursor-pointer'}
+                                className={'cursor-pointer sm:hidden'}
+                                size="icon"
+                                onClick={handleAdd}>
+                                <Plus className="h-4 w-4"/>
+                            </Button>
+                            <Button
+                                disabled={categories.length == budgets.length}
+                                className={'cursor-pointer hidden sm:flex'}
                                 onClick={handleAdd}>
 
                                 <Plus className="mr-2 h-4 w-4"/>
@@ -226,8 +240,8 @@ export function BudgetsList() {
                                 <TableRow>
                                     <TableHead>Category</TableHead>
                                     <TableHead>Amount</TableHead>
-                                    <TableHead>Month</TableHead>
-                                    <TableHead>Year</TableHead>
+                                    <TableHead className="hidden sm:table-cell">Month</TableHead>
+                                    <TableHead className="hidden sm:table-cell">Year</TableHead>
                                     <TableHead>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -242,8 +256,8 @@ export function BudgetsList() {
                                                 {budget.categoryName}
                                             </TableCell>
                                         <TableCell>{budget.amount}</TableCell>
-                                        <TableCell>{formatMonth(budget.month)}</TableCell>
-                                        <TableCell>{budget.year}</TableCell>
+                                        <TableCell className="hidden sm:table-cell">{formatMonth(budget.month)}</TableCell>
+                                        <TableCell className="hidden sm:table-cell">{budget.year}</TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
