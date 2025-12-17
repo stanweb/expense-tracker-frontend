@@ -1,35 +1,12 @@
-[00:00:03.311] Server  LOG      ✓ Ready in 2.1s
-[00:00:26.481] Server  LOG      ○ Compiling / ...
-[00:00:47.057] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911851692}
-[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911851746}
-[00:01:26.373] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911884625}
-[00:01:57.086] Server  LOG      ✓ Compiled in 475ms
-[00:02:16.155] Server  LOG      ○ Compiling /categories ...
-[00:02:18.425] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911938354}
-[00:02:23.247] Server  LOG      ○ Compiling /budgets ...
-[00:02:26.799] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911945343}
-[00:02:44.035] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911961890}
-[00:03:00.948] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911980068}
-[00:03:08.393] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911988342}
-[00:04:16.608] Server  LOG      ✓ Compiled in 587ms
-[00:04:56.266] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765912093986}
-[00:07:29.657] Server  LOG      ○ Compiling /all-transactions ...
-[00:07:32.030] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765912251444}
-[00:27:27.522] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:27:32.859] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:27:32.859] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
-[00:27:32.859] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765913452511}
-[00:33:57.324] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:36:58.878] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:37:02.855] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:37:02.855] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
-[00:37:02.855] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765914021839}
-[00:37:49.539] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:37:49.539] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
-[00:37:49.539] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765914069512}
-[00:39:51.099] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:39:51.099] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
-[00:39:51.099] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765914191073}
+[00:00:02.863] Server  LOG      ✓ Ready in 1991ms
+[00:00:30.799] Server  LOG      ○ Compiling / ...
+[00:00:42.832] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:00:45.466] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:45.466] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:45.467] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765950669639}
+[00:00:45.467] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765950669676}
+[00:00:57.743] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:00:58.270] Server  LOG      ✓ Compiled in 2.9s
+[00:00:58.682] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:58.682] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/login","route":"/login"}
+[00:00:58.682] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765950682915}

@@ -1,9 +1,4 @@
 {
-  "/(protected)/all-transactions/page": "app/(protected)/all-transactions/page.js",
-  "/(protected)/budgets/page": "app/(protected)/budgets/page.js",
-  "/(protected)/categories/page": "app/(protected)/categories/page.js",
   "/(protected)/page": "app/(protected)/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/ai/get-icon/route": "app/api/ai/get-icon/route.js",
   "/login/page": "app/login/page.js"
 }
