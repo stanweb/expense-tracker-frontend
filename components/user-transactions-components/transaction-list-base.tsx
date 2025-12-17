@@ -17,7 +17,7 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { EditTransactionCategoryModal } from "@/components/user-transactions-components/edit-transaction-category-modal";
 import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-components/confirm-delete-transaction-modal";
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, Plus, Upload, Bot } from 'lucide-react';
 import aiAxioClient from "@/utils/aiAxioClient";
 import { addJob, clearJob } from '@/store/jobs-slice';
 import axiosClient from "@/utils/servicesAxiosClient";
@@ -305,38 +305,61 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
     return (
         <Card className="bg-card">
             {(isCategorizing || loading || !!jobs[0]?.jobId) && <LoadingOverlay message={getLoadingMessage()} />}
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <CardTitle>{title}</CardTitle>
                     <CardDescription>{description}</CardDescription>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <div className="relative">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <div className="relative flex-grow">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             type="search"
                             placeholder="Search transactions..."
-                            className="pl-9"
+                            className="pl-9 w-full"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
 
                     {showAutoCategorizeButton && (
-                        <Button variant="outline" onClick={handleAutoCategorize} disabled={isCategorizing}>
-                            {isCategorizing ? 'Working...' : 'Auto-Categorize'}
-                        </Button>
+                        <>
+                            <Button variant="outline" size="icon" className="sm:hidden" onClick={handleAutoCategorize} disabled={isCategorizing}>
+                                <Bot className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" className="hidden sm:flex" onClick={handleAutoCategorize} disabled={isCategorizing}>
+                                {isCategorizing ? 'Working...' : 'Auto-Categorize'}
+                            </Button>
+                        </>
                     )}
 
                     <Button
                         variant="default"
+                        size="icon"
+                        className="sm:hidden"
+                        onClick={() => setShowAddRawTransactionModal(true)}
+                    >
+                        <Plus className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="default"
+                        className="hidden sm:flex"
                         onClick={() => setShowAddRawTransactionModal(true)}
                     >
                         Add Transaction
                     </Button>
                     <Button
                         variant="outline"
+                        size="icon"
+                        className="sm:hidden"
+                        onClick={() => setShowBulkUploadModal(true)}
+                    >
+                        <Upload className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        className="hidden sm:flex"
                         onClick={() => setShowBulkUploadModal(true)}
                     >
                         Upload Bulk

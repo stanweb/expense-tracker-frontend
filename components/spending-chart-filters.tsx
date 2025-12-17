@@ -20,11 +20,11 @@ export function SpendingChartFilters({
     years,
 }: SpendingChartFiltersProps) {
     return (
-        <div className="flex gap-2">
-            <div>
+        <div className="flex flex-col sm:flex-row gap-2">
+            <div className="w-full sm:w-auto">
                 <Label htmlFor="year-filter">Year</Label>
                 <Select onValueChange={setSelectedYear} value={selectedYear}>
-                    <SelectTrigger className="w-[120px]">
+                    <SelectTrigger className="w-full sm:w-[120px]">
                         <SelectValue placeholder="Select Year" />
                     </SelectTrigger>
                     <SelectContent>
@@ -36,10 +36,10 @@ export function SpendingChartFilters({
                     </SelectContent>
                 </Select>
             </div>
-            <div>
+            <div className="w-full sm:w-auto">
                 <Label htmlFor="category-filter">Category</Label>
                 <Select onValueChange={setSelectedCategory} value={selectedCategory}>
-                    <SelectTrigger className="w-[150px]">
+                    <SelectTrigger className="w-full sm:w-[150px]">
                         <SelectValue placeholder="All Categories" />
                     </SelectTrigger>
                     <SelectContent>

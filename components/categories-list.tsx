@@ -124,19 +124,19 @@ export function CategoriesList() {
     }
 
     return (
-        <div className={'container mx-auto py-8 px-8 max-w-7xl'}>
-            <Card className={'px-8'}>
+        <div className={'container mx-auto py-8 px-4 sm:px-8 max-w-7xl'}>
+            <Card className={'px-4 sm:px-8'}>
                 <CardHeader className="space-y-1 pb-6">
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col sm:flex-row items-start justify-between">
                         <div>
-                            <CardTitle className="text-3xl font-semibold tracking-tight">Categories</CardTitle>
-                            <CardDescription className="text-base mt-1.5">
+                            <CardTitle className="text-2xl sm:text-3xl font-semibold tracking-tight">Categories</CardTitle>
+                            <CardDescription className="text-sm sm:text-base mt-1.5">
                                 Manage and organize your financial categories
                             </CardDescription>
                         </div>
-                        <Button onClick={handleAdd} size="default" className="gap-2">
+                        <Button onClick={handleAdd} size="default" className="gap-2 mt-4 sm:mt-0">
                             <Plus className="h-4 w-4" />
-                            Add Category
+                            <span className="sm:inline">Add Category</span>
                         </Button>
                     </div>
                 </CardHeader>
@@ -160,7 +160,7 @@ export function CategoriesList() {
                         <TableHeader>
                             <TableRow className={'hover:bg-transparent border'}>
                                 <TableHead className="font-semibold">Name</TableHead>
-                                <TableHead className="font-semibold">Description</TableHead>
+                                <TableHead className="font-semibold hidden sm:table-cell">Description</TableHead>
                                 <TableHead className="w-[70px]">
                                     <span className="sr-only">Actions</span>
                                 </TableHead>
@@ -175,7 +175,7 @@ export function CategoriesList() {
                                         <Icon className="h-5 w-5 text-primary mr-2"/>
                                         {category.name}</TableCell>
                                     <TableCell
-                                        className="whitespace-pre-wrap break-words">{category.description}</TableCell>
+                                        className="whitespace-pre-wrap break-words hidden sm:table-cell">{category.description}</TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

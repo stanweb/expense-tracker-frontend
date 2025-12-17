@@ -1,206 +1,35 @@
-[00:00:02.873] Server  LOG      ✓ Ready in 2.1s
-[00:00:08.126] Server  LOG      ○ Compiling /onboarding-wizard ...
-[00:00:22.553] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:00:27.976] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:27.976] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/onboarding-wizard","route":"/onboarding-wizard"}
-[00:00:27.976] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765872908804}
-[00:00:27.976] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765872908867}
-[00:00:45.065] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:45.065] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/register","route":"/register"}
-[00:00:45.065] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/register color: rgb(120, 120, 120) color: inherit {"dp":"/register","o":"http://localhost:3000/register","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765872925960}
-[00:00:53.864] Server  LOG      ○ Compiling / ...
-[00:00:58.762] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765872939523}
-[00:00:59.608] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765872940486}
-[00:01:07.371] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765872948234}
-[00:01:45.328] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-JSON object containing a user’s financial data:
-[object Object]
-
-ALLOWED CATEGORY ICONS:
-- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.
-- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.
-- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.
-- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.
-- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.
-- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.
-- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.
-- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.
-- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.
-- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.
-- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.
-- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.
-- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.
-
-STRICT RULES:
-- Only generate categories that are directly implied by the data.
-- Group related expenses into realistic personal finance categories.
-- Always analyze extraInfo and include clearly implied recurring obligations.
-- Ignore vague, one-off, or unclear notes.
-- Do NOT invent categories or assumptions.
-- Do NOT create subcategories.
-- Do NOT duplicate category names or icons.
-- Categories must be reasonable relative to income.
-- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.
-- If absolutely no meaningful financial activity exists, return an empty JSON array [].
-
-CATEGORY OBJECT FORMAT:
-Each category MUST include exactly:
-- name
-- categoryIcon (must match one allowed icon exactly)
-- description (short, finance-focused)
-
-IMPORTANT OUTPUT RULES:
-- Output ONLY raw JSON
-- Do NOT include markdown
-- Do NOT include explanations
-- Do NOT include comments
-- Do NOT include trailing text
-
-OUTPUT FORMAT:
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "AllowedIconName",
-    "description": "Short financial description"
-  }
-]
-
-[00:02:47.047] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-JSON object containing a user’s financial data:
-[object Object]
-
-ALLOWED CATEGORY ICONS:
-- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.
-- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.
-- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.
-- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.
-- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.
-- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.
-- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.
-- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.
-- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.
-- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.
-- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.
-- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.
-- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.
-
-STRICT RULES:
-- Only generate categories that are directly implied by the data.
-- Group related expenses into realistic personal finance categories.
-- Always analyze extraInfo and include clearly implied recurring obligations.
-- Ignore vague, one-off, or unclear notes.
-- Do NOT invent categories or assumptions.
-- Do NOT create subcategories.
-- Do NOT duplicate category names or icons.
-- Categories must be reasonable relative to income.
-- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.
-- If absolutely no meaningful financial activity exists, return an empty JSON array [].
-
-CATEGORY OBJECT FORMAT:
-Each category MUST include exactly:
-- name
-- categoryIcon (must match one allowed icon exactly)
-- description (short, finance-focused)
-
-IMPORTANT OUTPUT RULES:
-- Output ONLY raw JSON
-- Do NOT include markdown
-- Do NOT include explanations
-- Do NOT include comments
-- Do NOT include trailing text
-
-OUTPUT FORMAT:
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "AllowedIconName",
-    "description": "Short financial description"
-  }
-]
-
-[00:02:48.230] Server  ERROR   Error in Groq API request: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[00:02:48.400] Server  ERROR   PDF error: Error: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"[]"}}
-[00:02:48.516] Browser ERROR   {"code":"ERR_BAD_RESPONSE","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:3000/api","data":"{\"income\":\"50000\",\"hasAdditionalIncome\":false,\"additionalIncome\":\"\",\"rent\":\"300\",\"utilities\":\"40\",\"transportation\":\"600\",\"groceries\":\"500\",\"diningOut\":\"344\",\"shopping\":\"600\",\"entertainment\":\"400\",\"travel\":\"200\",\"subscriptions\":\"500\",\"savings\":\"6000\",\"investments\":\"700\",\"debt\":\"0\",\"extraInfo\":\"\"}","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"post","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"ai/generate-category","withCredentials":true,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 500","name":"AxiosError","stack":"AxiosError: Request failed with status code 500\n    at settle (http://localhost:3000/_next/static/chunks/455f3__pnpm_c9a99d11._.js:7539:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/455f3__pnpm_c9a99d11._.js:8054:260)\n    at Axios.request (http://localhost:3000/_next/static/chunks/455f3__pnpm_c9a99d11._.js:8858:49)\n    at async handleFinish (http://localhost:3000/_next/static/chunks/spending-tracker_frontend_d1c97200._.js:1947:30)","status":500}
-[00:03:25.546] Server  LOG     {}
-[00:03:25.549] Server  LOG     You are a financial budgeting assistant for a personal finance app.
-
-INPUT:
-JSON object containing a user’s financial data:
-[object Object]
-
-ALLOWED CATEGORY ICONS:
-- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.
-- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.
-- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.
-- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.
-- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.
-- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.
-- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.
-- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.
-- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.
-- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.
-- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.
-- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.
-- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.
-- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.
-- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.
-
-TASK:
-Analyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.
-
-STRICT RULES:
-- Only generate categories that are directly implied by the data.
-- Group related expenses into realistic personal finance categories.
-- Always analyze extraInfo and include clearly implied recurring obligations.
-- Ignore vague, one-off, or unclear notes.
-- Do NOT invent categories or assumptions.
-- Do NOT create subcategories.
-- Do NOT duplicate category names or icons.
-- Categories must be reasonable relative to income.
-- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.
-- If absolutely no meaningful financial activity exists, return an empty JSON array [].
-
-CATEGORY OBJECT FORMAT:
-Each category MUST include exactly:
-- name
-- categoryIcon (must match one allowed icon exactly)
-- description (short, finance-focused)
-
-IMPORTANT OUTPUT RULES:
-- Output ONLY raw JSON
-- Do NOT include markdown
-- Do NOT include explanations
-- Do NOT include comments
-- Do NOT include trailing text
-
-OUTPUT FORMAT:
-[
-  {
-    "name": "Category Name",
-    "categoryIcon": "AllowedIconName",
-    "description": "Short financial description"
-  }
-]
-
-[00:04:08.405] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765873126960}
-[00:05:49.540] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:05:49.540] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/budget-generator","route":"/budget-generator"}
-[00:05:49.540] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budget-generator color: rgb(120, 120, 120) color: inherit {"dp":"/budget-generator","o":"http://localhost:3000/budget-generator","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765873230434}
-[00:05:55.853] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:05:55.853] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/onboarding-wizard","route":"/onboarding-wizard"}
-[00:05:55.853] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding-wizard color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding-wizard","o":"http://localhost:3000/onboarding-wizard","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765873236748}
-[00:06:57.654] Server  LOG     Final Prompt: "You are a financial budgeting assistant for a personal finance app.\n\nINPUT:\nJSON object containing a user’s financial data:\n{\n  \"income\": \"70000\",\n  \"hasAdditionalIncome\": false,\n  \"additionalIncome\": \"\",\n  \"rent\": \"20\",\n  \"utilities\": \"20\",\n  \"transportation\": \"200\",\n  \"groceries\": \"400\",\n  \"diningOut\": \"500\",\n  \"shopping\": \"400\",\n  \"entertainment\": \"5000\",\n  \"travel\": \"600\",\n  \"subscriptions\": \"3000\",\n  \"savings\": \"600\",\n  \"investments\": \"700\",\n  \"debt\": \"3000\",\n  \"extraInfo\": \"\"\n}\n\nALLOWED CATEGORY ICONS:\n- Home = Housing & Utilities: Rent, mortgage, utilities, and essential living costs required to maintain your home.\n- Wifi = Internet & Connectivity: Internet, broadband, and online service costs for home and personal use.\n- Smartphone = Mobile & Communication: Mobile phone plans, airtime, and communication-related expenses.\n- Tv = Subscriptions & Streaming: Streaming platforms, digital subscriptions, and recurring media services.\n- Car = Vehicle Ownership: Vehicle maintenance, repairs, insurance, and ownership-related costs.\n- Bus = Public Transportation: Bus, train, taxi, and daily commuting expenses.\n- Plane = Travel & Trips: Flights, accommodation, and travel-related spending for trips and vacations.\n- CreditCard = Debt & Loans: Loan repayments, credit card payments, and other debt obligations.\n- HandHeart = Donations & Support: Charity contributions, gifts, and financial support to others.\n- Shield = Insurance: Health, vehicle, or property insurance premiums and protection costs.\n- GraduationCap = Education & Learning: School fees, courses, training, and learning-related expenses.\n- Briefcase = Work & Professional Expenses: Work-related costs such as equipment, transport, or professional services.\n- HeartPulse = Healthcare: Medical visits, medication, and healthcare-related expenses.\n- Receipt = Bills & Recurring Payments: Regular bills and recurring financial obligations not covered elsewhere.\n- Wallet = Personal Spending: Flexible personal expenses and day-to-day discretionary spending.\n\nTASK:\nAnalyze the financial data and generate realistic, high-level budget categories that are clearly supported by NON-ZERO or clearly implied recurring data.\n\nSTRICT RULES:\n- Only generate categories that are directly implied by the data.\n- Group related expenses into realistic personal finance categories.\n- Always analyze extraInfo and include clearly implied recurring obligations.\n- Ignore vague, one-off, or unclear notes.\n- Do NOT invent categories or assumptions.\n- Do NOT create subcategories.\n- Do NOT duplicate category names or icons.\n- Categories must be reasonable relative to income.\n- If ANY expense, debt, bill, or recurring obligation exists, you MUST return at least one appropriate category.\n- If absolutely no meaningful financial activity exists, return an empty JSON array [].\n\nCATEGORY OBJECT FORMAT:\nEach category MUST include exactly:\n- name\n- categoryIcon (must match one allowed icon exactly)\n- description (short, finance-focused)\n\nIMPORTANT OUTPUT RULES:\n- Output ONLY raw JSON\n- Do NOT include markdown\n- Do NOT include explanations\n- Do NOT include comments\n- Do NOT include trailing text\n\nOUTPUT FORMAT:\n[\n  {\n    \"name\": \"Category Name\",\n    \"categoryIcon\": \"AllowedIconName\",\n    \"description\": \"Short financial description\"\n  }\n]\n"
+[00:00:03.311] Server  LOG      ✓ Ready in 2.1s
+[00:00:26.481] Server  LOG      ○ Compiling / ...
+[00:00:47.057] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911851692}
+[00:00:51.782] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911851746}
+[00:01:26.373] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911884625}
+[00:01:57.086] Server  LOG      ✓ Compiled in 475ms
+[00:02:16.155] Server  LOG      ○ Compiling /categories ...
+[00:02:18.425] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911938354}
+[00:02:23.247] Server  LOG      ○ Compiling /budgets ...
+[00:02:26.799] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911945343}
+[00:02:44.035] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911961890}
+[00:03:00.948] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/budgets color: rgb(120, 120, 120) color: inherit {"dp":"/budgets","o":"http://localhost:3000/budgets","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911980068}
+[00:03:08.393] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/categories color: rgb(120, 120, 120) color: inherit {"dp":"/categories","o":"http://localhost:3000/categories","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765911988342}
+[00:04:16.608] Server  LOG      ✓ Compiled in 587ms
+[00:04:56.266] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765912093986}
+[00:07:29.657] Server  LOG      ○ Compiling /all-transactions ...
+[00:07:32.030] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765912251444}
+[00:27:27.522] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:27:32.859] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:27:32.859] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
+[00:27:32.859] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765913452511}
+[00:33:57.324] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:36:58.878] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
+[00:37:02.855] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:37:02.855] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
+[00:37:02.855] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765914021839}
+[00:37:49.539] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:37:49.539] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
+[00:37:49.539] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765914069512}
+[00:39:51.099] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:39:51.099] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/all-transactions","route":"/all-transactions"}
+[00:39:51.099] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/all-transactions color: rgb(120, 120, 120) color: inherit {"dp":"/all-transactions","o":"http://localhost:3000/all-transactions","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765914191073}
