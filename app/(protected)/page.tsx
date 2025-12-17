@@ -7,15 +7,13 @@ import { CategoryBreakdown } from '@/components/category-breakdown'
 import { RecentTransactionsList } from '@/components/user-transactions-components/recent-transactions-list'
 import { TrendChart } from '@/components/trend-chart'
 import {DateRangePicker} from "@/components/date-range-picker/date-range-picker";
-import Link from 'next/link'; // Import Link
-import { Button } from '@/components/ui/button'; // Import Button
 
 export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
 
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main className="container mx-auto px-2 sm:px-4 py-8 space-y-8">
           <DateRangePicker/>
         {/* Overview Cards */}
           <SpendingOverview />
@@ -25,7 +23,7 @@ export default function Dashboard() {
           <div className="lg:col-span-2">
             <SpendingChart />
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <CategoryBreakdown />
           </div>
         </div>
