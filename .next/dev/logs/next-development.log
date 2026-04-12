@@ -1,12 +1,14 @@
-[00:00:02.863] Server  LOG      ✓ Ready in 1991ms
-[00:00:30.799] Server  LOG      ○ Compiling / ...
-[00:00:42.832] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:00:45.466] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:45.466] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:45.467] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765950669639}
-[00:00:45.467] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765950669676}
-[00:00:57.743] Server  ERROR   redux-persist failed to create sync storage. falling back to noop storage.
-[00:00:58.270] Server  LOG      ✓ Compiled in 2.9s
-[00:00:58.682] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:58.682] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/login","route":"/login"}
-[00:00:58.682] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1765950682915}
+{"timestamp":"00:00:24.413","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
+{"timestamp":"00:00:24.415","source":"Server","level":"LOG","message":"  ? serverComponentsExternalPackages (invalid experimental key)"}
+{"timestamp":"00:00:24.416","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:12:39.850","source":"Server","level":"ERROR","message":"(node:17194) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\n(Use `node --trace-deprecation ...` to show where the warning was created)"}
+{"timestamp":"00:12:42.266","source":"Server","level":"LOG","message":"[{...},{...}]"}
+{"timestamp":"00:12:42.454","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
+{"timestamp":"00:12:42.517","source":"Server","level":"LOG","message":"[{...},{...}]"}
+{"timestamp":"00:12:42.652","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
+{"timestamp":"03:53:27.161","source":"Server","level":"LOG","message":"[{...},{...},{...}]"}
+{"timestamp":"03:53:27.305","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
+{"timestamp":"06:22:42.914","source":"Server","level":"LOG","message":"[{...},{...},{...}]"}
+{"timestamp":"06:22:43.160","source":"Server","level":"LOG","message":"[{...},{...},{...}]"}
+{"timestamp":"06:22:43.693","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
+{"timestamp":"06:22:46.933","source":"Server","level":"ERROR","message":"❌ Error processing SMS: {}"}

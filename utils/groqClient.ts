@@ -22,7 +22,8 @@ async function makeGroqRequest(prompt: string, schema: any) {
 
         return { data: parsed, totalTokens };
     } catch (error) {
-        console.error("Error in Groq API request:", error);
+        console.log(prompt)
+        console.error("Error in Groq API request:");
         throw error;
     }
 }
@@ -64,17 +65,14 @@ export async function transactionExtractor(prompt: string) {
 
 export async function iconGenerator(prompt: string) {
     const schema = {
-        name: "transaction_list",
+        name: "transaction_icon",
         schema: {
-            type: "array",
-            items: {
-                type: "object",
-                properties: {
-                    iconName: { type: "string" },
-                },
-                required: ["iconName"],
-                additionalProperties: false,
+            type: "object",
+            properties: {
+                iconName: { type: "string" },
             },
+            required: ["iconName"],
+            additionalProperties: false,
         },
     };
     const { data } = await makeGroqRequest(prompt, schema);

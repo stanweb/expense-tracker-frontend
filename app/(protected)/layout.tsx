@@ -1,32 +1,13 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import axiosClient from "@/utils/servicesAxiosClient";
-import backendAxios from "@/utils/backendAxios";
+import AuthGuard from "@/components/AuthGuard";
 
-export default async function ProtectedLayout({
+export default function ProtectedLayout({
                                                   children,
                                               }: {
     children: React.ReactNode;
 }) {
-
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get("JSESSIONID")?.value;
-
-    if (!sessionId) {
-        redirect("/login");
-    }
-
-    try {
-        // Validate session with backend using axios
-        await backendAxios.get("/auth/validate-session", {
-            headers: {
-                Cookie: `JSESSIONID=${sessionId}`,
-            },
-        });
-    } catch (err) {
-        // Session is invalid or backend unreachable
-        redirect("/login");
-    }
-
-    return <>{children}</>;
+    return (
+        <AuthGuard>
+            {children}
+        </AuthGuard>
+    );
 }

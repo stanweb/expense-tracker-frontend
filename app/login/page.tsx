@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/user-slice";
+import { setAuthTokens } from "@/store/user-slice"; // Import setAuthTokens
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import axiosClient from "@/utils/servicesAxiosClient";
+import backendAxios from "@/utils/backendAxios"; // Use backendAxios
 import {Card} from "@/components/ui/card";
 
 const LoginPage = () => {
@@ -22,13 +22,22 @@ const LoginPage = () => {
         setError("");
 
         try {
-            const response = await axiosClient.post(
+            const response = await backendAxios.post( // Use backendAxios
                 "/auth/login",
                 { username, password },
             );
             const data = response.data;
 
-            dispatch(setUser({ userId: data.userId, username: data.username }));
+            // Dispatch setAuthTokens with all relevant data
+            dispatch(setAuthTokens({
+                userId: data.userId,
+                username: data.username,
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken,
+                expiresIn: data.expiresIn,
+                refreshExpiresIn: data.refreshExpiresIn,
+                onboardingCompleted: data.onboardingCompleted,
+            }));
 
             if (!data.onboardingCompleted) {
                 router.push("/onboarding-wizard");

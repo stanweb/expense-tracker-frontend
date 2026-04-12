@@ -1,27 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import backendAxios from "@/utils/backendAxios";
+import serverBackendAxios from "@/utils/serverBackendAxios"; // Import the new server-side Axios instance
 
 type AuthenticatedHandler = (req: NextRequest) => Promise<NextResponse>;
 
 export function withAuth(handler: AuthenticatedHandler): AuthenticatedHandler {
     return async (req: NextRequest) => {
-        const cookieStore =  await cookies();
-        const sessionId = cookieStore.get("JSESSIONID")?.value;
+        const authHeader = req.headers.get("Authorization");
 
-        if (!sessionId) {
-            return new NextResponse("Unauthorized", { status: 401 });
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return new NextResponse("Unauthorized: Missing or invalid token", { status: 401 });
         }
 
+        const token = authHeader.split(" ")[1];
+        console.log(token) // Keep this for debugging if needed, but remove in production
+
         try {
-            await backendAxios.get("/auth/validate-session", {
+            // Validate the token with the backend using the server-side Axios instance
+            await serverBackendAxios.get("/auth/validate-session", {
                 headers: {
-                    Cookie: `JSESSIONID=${sessionId}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
         } catch (err) {
-            console.error("Session validation failed:", err);
-            return new NextResponse("Unauthorized", { status: 401 });
+            console.error("Token validation failed:", err);
+            return new NextResponse("Unauthorized: Invalid token", { status: 401 });
         }
 
         return handler(req);
