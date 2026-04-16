@@ -62,7 +62,40 @@ export async function transactionExtractor(prompt: string) {
     };
     return makeGroqRequest(prompt, schema);
 }
-
+export async function investmentTransactionExtractor(prompt: string) {
+    const schema = {
+        name: "transaction_list",
+        schema: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    transactionId: { type: "string" },
+                    amount: { type: "number" },
+                    transactionCost: { type: "number" },
+                    date: { type: "string" },
+                    recipient: { type: "string" },
+                    type: {
+                        type: "string",
+                        enum: ["paid", "sent", "received"],
+                    },
+                    rawMessage: { type: "string" },
+                },
+                required: [
+                    "transactionId",
+                    "amount",
+                    "transactionCost",
+                    "date",
+                    "recipient",
+                    "type",
+                    "rawMessage",
+                ],
+                additionalProperties: false,
+            },
+        },
+    };
+    return makeGroqRequest(prompt, schema);
+}
 export async function iconGenerator(prompt: string) {
     const schema = {
         name: "transaction_icon",

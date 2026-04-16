@@ -1,4 +1,4 @@
-import { transactionExtractor } from "@/utils/groqClient";
+import { transactionExtractor, investmentTransactionExtractor } from "@/utils/groqClient";
 import { loadPrompt } from "@/utils/loadPrompts";
 import {
     APPROVED_SMS_SENDERS_GIST_URL,
@@ -9,7 +9,7 @@ import serverBackendAxios from "@/utils/serverBackendAxios";
 import axios from "axios";
 
 const RPM_LIMIT = 60;
-const TPM_LIMIT = 10000;
+const TPM_LIMIT = 8000;
 const CONCURRENT_LIMIT = 3;
 const UPLOAD_CHUNK_SIZE = 50;
 
@@ -51,6 +51,9 @@ export async function processSmsAsync(
         
         const gistPrompt = await loadPrompt(promptUrl);
 
+        // ✅ Select correct extractor based on type
+        const extractor = type === 'investment' ? investmentTransactionExtractor : transactionExtractor;
+
         // ✅ Fetch approved senders dynamically
         let approvedSenders: string[] = [];
         try {
@@ -63,7 +66,7 @@ export async function processSmsAsync(
         }
 
         const upstreamUrl = type === 'investment' 
-            ? `/users/${userId}/investment-transactions/bulk`
+            ? `/investment-transactions/bulk`
             : `/users/${userId}/transactions`;
 
         // ✅ Proper concurrency control
@@ -106,7 +109,7 @@ export async function processSmsAsync(
                             break;
                         }
 
-                        const { data, totalTokens } = await transactionExtractor(prompt);
+                        const { data, totalTokens } = await extractor(prompt);
 
                         requestsThisMinute++;
                         tokensThisMinute += totalTokens || estimatedTokens;

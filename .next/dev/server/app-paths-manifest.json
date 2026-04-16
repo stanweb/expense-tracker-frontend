@@ -1,3 +1,4 @@
 {
-  "/api/ai/batch-stream/route": "app/api/ai/batch-stream/route.js"
+  "/api/ai/batch-stream/route": "app/api/ai/batch-stream/route.js",
+  "/api/ai/investment-stream/route": "app/api/ai/investment-stream/route.js"
 }

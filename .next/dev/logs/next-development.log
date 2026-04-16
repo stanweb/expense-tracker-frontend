@@ -1,14 +1,8 @@
-{"timestamp":"00:00:24.413","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
-{"timestamp":"00:00:24.415","source":"Server","level":"LOG","message":"  ? serverComponentsExternalPackages (invalid experimental key)"}
-{"timestamp":"00:00:24.416","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:12:39.850","source":"Server","level":"ERROR","message":"(node:17194) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\n(Use `node --trace-deprecation ...` to show where the warning was created)"}
-{"timestamp":"00:12:42.266","source":"Server","level":"LOG","message":"[{...},{...}]"}
-{"timestamp":"00:12:42.454","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
-{"timestamp":"00:12:42.517","source":"Server","level":"LOG","message":"[{...},{...}]"}
-{"timestamp":"00:12:42.652","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
-{"timestamp":"03:53:27.161","source":"Server","level":"LOG","message":"[{...},{...},{...}]"}
-{"timestamp":"03:53:27.305","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
-{"timestamp":"06:22:42.914","source":"Server","level":"LOG","message":"[{...},{...},{...}]"}
-{"timestamp":"06:22:43.160","source":"Server","level":"LOG","message":"[{...},{...},{...}]"}
-{"timestamp":"06:22:43.693","source":"Server","level":"LOG","message":"✅ SMS processing completed successfully"}
-{"timestamp":"06:22:46.933","source":"Server","level":"ERROR","message":"❌ Error processing SMS: {}"}
+{"timestamp":"00:00:04.608","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
+{"timestamp":"00:00:04.609","source":"Server","level":"LOG","message":"  ? serverComponentsExternalPackages (invalid experimental key)"}
+{"timestamp":"00:00:04.610","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:05:27.976","source":"Server","level":"ERROR","message":"(node:33038) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\n(Use `node --trace-deprecation ...` to show where the warning was created)"}
+{"timestamp":"00:05:31.428","source":"Server","level":"LOG","message":"Final transactional flush: [{...},{...},{...},{...}]"}
+{"timestamp":"00:05:31.872","source":"Server","level":"LOG","message":"✅ SMS transactional processing completed successfully"}
+{"timestamp":"00:05:35.858","source":"Server","level":"LOG","message":"Final investment flush: [{...},{...}]"}
+{"timestamp":"00:05:37.048","source":"Server","level":"LOG","message":"✅ SMS investment processing completed successfully"}
