@@ -9,6 +9,11 @@ const nextConfig = {
     experimental: {
         serverComponentsExternalPackages: ["pdf-parse"],
     },
+  compiler: {
+    removeConsole:{
+      exclude: ['error']
+    }
+  }
 
 
 }

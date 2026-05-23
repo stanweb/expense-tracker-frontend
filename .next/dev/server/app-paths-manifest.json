@@ -1,4 +1,1 @@
-{
-  "/(protected)/page": "app/(protected)/page.js",
-  "/login/page": "app/login/page.js"
-}
+{}

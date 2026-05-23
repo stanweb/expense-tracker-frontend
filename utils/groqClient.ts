@@ -22,7 +22,8 @@ async function makeGroqRequest(prompt: string, schema: any) {
 
         return { data: parsed, totalTokens };
     } catch (error) {
-        console.error("Error in Groq API request:", error);
+        console.log(prompt)
+        console.error("Error in Groq API request:");
         throw error;
     }
 }
@@ -61,8 +62,7 @@ export async function transactionExtractor(prompt: string) {
     };
     return makeGroqRequest(prompt, schema);
 }
-
-export async function iconGenerator(prompt: string) {
+export async function investmentTransactionExtractor(prompt: string) {
     const schema = {
         name: "transaction_list",
         schema: {
@@ -70,11 +70,42 @@ export async function iconGenerator(prompt: string) {
             items: {
                 type: "object",
                 properties: {
-                    iconName: { type: "string" },
+                    transactionId: { type: "string" },
+                    amount: { type: "number" },
+                    transactionCost: { type: "number" },
+                    date: { type: "string" },
+                    recipient: { type: "string" },
+                    type: {
+                        type: "string",
+                        enum: ["paid", "sent", "received"],
+                    },
+                    rawMessage: { type: "string" },
                 },
-                required: ["iconName"],
+                required: [
+                    "transactionId",
+                    "amount",
+                    "transactionCost",
+                    "date",
+                    "recipient",
+                    "type",
+                    "rawMessage",
+                ],
                 additionalProperties: false,
             },
+        },
+    };
+    return makeGroqRequest(prompt, schema);
+}
+export async function iconGenerator(prompt: string) {
+    const schema = {
+        name: "transaction_icon",
+        schema: {
+            type: "object",
+            properties: {
+                iconName: { type: "string" },
+            },
+            required: ["iconName"],
+            additionalProperties: false,
         },
     };
     const { data } = await makeGroqRequest(prompt, schema);

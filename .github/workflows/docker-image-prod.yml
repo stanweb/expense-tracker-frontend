@@ -1,17 +1,36 @@
-name: Build & Push Docker Image (PR)
+name: Build & Deploy Frontend
 
 on:
-  pull_request:
+  push:
     branches:
       - prod
 
+# 🌟 FUTURE-PROOFING: Forces the runner to execute actions using Node.js 24
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -19,10 +38,25 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 🌟 FIX: Added 'provenance: false' to prevent Buildx from searching Docker Hub for local build stages
       - name: Build & Push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-frontend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Deploy to Homelab Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOMELAB_TAILSCALE_IP }}
+          username: ${{ secrets.HOMELAB_SSH_USER }}
+          key: ${{ secrets.HOMELAB_SSH_KEY }}
+          script: |
+            cd /opt/stacks/spending-tracker-frontend
+            docker compose pull
+            docker compose up -d --force-recreate --no-deps frontend
+            docker image prune -f

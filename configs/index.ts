@@ -7,3 +7,9 @@ export const SMS_STATEMENT_PROMPT_GIST_URL = 'https://gist.githubusercontent.com
 export const ICON_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/4554fb546cdc69e17360bb10e3b3cfff/raw/iconPrompt.txt'
 export const CATEGORY_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/6a618d9f599e5f81cfc772918a5fa654/raw/categoryPrompt.txt'
 export const BUDGET_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/0dc2dfb01a207130156e8d2ea6dcc378/raw/budgetPrompt.txt'
+export const MOBILE_RAW_TEXT_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/4ebfe2d8b323c803769f4569d00f73a1/raw/mobileSMSPrompt.txt'
+
+export const INVESTMENT_TRANSACTION_EXTRACTION_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/5c32be2328dc9c5653fd42bdfbbddced/raw/investment-extraction.txt'
+
+export const APPROVED_SMS_SENDERS_GIST_URL = 'https://gist.githubusercontent.com/stanweb/650f5a05f0abd6fa0c0981bb8193ae8f/raw/approved-senders.json'
+
