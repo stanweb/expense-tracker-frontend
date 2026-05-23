@@ -1,8 +1,7 @@
-
 name: Build & Deploy Frontend
 
 on:
-  pull_request:
+  push:
     branches:
       - prod
 
@@ -25,7 +24,6 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github
 
-      # 🌟 FIX FOR BUILD CACHE ERROR: Sets up QEMU and initializes a container-based Buildx builder
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -40,6 +38,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 🌟 FIX: Added 'provenance: false' to prevent Buildx from searching Docker Hub for local build stages
       - name: Build & Push
         uses: docker/build-push-action@v6
         with:
@@ -48,6 +47,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
 
       - name: Deploy to Homelab Server via SSH
         uses: appleboy/ssh-action@v1.0.3
