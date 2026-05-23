@@ -1,9 +1,18 @@
 import Groq from "groq-sdk";
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+// Lazy initialization — client is only created at request time, not at build time
+let groqClient: Groq | null = null;
+
+function getGroqClient(): Groq {
+    if (!groqClient) {
+        groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    }
+    return groqClient;
+}
 
 async function makeGroqRequest(prompt: string, schema: any) {
     try {
-        const chatCompletion = await groq.chat.completions.create({
+        const chatCompletion = await getGroqClient().chat.completions.create({
             messages: [
                 {
                     role: "user",
@@ -62,6 +71,7 @@ export async function transactionExtractor(prompt: string) {
     };
     return makeGroqRequest(prompt, schema);
 }
+
 export async function investmentTransactionExtractor(prompt: string) {
     const schema = {
         name: "transaction_list",
@@ -96,6 +106,7 @@ export async function investmentTransactionExtractor(prompt: string) {
     };
     return makeGroqRequest(prompt, schema);
 }
+
 export async function iconGenerator(prompt: string) {
     const schema = {
         name: "transaction_icon",
@@ -172,4 +183,4 @@ export const budgetGenerator = async (prompt: string) => {
     return data;
 };
 
-export default groq;
+export default getGroqClient;
