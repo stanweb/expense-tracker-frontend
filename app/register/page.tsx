@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/user-slice";
+// import { setUser } from "@/store/user-slice";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -24,7 +24,7 @@ const RegisterPage = () => {
         try {
             const response = await axiosClient.post("/auth/register", { username, password });
             const data = response.data;
-            dispatch(setUser({ userId: data.userId, username: data.username }));
+            // dispatch(setUser({ userId: data.userId, username: data.username }));
             router.push("/");
         } catch (err: any) {
             if (err.response) {
