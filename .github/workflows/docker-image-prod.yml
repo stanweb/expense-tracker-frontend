@@ -1,12 +1,16 @@
-name: Build & Push Docker Image (prod)
+name: Build & Deploy Frontend
 
 on:
   push:
     branches:
       - prod
 
+# 🌟 FUTURE-PROOFING: Forces the runner to execute actions using Node.js 24
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +28,28 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-frontend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spending-tracker-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github
+
+      # 🌟 FIX FOR BUILDX ERROR: Installs the builder driver required for 'type=gha' caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Deploy to Homelab Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOMELAB_TAILSCALE_IP }}
+          username: ${{ secrets.HOMELAB_SSH_USER }}
+          key: ${{ secrets.HOMELAB_SSH_KEY }}
+          script: |
+            cd /opt/stacks/spending-tracker-frontend
+            docker compose pull
+            docker compose up -d --force-recreate --no-deps frontend
+            docker image prune -f
