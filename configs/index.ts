@@ -13,3 +13,61 @@ export const INVESTMENT_TRANSACTION_EXTRACTION_PROMPT_GIST_URL = 'https://gist.g
 
 export const APPROVED_SMS_SENDERS_GIST_URL = 'https://gist.githubusercontent.com/stanweb/650f5a05f0abd6fa0c0981bb8193ae8f/raw/approved-senders.json'
 
+export const theme = {
+  colors: {
+    primary: {
+      light: '#6366F1', // Indigo 500
+      dark: '#818CF8', // Indigo 400
+      gradient: ['#6366F1', '#A855F7'], // Indigo to Violet
+    },
+    background: {
+      light: '#F9FAFB', // Gray 50
+      dark: '#0F172A', // Slate 900
+      cardLight: '#FFFFFF',
+      cardDark: '#1E293B', // Slate 800
+    },
+    text: {
+      primaryLight: '#111827', // Gray 900
+      primaryDark: '#FFFFFF',
+      secondaryLight: '#6B7280', // Gray 500
+      secondaryDark: '#94A3B8', // Slate 400
+    },
+    status: {
+      success: '#10B981', // Emerald 500
+      error: '#EF4444', // Red 500
+      warning: '#F59E0B', // Amber 500
+      info: '#6366F1',
+    },
+    border: {
+      light: '#F3F4F6', // Gray 100
+      dark: '#334155', // Slate 700
+    },
+  },
+  spacing: {
+    xs: 2,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+  borderRadius: {
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 24,
+    full: 9999,
+  },
+  typography: {
+    fontFamily: 'Inter-Regular', // Placeholder for custom font
+    sizes: {
+      xs: 10,
+      sm: 12,
+      md: 14,
+      lg: 18,
+      xl: 24,
+      xxl: 32,
+    },
+  },
+};
+
+export type Theme = typeof theme;

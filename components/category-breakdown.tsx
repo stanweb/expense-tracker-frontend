@@ -19,7 +19,7 @@ export function CategoryBreakdown() {
 
     useEffect(() => {
         if (userId) {
-            axioClient.get(`users/${userId}/category/summary`, {
+            axioClient.get(`users/${userId}/analytics/categories`, {
                 params: {
                     startDate: fromDate,
                     endDate: toDate

@@ -268,7 +268,7 @@ export function TransactionListBase({ title, description, limit, showAutoCategor
         if (!userId) return;
         setIsCategorizing(true);
         try {
-            await axioClient.post(`/users/${userId}/categorize`, {});
+            await axioClient.post(`/users/${userId}/transactions/categorize`, {});
             showToast({
                 title: "Success!",
                 description: "Your transactions have been auto-categorized.",
