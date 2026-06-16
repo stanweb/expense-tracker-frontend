@@ -2,12 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/utils/authMiddleware";
 import {processPdfAsync} from "@/utils/processPdfAsync";
 
-import { cookies } from "next/headers";
 import {createJob} from "@/utils/jobHelper";
 
 async function handler(req: NextRequest) {
-    const cookieStore =  await cookies();
-    const sessionId = cookieStore.get("JSESSIONID")?.value;
     try {
         const formData = await req.formData();
         const file = formData.get("pdfFile") as File;
@@ -16,10 +13,10 @@ async function handler(req: NextRequest) {
             return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
         }
 
-        const job = await createJob(sessionId || "")
+        const job = await createJob()
 
         // Run extraction in background
-        processPdfAsync(file, job.jobId, sessionId || "");
+        processPdfAsync(file, job.jobId);
 
         // Return immediately with jobId
         return NextResponse.json(job, { status: 202 });

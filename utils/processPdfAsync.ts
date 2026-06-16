@@ -24,7 +24,7 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function processPdfAsync(file: File, jobId: string, sessionId:string) {
+export async function processPdfAsync(file: File, jobId: string) {
     try {
         const pages = await pdfToText(file);
         let allTransactions: any[] = [];
@@ -58,15 +58,11 @@ export async function processPdfAsync(file: File, jobId: string, sessionId:strin
             }
         }
 
-        await apiClient.post('/users/1/transactions', allTransactions,{
-            headers: {
-                Cookie: `JSESSIONID=${sessionId}`, // add your cookie here
-            },
-        })
+        await apiClient.post('/users/1/transactions', allTransactions)
 
-        await updateJob(jobId, "COMPLETED", sessionId);
+        await updateJob(jobId, "COMPLETED");
     } catch (error: any) {
         console.log(error)
-        await updateJob(jobId, "FAILED", sessionId, error.message);
+        await updateJob(jobId, "FAILED", error.message);
     }
 }

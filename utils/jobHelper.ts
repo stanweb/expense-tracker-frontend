@@ -1,15 +1,10 @@
 import apiClient from "@/utils/apiClient";
 
-export async function createJob(sessionId: string) {
+export async function createJob() {
     try {
         const { data } = await apiClient.post(
             "jobs",
-            { status: "PROCESSING" },
-            {
-                headers: {
-                    Cookie: `JSESSIONID=${sessionId}`, // add your cookie here
-                },
-            }
+            { status: "PROCESSING" }
         );
         return data; // return the created job data
     } catch (e) {
@@ -18,16 +13,11 @@ export async function createJob(sessionId: string) {
     }
 }
 
-export async function updateJob(jobId: string, status: string, sessionId: string, error='') {
+export async function updateJob(jobId: string, status: string, error = "") {
     try {
         await apiClient.put(
             `/jobs/${jobId}`,
-            { status, error },
-            {
-                headers: {
-                    Cookie: `JSESSIONID=${sessionId}`, // add your cookie here
-                },
-            }
+            { status, error }
         );
     } catch (e) {
         console.error("Failed to update job:", e);
