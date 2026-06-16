@@ -4,7 +4,7 @@ export const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 
 // Use this for calls that originate from API routes / server components so
 // Docker deployments can route through the internal network (e.g. http://backend:8080/api)
 // without rebuilding the client bundle.
-export const INTERNAL_API_BASE_URL = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api'
+export const INTERNAL_API_BASE_URL = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://backend:8080/api'
 
 export const PDF_STATEMENT_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/8c471be21d2cd6c86ecc8014a832a8c5/raw/pdfExtractPrompt.txt'
 export const SMS_STATEMENT_PROMPT_GIST_URL = 'https://gist.githubusercontent.com/stanweb/bc9fc9e83d675b95ac77fe032be405e2/raw/smsExtractPrompt.txt'
