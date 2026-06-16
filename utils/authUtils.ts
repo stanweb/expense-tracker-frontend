@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import backendAxios from "@/utils/backendAxios";
 import serverBackendAxios from "@/utils/serverBackendAxios";
 
 interface AuthenticatedUser {

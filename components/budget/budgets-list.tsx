@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import {Budget, Category, RootState} from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
-import axioClient from "@/utils/servicesAxiosClient";
+import axioClient from "@/utils/apiClient";
 import { BudgetForm } from "@/components/budget/budget-form";
 import { Copy, MoreHorizontal, Pencil, Plus, Trash2} from "lucide-react";
 import {

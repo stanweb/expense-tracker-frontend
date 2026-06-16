@@ -10,7 +10,7 @@ import { ApiTransaction, AddTransaction, ParsedTransaction, RootState, UiTransac
 import { useDispatch, useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
 import { useEffect, useState } from 'react';
-import axioClient from '@/utils/servicesAxiosClient';
+import axioClient from '@/utils/apiClient';
 import { getIcon, formatDaysAgo } from '@/utils/helpers';
 import ConfirmTransactionModal from "@/components/user-transactions-components/confrim-transaction";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
@@ -18,9 +18,9 @@ import { EditTransactionCategoryModal } from "@/components/user-transactions-com
 import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-components/confirm-delete-transaction-modal";
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Upload, Bot } from 'lucide-react';
-import aiAxioClient from "@/utils/aiAxioClient";
+import aiAxioClient from "@/utils/apiClient";
 import { addJob, clearJob } from '@/store/jobs-slice';
-import axiosClient from "@/utils/servicesAxiosClient";
+import axiosClient from "@/utils/apiClient";
 import {setTransactionTrigger} from "@/store/date-slice";
 import {useToast} from "@/components/ui/ToastProvider";
 

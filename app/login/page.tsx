@@ -7,9 +7,8 @@ import { setAuthTokens } from "@/store/user-slice"; // Import setAuthTokens
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import backendAxios from "@/utils/backendAxios"; // Use backendAxios
+import apiClient from "@/utils/apiClient";
 import {Card} from "@/components/ui/card";
-import axiosClient from "@/utils/servicesAxiosClient";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -23,7 +22,7 @@ const LoginPage = () => {
         setError("");
 
         try {
-            const response = await axiosClient.post( // Use backendAxios
+            const response = await apiClient.post( // unified client
                 "/auth/login",
                 { username, password },
             );
