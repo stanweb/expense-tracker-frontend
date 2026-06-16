@@ -9,6 +9,7 @@ import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import backendAxios from "@/utils/backendAxios"; // Use backendAxios
 import {Card} from "@/components/ui/card";
+import axiosClient from "@/utils/servicesAxiosClient";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -22,7 +23,7 @@ const LoginPage = () => {
         setError("");
 
         try {
-            const response = await backendAxios.post( // Use backendAxios
+            const response = await axiosClient.post( // Use backendAxios
                 "/auth/login",
                 { username, password },
             );

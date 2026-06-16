@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { transactionExtractor } from "@/utils/groqClient";
 import { loadPrompt } from "@/utils/loadPrompts";
 import { SMS_STATEMENT_PROMPT_GIST_URL } from "@/configs";
-import backendAxios from "@/utils/backendAxios";
+import serverBackendAxios from "@/utils/serverBackendAxios";
 import { getAuthenticatedUser } from "@/utils/authUtils";
 
 export async function POST(req: NextRequest) {
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         // 4. Register transaction in the backend
         try {
             // The backend expects an array of transactions: List<CreateTransactionDTO>
-            const registerResponse = await backendAxios.post(
+            const registerResponse = await serverBackendAxios.post(
                 `/users/${userId}/transactions`,
                 [extractedTransaction],
                 {

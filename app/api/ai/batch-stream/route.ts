@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { loadPrompt } from "@/utils/loadPrompts";
 import { MOBILE_RAW_TEXT_PROMPT_GIST_URL } from "@/configs";
 import { transactionExtractor } from "@/utils/groqClient";
-import backendAxios from "@/utils/backendAxios";
 import { getAuthenticatedUser } from "@/utils/authUtils";
 import {processSmsAsync} from "@/utils/processSmsAsync";
 
