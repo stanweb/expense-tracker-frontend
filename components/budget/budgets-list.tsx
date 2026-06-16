@@ -36,6 +36,7 @@ export function BudgetsList() {
     const [lastMonthBudget, setLastMonthBudget] = useState<Budget[]>([])
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null)
+    const [prefillCategoryId, setPrefillCategoryId] = useState<number | null>(null)
     const [selectedMonth, setSelectedMonth] = useState<string>(String(new Date().getMonth() + 1));
     const [selectedYear, setSelectedYear] = useState<string>(String(new Date().getFullYear()));
     const [categories, setCategories] = useState<Category[]>([])
@@ -68,8 +69,19 @@ export function BudgetsList() {
 
     const handleAdd = () => {
         setSelectedBudget(null)
+        setPrefillCategoryId(null)
         setIsFormOpen(true)
     }
+
+    const handleBudgetCategory = (categoryId: number) => {
+        setSelectedBudget(null)
+        setPrefillCategoryId(categoryId)
+        setIsFormOpen(true)
+    }
+
+    const unbudgetedCategories = categories.filter(
+        (category) => !budgets.some((budget) => budget.categoryId === category.id)
+    )
 
     const handleEdit = (budget: Budget) => {
         setSelectedBudget(budget)
@@ -235,6 +247,48 @@ export function BudgetsList() {
                             Start by adding a new budget or copying from last month.
                         </div>
                     ) : (
+                        <>
+                        {unbudgetedCategories.length > 0 && (
+                            <div className="rounded-lg border bg-muted/30 p-4">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h3 className="text-sm font-semibold text-foreground">
+                                            Categories not yet budgeted
+                                        </h3>
+                                        <p className="text-xs text-muted-foreground">
+                                            {unbudgetedCategories.length} {unbudgetedCategories.length === 1 ? "category" : "categories"} without a budget for {formatMonth(Number(selectedMonth))} {selectedYear}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {unbudgetedCategories.map((category) => {
+                                        const Icon = getIcon(category.categoryIcon || '')
+                                        return (
+                                            <div
+                                                key={category.id}
+                                                className="flex items-center justify-between gap-3 rounded-md border bg-card/60 p-3"
+                                            >
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <Icon className="h-5 w-5 text-muted-foreground shrink-0" />
+                                                    <span className="text-sm font-medium text-foreground truncate">
+                                                        {category.name}
+                                                    </span>
+                                                </div>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="shrink-0"
+                                                    onClick={() => handleBudgetCategory(category.id)}
+                                                >
+                                                    <Plus className="h-4 w-4 mr-1" />
+                                                    Set budget
+                                                </Button>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
                         <Table className="rounded-lg">
                             <TableHeader>
                                 <TableRow>
@@ -287,6 +341,7 @@ export function BudgetsList() {
                                     )})}
                             </TableBody>
                         </Table>
+                        </>
                     )}
                     <BudgetForm
                         isOpen={isFormOpen}
@@ -294,6 +349,7 @@ export function BudgetsList() {
                         onSubmit={handleSubmit}
                         budget={selectedBudget}
                         categories={categories}
+                        prefillCategoryId={prefillCategoryId}
                     />
                 </CardContent>
             </Card>

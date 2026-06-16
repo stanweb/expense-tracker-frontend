@@ -34,7 +34,7 @@ export function useSpendingChartData(selectedYear: string, selectedCategory: str
                 if (selectedCategory !== 'all') {
                     params.categoryId = selectedCategory;
                 }
-                const response = await axiosClient.get(`users/${userId}/monthly/breakdown`, { params });
+                const response = await axiosClient.get(`users/${userId}/analytics/monthly-breakdown`, { params });
                 setChartData(response.data);
             } catch (err: any) {
                 console.error("Error fetching chart data:", err);

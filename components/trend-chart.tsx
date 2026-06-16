@@ -28,7 +28,7 @@ export function TrendChart() {
                     typeParam = 'received';
                 }
 
-                const response = await axioClient.get<TrendData[]>(`/users/${userId}/transactions/trend`, {
+                const response = await axioClient.get<TrendData[]>(`/users/${userId}/analytics/spending-trend`, {
                     params: {
                         from: fromDate ?? '',
                         to: toDate ?? '',

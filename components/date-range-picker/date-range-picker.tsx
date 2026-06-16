@@ -23,6 +23,7 @@ import { Card } from "@/components/ui/card";
 import { RootState } from "@/Interfaces/Interfaces";
 import { updateDateRangeAndFetchData } from "@/store/thunks";
 import { AppDispatch } from "@/store/store";
+import {JSX} from "react";
 
 /** -------------------------
  *  Helpers: local formatting

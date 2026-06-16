@@ -28,7 +28,7 @@ export function SpendingOverview() {
                     typeParam = 'received';
                 }
 
-                const response = await axiosClient.get(`/users/${userId}/summary-overview`, {
+                const response = await axiosClient.get(`/users/${userId}/analytics/summary`, {
                     params: {
                         from: fromDate,
                         to: toDate,

@@ -24,9 +24,10 @@ interface BudgetFormProps {
     onSubmit: (budget: Partial<Budget>) => void
     budget?: Budget | null
     categories: Category []
+    prefillCategoryId?: number | null
 }
 
-export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories }: BudgetFormProps) {
+export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories, prefillCategoryId }: BudgetFormProps) {
     const [amount, setAmount] = useState<number | string>("")
     const [month, setMonth] = useState<string>("")
     const [year, setYear] = useState<string>("")
@@ -54,10 +55,10 @@ export function BudgetForm({ isOpen, onClose, onSubmit, budget, categories }: Bu
             const today = new Date();
             setMonth(String(today.getMonth() + 1));
             setYear(String(today.getFullYear()));
-            setCategoryId("")
+            setCategoryId(prefillCategoryId ? String(prefillCategoryId) : "")
         }
         setErrors({}); // Clear errors when dialog opens or budget changes
-    }, [budget, isOpen])
+    }, [budget, isOpen, prefillCategoryId])
 
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
