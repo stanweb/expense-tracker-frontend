@@ -38,7 +38,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { cn } from '@/lib/utils'
 import { clearUser } from '@/store/user-slice'
-import axiosClient from '../utils/servicesAxiosClient'
+import axiosClient from '../utils/apiClient'
 
 type NavItem = {
   label: string

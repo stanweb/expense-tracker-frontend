@@ -10,6 +10,14 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Build-time arg for the client-side API base (inlined into the JS bundle).
+# The browser hits same-origin /backend-api/*, so this value is only a
+# placeholder for the bundle — Next.js rewrites forward to INTERNAL_API_BASE_URL
+# at request time. We pass the Docker network address so dev/prod stay aligned.
+ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+
 RUN pnpm build
 
 FROM base AS runner

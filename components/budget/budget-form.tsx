@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import {Budget, Category, RootState} from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import axioClient from "@/utils/servicesAxiosClient";
+import axioClient from "@/utils/apiClient";
 import { MONTHS, YEARS } from "@/utils/constants";
 import {useSelector} from "react-redux";
 

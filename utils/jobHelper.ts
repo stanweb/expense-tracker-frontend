@@ -1,8 +1,8 @@
-import backendAxios from "@/utils/backendAxios";
+import apiClient from "@/utils/apiClient";
 
 export async function createJob(sessionId: string) {
     try {
-        const { data } = await backendAxios.post(
+        const { data } = await apiClient.post(
             "jobs",
             { status: "PROCESSING" },
             {
@@ -20,7 +20,7 @@ export async function createJob(sessionId: string) {
 
 export async function updateJob(jobId: string, status: string, sessionId: string, error='') {
     try {
-        await backendAxios.put(
+        await apiClient.put(
             `/jobs/${jobId}`,
             { status, error },
             {

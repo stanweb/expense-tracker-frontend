@@ -1,5 +1,5 @@
 import { Category } from '@/Interfaces/Interfaces';
-import axiosClient from '@/utils/servicesAxiosClient';
+import axiosClient from '@/utils/apiClient';
 
 export const getCategories = async (userId: number): Promise<Category[]> => {
     try {

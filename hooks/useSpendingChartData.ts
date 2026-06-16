@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosClient from '../utils/servicesAxiosClient';
+import axiosClient from '../utils/apiClient';
 import { Category } from '@/Interfaces/Interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';

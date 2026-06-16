@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Category, RootState } from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
-import axioClient from "@/utils/servicesAxiosClient";
+import axioClient from "@/utils/apiClient";
 import { CategoryForm } from "@/components/category-form";
 import {
     DropdownMenu,
@@ -24,7 +24,7 @@ import {LucideIcon, MoreHorizontal, Pencil, Plus, Search, Trash2} from "lucide-r
 import {Input} from "@/components/ui/input";
 import { useSelector } from "react-redux";
 import { addCategory, getCategories } from "./api-calls/categories";
-import aiAxiosClient from "@/utils/aiAxioClient";
+import aiAxiosClient from "@/utils/apiClient";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {useToast} from "@/components/ui/ToastProvider";
 import {getIcon} from "@/utils/helpers";

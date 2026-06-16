@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import axiosClient from "@/utils/servicesAxiosClient";
+import apiClient from "@/utils/apiClient";
 import {Card} from "@/components/ui/card";
 
 const RegisterPage = () => {
@@ -22,7 +22,7 @@ const RegisterPage = () => {
         setError("");
 
         try {
-            const response = await axiosClient.post("/auth/register", { username, password });
+            const response = await apiClient.post("/auth/register", { username, password });
             const data = response.data;
             // dispatch(setUser({ userId: data.userId, username: data.username }));
             router.push("/");

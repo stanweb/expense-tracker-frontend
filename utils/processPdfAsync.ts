@@ -1,6 +1,6 @@
 import { transactionExtractor } from "@/utils/groqClient";
 import { pdfToText } from "@/utils/pdfToText";
-import backendAxios from "@/utils/backendAxios";
+import apiClient from "@/utils/apiClient";
 import {updateJob} from "@/utils/jobHelper";
 import {loadPrompt} from "@/utils/loadPrompts";
 import {PDF_STATEMENT_PROMPT_GIST_URL} from "@/configs";
@@ -58,7 +58,7 @@ export async function processPdfAsync(file: File, jobId: string, sessionId:strin
             }
         }
 
-        await backendAxios.post('/users/1/transactions', allTransactions,{
+        await apiClient.post('/users/1/transactions', allTransactions,{
             headers: {
                 Cookie: `JSESSIONID=${sessionId}`, // add your cookie here
             },
