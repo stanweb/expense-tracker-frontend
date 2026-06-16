@@ -5,7 +5,7 @@
 // NEXT_PUBLIC_API_BASE_URL points at.
 const API_BASE_URL =
   process.env.INTERNAL_API_BASE_URL ||
-  'http://backend:8080';
+  'http://backend:8080/api';
 
 const nextConfig = {
   typescript: {
