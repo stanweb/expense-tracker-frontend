@@ -55,12 +55,29 @@ import {
 } from "@/components/api-calls/investment-transactions"
 import { Badge } from "@/components/ui/badge"
 import { usePortfolioTypes } from "@/hooks/use-portfolio-types"
+import { PortfolioAnalytics } from "@/components/portfolio/portfolio-analytics"
 
 const formatMoney = (value: string | number | null | undefined) => {
     if (value === null || value === undefined || value === "") return "0.00"
     const num = Number(value)
     if (Number.isNaN(num)) return String(value)
     return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+const computeGainPct = (currentValue: string | number | null | undefined, costBasis: string | number | null | undefined) => {
+    const value = Number(currentValue ?? 0)
+    const cost = Number(costBasis ?? 0)
+    if (!Number.isFinite(value) || !Number.isFinite(cost) || cost <= 0) return null
+    return ((value - cost) / cost) * 100
+}
+
+const formatGainPct = (pct: number | null) => {
+    if (pct === null) return "—"
+    const sign = pct > 0 ? "+" : ""
+    return `${sign}${pct.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })}%`
 }
 
 const formatUnits = (value: string | number | null | undefined) => {
@@ -314,6 +331,8 @@ export function PortfoliosList() {
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                    <PortfolioAnalytics portfolios={portfolios} />
+
                     <div className="flex items-center mb-6 flex-wrap gap-3">
                         <div className="relative w-full max-w-sm">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -349,6 +368,7 @@ export function PortfoliosList() {
                                     <TableHead className="font-semibold hidden md:table-cell">Broker</TableHead>
                                     <TableHead className="font-semibold hidden lg:table-cell text-right">Units</TableHead>
                                     <TableHead className="font-semibold hidden lg:table-cell text-right">Cost Basis</TableHead>
+                                    <TableHead className="font-semibold text-right">Gain %</TableHead>
                                     <TableHead className="font-semibold text-right">Current Value</TableHead>
                                     <TableHead className="w-[70px]">
                                         <span className="sr-only">Actions</span>
@@ -410,6 +430,27 @@ export function PortfoliosList() {
                                                 <TableCell className="hidden lg:table-cell text-right tabular-nums">
                                                     {formatMoney(portfolio.totalCostBasis)}
                                                 </TableCell>
+                                                <TableCell className="text-right tabular-nums">
+                                                    {(() => {
+                                                        const pct = computeGainPct(portfolio.currentValue, portfolio.totalCostBasis)
+                                                        if (pct === null) return <span className="text-muted-foreground">—</span>
+                                                        const color = pct > 0
+                                                            ? "text-emerald-500"
+                                                            : pct < 0
+                                                                ? "text-red-500"
+                                                                : "text-muted-foreground"
+                                                        return (
+                                                            <span className={`inline-flex items-center gap-1 font-medium ${color}`}>
+                                                                {pct > 0 ? (
+                                                                    <ArrowUpRight className="h-3.5 w-3.5" />
+                                                                ) : pct < 0 ? (
+                                                                    <ArrowDownRight className="h-3.5 w-3.5" />
+                                                                ) : null}
+                                                                {formatGainPct(pct)}
+                                                            </span>
+                                                        )
+                                                    })()}
+                                                </TableCell>
                                                 <TableCell className="text-right tabular-nums font-semibold">
                                                     {formatMoney(portfolio.currentValue)}
                                                 </TableCell>
@@ -453,7 +494,7 @@ export function PortfoliosList() {
                                             </TableRow>
                                             {isExpanded && (
                                                 <TableRow className="hover:bg-transparent border">
-                                                    <TableCell colSpan={9} className="bg-muted/20 p-0">
+                                                    <TableCell colSpan={10} className="bg-muted/20 p-0">
                                                         <PortfolioTransactionsPanel
                                                             portfolio={portfolio}
                                                             transactions={txs}
