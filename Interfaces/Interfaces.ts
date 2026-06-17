@@ -39,12 +39,18 @@ export interface JobState {
     jobId: string | null;
     status: string | null;
   }
-  
+
   export interface RootState {
       dateRange: AppDateRangeState;
       user: User;
       jobs: JobState [];
+      portfolioTypes: PortfolioTypesState;
   }
+
+export interface PortfolioTypesState {
+    items: PortfolioType[];
+    loaded: boolean;
+}
   
 
 export interface AppDateRangeState {
@@ -103,4 +109,59 @@ export interface TrendData {
     week: string;
     spending: number;
     forecast: number;
+}
+
+export interface Portfolio {
+    id: number;
+    userId: number;
+    name: string;
+    tickerSymbol: string;
+    broker: string | null;
+    totalUnits: string;
+    totalCostBasis: string;
+    currentValue: string;
+    typeId?: number | null;
+    typeName?: string | null;
+    typeActive?: boolean | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface PortfolioType {
+    id: number;
+    name: string;
+    description: string | null;
+    active: boolean;
+}
+
+export type InvestmentTransactionType = "BUY" | "SELL";
+
+export interface InvestmentTransaction {
+    id: string;
+    userId: number;
+    portfolioId: number;
+    portfolioName: string;
+    tickerSymbol: string;
+    type: InvestmentTransactionType;
+    units: string | null;
+    amount: string;
+    pricePerUnit: string | null;
+    transactionDate: string;
+    notes: string | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface InvestmentTransactionQuery {
+    portfolioId?: number;
+    type?: InvestmentTransactionType;
+    fromDate?: string;
+    toDate?: string;
+    page?: number;
+    size?: number;
+    sort?: string;
+}
+
+export interface PortfolioTypes{
+
 }
