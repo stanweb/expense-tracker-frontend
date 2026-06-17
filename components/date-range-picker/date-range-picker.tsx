@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { CalendarIcon, ChevronDownIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -19,7 +19,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useDispatch, useSelector } from "react-redux";
-import { Card } from "@/components/ui/card";
 import { RootState } from "@/Interfaces/Interfaces";
 import { updateDateRangeAndFetchData } from "@/store/thunks";
 import { AppDispatch } from "@/store/store";
@@ -170,12 +169,12 @@ export function DateRangePicker(): JSX.Element {
         const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
 
         return {
-            today: { from: todayStart, to: todayEnd },
-            yesterday: { from: startOfDay(yesterday), to: endOfDay(yesterday) },
-            last7Days: { from: last7, to: todayEnd },
-            last30Days: { from: last30, to: todayEnd },
-            thisMonth: { from: startOfDay(thisMonthStart), to: todayEnd },
-            lastMonth: { from: startOfDay(lastMonthStart), to: endOfDay(lastMonthEnd) },
+            today: { from: todayStart, to: todayEnd, label: "Today" },
+            yesterday: { from: startOfDay(yesterday), to: endOfDay(yesterday), label: "Yesterday" },
+            last7Days: { from: last7, to: todayEnd, label: "Last 7 days" },
+            last30Days: { from: last30, to: todayEnd, label: "Last 30 days" },
+            thisMonth: { from: startOfDay(thisMonthStart), to: todayEnd, label: "This month" },
+            lastMonth: { from: startOfDay(lastMonthStart), to: endOfDay(lastMonthEnd), label: "Last month" },
         } as const;
     }, []);
 
@@ -252,13 +251,11 @@ export function DateRangePicker(): JSX.Element {
     }, [range]);
 
     return (
-        <Card className="bg-card px-5">
-            <div className="flex flex-col gap-3">
-                <Label className="font-medium">Date Range</Label>
-                <Label className="text-sm font-normal text-muted-foreground">
-                    Select the date for your transactions
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
+            <div className="flex flex-col gap-1.5">
+                <Label htmlFor="date-range-trigger" className="text-xs font-medium text-muted-foreground">
+                    Date range
                 </Label>
-
                 <Popover
                     open={open}
                     onOpenChange={(o) => {
@@ -268,11 +265,15 @@ export function DateRangePicker(): JSX.Element {
                 >
                     <PopoverTrigger asChild>
                         <Button
+                            id="date-range-trigger"
                             type="button"
                             variant="outline"
-                            className="w-64 justify-between font-normal"
+                            className="w-full sm:w-72 justify-between font-normal"
                         >
-                            <span>{displayText}</span>
+                            <span className="flex items-center gap-2">
+                                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                                {displayText}
+                            </span>
                             <ChevronDownIcon
                                 className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
                             />
@@ -296,7 +297,7 @@ export function DateRangePicker(): JSX.Element {
                                             handlePresetSelect(key as keyof typeof PRESET_RANGES)
                                         }
                                     >
-                                        {key.replace(/([A-Z])/g, " $1")}
+                                        {PRESET_RANGES[key as keyof typeof PRESET_RANGES].label}
                                     </Button>
                                 ))}
 
@@ -328,12 +329,13 @@ export function DateRangePicker(): JSX.Element {
                 </Popover>
             </div>
 
-            <div className="flex flex-col gap-3 mt-4">
-                <Label className="font-medium">Transaction Type</Label>
-
+            <div className="flex flex-col gap-1.5">
+                <Label htmlFor="transaction-type-trigger" className="text-xs font-medium text-muted-foreground">
+                    Transaction type
+                </Label>
                 <Select value={transactionType} onValueChange={handleTypeChange}>
-                    <SelectTrigger className="w-64">
-                        <SelectValue placeholder="Select Type" />
+                    <SelectTrigger id="transaction-type-trigger" className="w-full sm:w-44">
+                        <SelectValue placeholder="All" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">All</SelectItem>
@@ -342,6 +344,6 @@ export function DateRangePicker(): JSX.Element {
                     </SelectContent>
                 </Select>
             </div>
-        </Card>
+        </div>
     );
 }
