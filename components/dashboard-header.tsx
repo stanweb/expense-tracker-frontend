@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import {
   BarChart3,
+  Briefcase,
   LayoutDashboard,
   ListCheck,
   LogOut,
@@ -51,6 +52,7 @@ const navItems: NavItem[] = [
   { label: 'Transactions', href: '/all-transactions', icon: Receipt },
   { label: 'Categories', href: '/categories', icon: ListCheck },
   { label: 'Budgets', href: '/budgets', icon: Wallet },
+  { label: 'Portfolios', href: '/portfolios', icon: Briefcase },
   { label: 'Top Spenders', href: '/top-spenders', icon: TrendingUp },
 ]
 

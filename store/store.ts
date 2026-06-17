@@ -15,11 +15,13 @@ import {
 import dateRangeReducer from "./date-slice";
 import userReducer from "./user-slice";
 import jobsReducer from "./jobs-slice";
+import portfolioTypesReducer from "./portfolio-types-slice";
 
 const rootReducer = combineReducers({
     dateRange: dateRangeReducer,
     user: userReducer,
     jobs: jobsReducer,
+    portfolioTypes: portfolioTypesReducer,
 });
 
 const persistConfig = {
