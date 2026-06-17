@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { ElementType } from 'react'
+import { cn } from '@/lib/utils'
 
 interface ActiveCategoryItemProps {
     label: string
@@ -32,8 +33,8 @@ export function ActiveCategoryItem({
                             {trend}
                         </p>
                     </div>
-                    <div className={`p-3 rounded-lg bg-gradient-to-br ${color}`}>
-                        <Icon className="h-5 w-5 text-primary" />
+                    <div className={cn('p-3 rounded-lg', color)}>
+                        <Icon className="h-5 w-5" />
                     </div>
                 </div>
             </CardContent>

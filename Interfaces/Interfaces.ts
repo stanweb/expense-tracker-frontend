@@ -30,7 +30,7 @@ export interface OverviewData {
 }
 
 export interface User {
-    userName: string;
+    username: string;
     userId: number;
     onboardingCompleted: boolean;
 }
@@ -71,6 +71,7 @@ export interface UiTransaction {
     category?: string
     amount: number
     date: string // "Today", "Yesterday", etc.
+    rawDate?: string // ISO date from API; used for full-date display on the dashboard.
     recipient?: string
     categoryName?: string
     icon: ElementType

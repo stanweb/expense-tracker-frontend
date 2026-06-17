@@ -1,24 +1,28 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { CircleAlert, Inbox, TrendingUp } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { RootState, TopSpender, Category } from '@/Interfaces/Interfaces'; // Import Category interface
+import { RootState, TopSpender, Category } from '@/Interfaces/Interfaces';
 import { useEffect, useState } from 'react';
 import axioClient from '@/utils/apiClient';
+
+const formatCurrency = (value: number) =>
+    new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(value);
 
 export function TopSpendersList() {
     const { fromDate, toDate, transactionType } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const [topSpenders, setTopSpenders] = useState<TopSpender[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]); // State for categories
-    const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined); // State for selected category filter
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Fetch categories on component mount
     useEffect(() => {
         if (!userId) return;
         const fetchCategories = async () => {
@@ -49,14 +53,14 @@ export function TopSpendersList() {
                     from: fromDate ?? '',
                     to: toDate ?? '',
                     ...(typeParam && { type: typeParam }),
-                    limit: 10, // Default to top 5, can be made dynamic later
+                    limit: 10,
                 };
 
                 if (selectedCategoryId && selectedCategoryId !== 'all') {
-                    params.categoryId = [selectedCategoryId]; // API expects a list of category IDs
+                    params.categoryId = [selectedCategoryId];
                 }
 
-                const response = await axioClient.get<TopSpender[]>(`/users/${userId}/transactions/top-spenders`, {
+                const response = await axioClient.get<TopSpender[]>(`/users/${userId}/analytics/top-spenders`, {
                     params,
                 });
                 setTopSpenders(response.data);
@@ -72,25 +76,21 @@ export function TopSpendersList() {
         if (fromDate && toDate) {
             void fetchTopSpenders();
         }
-    }, [fromDate, toDate, transactionType, selectedCategoryId, userId]); // Add selectedCategoryId to dependencies
+    }, [fromDate, toDate, transactionType, selectedCategoryId, userId]);
 
     const totalSpent = topSpenders.reduce((acc, spender) => acc + spender.totalSpent, 0);
+    const hasActiveFilter = selectedCategoryId && selectedCategoryId !== 'all';
 
     return (
         <Card className="bg-card">
-            <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                    <CardTitle>Top Spenders</CardTitle>
-                    <CardDescription>Who you're spending the most money with</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Label htmlFor="category-filter">Category:</Label>
+            <CardContent className="space-y-4">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
                     <Select onValueChange={setSelectedCategoryId} value={selectedCategoryId}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Categories" />
+                        <SelectTrigger className="w-full sm:w-[200px]" aria-label="Filter by category">
+                            <SelectValue placeholder="Filter by category" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
+                            <SelectItem value="all">All categories</SelectItem>
                             {categories.map((category) => (
                                 <SelectItem key={category.id} value={String(category.id)}>
                                     {category.name}
@@ -99,33 +99,75 @@ export function TopSpendersList() {
                         </SelectContent>
                     </Select>
                 </div>
-            </CardHeader>
-            <CardContent>
-                {loading && <p>Loading top spenders...</p>}
-                {error && <p className="text-red-500">Error: {error}</p>}
-                {!loading && !error && topSpenders.length === 0 && (
-                    <p>No top spenders found for the selected period and category.</p>
+
+                {loading && (
+                    <div className="space-y-3" role="status" aria-label="Loading top spenders">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <div key={i} className="flex items-center justify-between">
+                                <Skeleton className="h-4 w-1/3" />
+                                <Skeleton className="h-4 w-1/4" />
+                            </div>
+                        ))}
+                    </div>
                 )}
+
+                {error && !loading && (
+                    <Alert variant="destructive">
+                        <CircleAlert />
+                        <AlertTitle>Couldn’t load top spenders</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                )}
+
+                {!loading && !error && topSpenders.length === 0 && (
+                    <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                        <div className="rounded-full bg-muted p-3">
+                            <Inbox className="size-6 text-muted-foreground" aria-hidden />
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-sm font-medium text-foreground">No top spenders yet</p>
+                            <p className="text-sm text-muted-foreground">
+                                {hasActiveFilter
+                                    ? 'Try a different category or widen your date range.'
+                                    : 'No transactions match the current filters.'}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {!loading && !error && topSpenders.length > 0 && (
                     <Table>
                         <TableHeader>
                             <TableRow>
+                                <TableHead className="w-12">#</TableHead>
                                 <TableHead>Recipient</TableHead>
                                 <TableHead className="text-right">Total Spent</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {topSpenders.map((spender, index) => (
-                                <TableRow key={index}>
-                                    <TableCell className="font-medium">{spender.recipient}</TableCell>
-                                    <TableCell className="text-right">KES {spender.totalSpent.toFixed(2)}</TableCell>
+                                <TableRow key={`${spender.recipient}-${index}`}>
+                                    <TableCell className="text-muted-foreground">{index + 1}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <div className="flex items-center gap-2">
+                                            {index === 0 && (
+                                                <TrendingUp className="size-4 text-primary" aria-hidden />
+                                            )}
+                                            {spender.recipient}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-right tabular-nums">
+                                        {formatCurrency(spender.totalSpent)}
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                         <TableFooter>
                             <TableRow>
-                                <TableCell className="font-bold">Total</TableCell>
-                                <TableCell className="text-right font-bold">KES {totalSpent.toFixed(2)}</TableCell>
+                                <TableCell colSpan={2} className="text-muted-foreground">Total</TableCell>
+                                <TableCell className="text-right font-semibold tabular-nums">
+                                    {formatCurrency(totalSpent)}
+                                </TableCell>
                             </TableRow>
                         </TableFooter>
                     </Table>

@@ -91,7 +91,7 @@ export function DashboardHeader() {
     <header className="sticky top-0 z-50 border-b border-border bg-card">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3 min-w-0">
-          <div className="h-9 w-9 shrink-0 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+          <div className="h-9 w-9 shrink-0 rounded-lg bg-primary flex items-center justify-center">
             <BarChart3 className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="hidden sm:block min-w-0">
@@ -157,7 +157,7 @@ export function DashboardHeader() {
             <SheetContent side="right" className="w-72 sm:max-w-sm">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                     <BarChart3 className="h-4 w-4 text-primary-foreground" />
                   </div>
                   Spending Tracker

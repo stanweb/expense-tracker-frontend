@@ -8,6 +8,13 @@ import { ActiveCategoryItem } from "@/components/active-category-item";
 import { useEffect, useState } from 'react';
 import axiosClient from '@/utils/apiClient';
 
+const formatKES = (n: number) =>
+    new Intl.NumberFormat('en-KE', {
+        style: 'currency',
+        currency: 'KES',
+        maximumFractionDigits: 0,
+    }).format(n);
+
 export function SpendingOverview() {
     const { transactionType, fromDate, toDate, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
@@ -48,7 +55,7 @@ export function SpendingOverview() {
 
     if (loading) {
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, index) => (
                     <Card key={index} className="bg-card">
                         <CardContent className="pt-6">
@@ -63,14 +70,14 @@ export function SpendingOverview() {
             </div>
         )
     }
-    
+
     if (!data) {
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, index) => (
                     <Card key={index} className="bg-card">
                         <CardContent className="pt-6">
-                            <p>No data available</p>
+                            <p className="text-sm text-muted-foreground">No data available</p>
                         </CardContent>
                     </Card>
                 ))}
@@ -81,53 +88,43 @@ export function SpendingOverview() {
     const metrics = [
         {
             label: totalSpentLabel,
-            value: `KES ${(data.totalSpent / 1000).toFixed(1)}k`,
+            value: formatKES(data.totalSpent),
             icon: Wallet,
-            color: 'from-primary/20 to-primary/5',
-            trend: '+12.5%',
-            trendUp: true,
+            color: 'bg-primary/10 text-primary',
         },
         {
             label: 'Transaction Costs',
-            value: `KES ${data.transactionCost.toFixed(2)}`,
+            value: formatKES(data.transactionCost),
             icon: ArrowUpRight,
-            color: 'from-chart-1/20 to-chart-1/5',
-            trend: '+3.2%',
-            trendUp: false,
+            color: 'bg-chart-1/15 text-chart-1',
         },
         {
             label: 'Categories',
             value: data.categoriesCount.toString(),
             icon: Tag,
-            color: 'from-chart-2/20 to-chart-2/5',
-            trend: 'Active',
-            trendUp: true,
+            color: 'bg-chart-2/15 text-chart-2',
         },
         {
             label: 'Total Transactions',
             value: data.transactionsCount.toString(),
             icon: TrendingUp,
-            color: 'from-chart-3/20 to-chart-3/5',
-            trend: '+23 this month',
-            trendUp: true,
+            color: 'bg-chart-3/15 text-chart-3',
         },
     ]
 
     return (
-        <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {metrics.map((metric, index) => (
-                    <ActiveCategoryItem
-                        key={index}
-                        label={metric.label}
-                        value={metric.value}
-                        icon={metric.icon}
-                        color={metric.color}
-                        trend={metric.trend}
-                        trendUp={metric.trendUp}
-                    />
-                ))}
-            </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {metrics.map((metric, index) => (
+                <ActiveCategoryItem
+                    key={index}
+                    label={metric.label}
+                    value={metric.value}
+                    icon={metric.icon}
+                    color={metric.color}
+                    trend=""
+                    trendUp
+                />
+            ))}
         </div>
     )
 }
