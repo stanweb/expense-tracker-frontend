@@ -3,10 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { CircleAlert, Eye, EyeOff, Loader2, Lock, Sparkles, TrendingUp, User, UserPlus } from "lucide-react";
+import { CircleAlert, Eye, EyeOff, Loader2, Lock, Mail, Sparkles, TrendingUp, User, UserPlus } from "lucide-react";
 
-import { setAuthTokens } from "@/store/user-slice";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,50 +47,77 @@ const validateConfirmPassword = (value: string, password: string): string | null
   return null;
 };
 
+const NAME_PATTERN = /^[\p{L} '\-]{1,50}$/u;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const validateName = (field: "First name" | "Last name", value: string): string | null => {
+  const v = value.trim();
+  if (!v) return `${field} is required.`;
+  if (v.length > 50) return `${field} must be 50 characters or fewer.`;
+  if (!NAME_PATTERN.test(v)) return `Enter a valid ${field.toLowerCase()}.`;
+  return null;
+};
+
+const validateEmail = (value: string): string | null => {
+  const v = value.trim();
+  if (!v) return "Email is required.";
+  if (!EMAIL_PATTERN.test(v)) return "Enter a valid email address.";
+  return null;
+};
+
 const RegisterPage = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [firstNameError, setFirstNameError] = useState<string | null>(null);
+  const [lastNameError, setLastNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
 
+    const fErr = validateName("First name", firstName);
+    const lErr = validateName("Last name", lastName);
+    const eErr = validateEmail(email);
     const uErr = validateUsername(username);
     const pErr = validatePassword(password);
     const cErr = validateConfirmPassword(confirmPassword, password);
+    setFirstNameError(fErr);
+    setLastNameError(lErr);
+    setEmailError(eErr);
     setUsernameError(uErr);
     setPasswordError(pErr);
     setConfirmPasswordError(cErr);
-    if (uErr || pErr || cErr) return;
+    if (fErr || lErr || eErr || uErr || pErr || cErr) return;
 
     setIsSubmitting(true);
     try {
-      const response = await apiClient.post("/auth/register", { username: username.trim(), password });
+      const response = await apiClient.post("/auth/register", {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        username: username.trim(),
+        password,
+      });
       const data = response.data;
 
-      if (data.accessToken) {
-        dispatch(setAuthTokens({
-          userId: data.userId,
-          username: data.username,
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-          expiresIn: data.expiresIn,
-          refreshExpiresIn: data.refreshExpiresIn,
-          onboardingCompleted: data.onboardingCompleted ?? false,
-        }));
-      }
-
-      router.push(data.onboardingCompleted ? "/" : "/onboarding-wizard");
+      // The register endpoint returns no tokens, so the user has to sign in
+      // with their new credentials. Redirect to /login with the username
+      // pre-filled so they only have to type their password.
+      const params = new URLSearchParams({ username: data.username ?? username.trim() });
+      router.push(`/login?${params.toString()}`);
     } catch (err: any) {
       if (err.response) {
         if (err.response.status === 403) {
@@ -162,6 +187,119 @@ const RegisterPage = () => {
 
             <CardContent>
               <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First name</Label>
+                    <InputGroup
+                      aria-invalid={firstNameError ? true : undefined}
+                      data-invalid={firstNameError ? true : undefined}
+                    >
+                      <InputGroupAddon align="inline-start">
+                        <User className="h-4 w-4" />
+                      </InputGroupAddon>
+                      <InputGroupInput
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        autoComplete="given-name"
+                        placeholder="Jane"
+                        value={firstName}
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                          if (firstNameError) setFirstNameError(null);
+                        }}
+                        onBlur={() => setFirstNameError(validateName("First name", firstName))}
+                        disabled={isSubmitting}
+                        aria-invalid={firstNameError ? true : undefined}
+                        aria-describedby={firstNameError ? "firstName-error" : undefined}
+                      />
+                    </InputGroup>
+                    {firstNameError && (
+                      <p
+                        id="firstName-error"
+                        className="flex items-center gap-1.5 text-xs text-destructive"
+                      >
+                        <CircleAlert className="h-3.5 w-3.5 shrink-0" />
+                        <span>{firstNameError}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last name</Label>
+                    <InputGroup
+                      aria-invalid={lastNameError ? true : undefined}
+                      data-invalid={lastNameError ? true : undefined}
+                    >
+                      <InputGroupAddon align="inline-start">
+                        <User className="h-4 w-4" />
+                      </InputGroupAddon>
+                      <InputGroupInput
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        autoComplete="family-name"
+                        placeholder="Doe"
+                        value={lastName}
+                        onChange={(e) => {
+                          setLastName(e.target.value);
+                          if (lastNameError) setLastNameError(null);
+                        }}
+                        onBlur={() => setLastNameError(validateName("Last name", lastName))}
+                        disabled={isSubmitting}
+                        aria-invalid={lastNameError ? true : undefined}
+                        aria-describedby={lastNameError ? "lastName-error" : undefined}
+                      />
+                    </InputGroup>
+                    {lastNameError && (
+                      <p
+                        id="lastName-error"
+                        className="flex items-center gap-1.5 text-xs text-destructive"
+                      >
+                        <CircleAlert className="h-3.5 w-3.5 shrink-0" />
+                        <span>{lastNameError}</span>
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <InputGroup
+                    aria-invalid={emailError ? true : undefined}
+                    data-invalid={emailError ? true : undefined}
+                  >
+                    <InputGroupAddon align="inline-start">
+                      <Mail className="h-4 w-4" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      placeholder="[email protected]"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (emailError) setEmailError(null);
+                      }}
+                      onBlur={() => setEmailError(validateEmail(email))}
+                      disabled={isSubmitting}
+                      aria-invalid={emailError ? true : undefined}
+                      aria-describedby={emailError ? "email-error" : undefined}
+                    />
+                  </InputGroup>
+                  {emailError && (
+                    <p
+                      id="email-error"
+                      className="flex items-center gap-1.5 text-xs text-destructive"
+                    >
+                      <CircleAlert className="h-3.5 w-3.5 shrink-0" />
+                      <span>{emailError}</span>
+                    </p>
+                  )}
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="username">Username</Label>
                   <InputGroup
