@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { CircleAlert, Eye, EyeOff, Loader2, Lock, Sparkles, TrendingUp, User } from "lucide-react";
 
@@ -52,7 +52,15 @@ const LoginPage = () => {
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useDispatch();
+
+  // When arriving from /register, the username is passed as a query string
+  // so the user only has to type their password.
+  useEffect(() => {
+    const prefill = searchParams.get("username");
+    if (prefill) setUsername(prefill);
+  }, [searchParams]);
 
   const handleUsernameBlur = () => {
     setUsernameError(validateUsername(username));
@@ -300,4 +308,11 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+const LoginPageWrapper = () => (
+  // Suspense boundary is required because LoginPage calls useSearchParams.
+  <Suspense fallback={null}>
+    <LoginPage />
+  </Suspense>
+);
+
+export default LoginPageWrapper;

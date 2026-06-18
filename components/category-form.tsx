@@ -27,8 +27,9 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
     const [description, setDescription] = useState("")
     const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
-
     useEffect(() => {
+        // Removed 'isOpen' from the dependency array to prevent
+        // unnecessary state resets during user/Cypress interaction.
         if (category) {
             setName(category.name)
             setDescription(category.description)
@@ -38,7 +39,7 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
             setDescription("")
             setSelectedIcon(null)
         }
-    }, [category, isOpen])
+    }, [category]) // Only re-run when the category object changes
 
     const handleSubmit = () => {
         onSubmit({
@@ -48,9 +49,6 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
             categoryIcon: selectedIcon,
         })
     }
-    
-    // const iconList = Object.keys(Icons).filter(key => typeof Icons[key as keyof typeof Icons] === 'object');
-
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -64,11 +62,21 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
                 <div className="space-y-4">
                     <div className={'grid gap-2'}>
                         <Label htmlFor="name">Name</Label>
-                        <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="bg-input text-foreground border-input" />
+                        <Input
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="bg-input text-foreground border-input"
+                        />
                     </div>
                     <div className={'grid gap-2'}>
                         <Label htmlFor="description">Description</Label>
-                        <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="bg-input text-foreground border-input" />
+                        <Textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="bg-input text-foreground border-input"
+                        />
                     </div>
                 </div>
                 <DialogFooter>
