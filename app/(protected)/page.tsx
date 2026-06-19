@@ -61,7 +61,7 @@ export default function Dashboard() {
         </div>
 
         {/* Trend and Transactions */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <TrendChart />
           <RecentTransactionsList />
         </div>

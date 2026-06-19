@@ -12,6 +12,7 @@ import {Button} from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Inbox } from 'lucide-react';
+import {ChartData} from "recharts/types/state/chartDataSlice";
 
 interface CategoryDatum {
     name: string;

@@ -100,10 +100,6 @@ describe("Categories — CRUD", () => {
     cy.contains('[role="menuitem"]', /Edit/i).click();
     cy.get('[role="dialog"]').within(() => {
       cy.get("#name").clear().should("have.value", "");
-      // Wait for React state to settle after the controlled-input clear.
-      // Without this, the first typed character can race the state update
-      // and get dropped, leaving the value mangled (e.g. "pd_…" instead of
-      // "Upd_…").
       cy.wait(200);
       cy.get("#name").type(updated, { delay: 100 });
       cy.contains("button", /Save/i).click();
