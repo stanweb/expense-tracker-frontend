@@ -540,7 +540,7 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                     onConfirm={() => transactionToDelete && handleConfirmDelete(transactionToDelete.id.toString())}
                 />
 
-                <div className={isDashboard ? 'min-h-[280px] flex flex-col' : 'flex-1 min-h-0'}>
+                <div className={isDashboard ? 'max-h-[420px] flex flex-col overflow-y-auto' : 'flex-1 min-h-0'}>
                     {isDashboard ? (
                         <>
                             {loading && (

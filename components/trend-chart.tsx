@@ -59,7 +59,7 @@ export function TrendChart() {
             <CardHeader>
                 <CardTitle>Spending Trend</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col min-h-[280px]">
+            <CardContent className="flex flex-col min-h-[280px] max-h-[420px]">
                 {loading && (
                     <div className="space-y-3" aria-busy="true" aria-label="Loading trend data">
                         <Skeleton className="h-4 w-1/3" />
