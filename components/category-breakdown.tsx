@@ -20,7 +20,7 @@ interface CategoryDatum {
     value: number
 }
 
-const TOP_N = 4
+const TOP_N = 5
 
 const hashName = (name: string): number => {
     let h = 5381
