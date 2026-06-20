@@ -49,7 +49,7 @@ export function CategoryBreakdown() {
         setError(null)
         axioClient
             .get(`users/${userId}/analytics/categories`, {
-                params: { startDate: fromDate, endDate: toDate },
+                params: { from: fromDate, to: toDate },
             })
             .then((res) => {
                 setRawData(Array.isArray(res.data) ? res.data : [])
