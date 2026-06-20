@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, Tag, AlertCircle } from 'lucide-react';
+import {Loader2, Tag, AlertCircle} from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -15,18 +15,12 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { RootState, UiTransaction } from '@/Interfaces/Interfaces';
+import { Category, RootState, UiTransaction } from '@/Interfaces/Interfaces';
 import axioClient from '@/utils/apiClient';
 import { getIcon } from '@/utils/helpers';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTransactionTrigger } from '@/store/date-slice';
 import { useToast } from '@/components/ui/ToastProvider';
-
-interface Category {
-    id: string;
-    name: string;
-    icon: string;
-}
 
 interface EditTransactionCategoryModalProps {
     isOpen: boolean;
@@ -42,7 +36,7 @@ export const EditTransactionCategoryModal = ({
     onSuccess,
 }: EditTransactionCategoryModalProps) => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
     const [loading, setLoading] = useState(false);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -122,7 +116,7 @@ export const EditTransactionCategoryModal = ({
     if (!transaction) return null;
 
     const selectedCategory = categories.find((c) => c.id === selectedCategoryId);
-    const SelectedIcon = selectedCategory ? getIcon(selectedCategory.icon) : null;
+    const SelectedIcon = selectedCategory?.categoryIcon ? getIcon(selectedCategory.categoryIcon) : null;
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -184,7 +178,7 @@ export const EditTransactionCategoryModal = ({
                                 className="grid grid-cols-2 sm:grid-cols-3 gap-2"
                             >
                                 {categories.map((category) => {
-                                    const Icon = getIcon(category.icon);
+                                    const Icon = getIcon(category.categoryIcon || 'CreditCard');
                                     const isSelected = selectedCategoryId === category.id;
                                     return (
                                         <button
