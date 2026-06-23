@@ -21,7 +21,8 @@ export function SpendingOverview() {
     const [data, setData] = useState<OverviewData | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const totalSpentLabel = transactionType === 'received' ? 'Total Received' : 'Total Spent';
+    const effectiveType = transactionType === 'all' ? 'spent' : transactionType;
+    const totalSpentLabel = effectiveType === 'received' ? 'Total Received' : 'Total Spent';
 
     useEffect(() => {
         if (!userId) return;
@@ -29,9 +30,9 @@ export function SpendingOverview() {
             setLoading(true);
             try {
                 let typeParam = '';
-                if (transactionType === 'spent') {
+                if (effectiveType === 'spent') {
                     typeParam = 'paid,sent';
-                } else if (transactionType === 'received') {
+                } else if (effectiveType === 'received') {
                     typeParam = 'received';
                 }
 
@@ -51,7 +52,7 @@ export function SpendingOverview() {
             }
         };
         fetchSpendingData().catch(console.error);
-    }, [fromDate, toDate, transactionType, userId, transactionTrigger]);
+    }, [fromDate, toDate, effectiveType, userId, transactionTrigger]);
 
     if (loading) {
         return (
