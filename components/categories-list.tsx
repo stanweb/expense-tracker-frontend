@@ -158,7 +158,7 @@ export function CategoriesList() {
                     </div>
                     <Table className="rounded-lg">
                         <TableHeader>
-                            <TableRow className={'hover:bg-transparent border'}>
+                            <TableRow className={'border'}>
                                 <TableHead className="font-semibold">Name</TableHead>
                                 <TableHead className="font-semibold hidden sm:table-cell">Description</TableHead>
                                 <TableHead className="w-[70px]">
@@ -170,7 +170,7 @@ export function CategoriesList() {
                             {filteredCategories.map((category) => {
                                 const Icon = getIcon(category.categoryIcon || 'CreditCard') as LucideIcon;
                                 return (
-                                <TableRow key={category.id} className={'hover:bg-transparent border'}>
+                                <TableRow key={category.id} className={'border'}>
                                     <TableCell className="whitespace-pre-wrap break-words flex items-center">
                                         <Icon className="h-5 w-5 text-primary mr-2"/>
                                         {category.name}</TableCell>

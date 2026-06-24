@@ -6,10 +6,10 @@ import { useState } from "react";
 import { useSpendingChartData } from '@/hooks/useSpendingChartData';
 import { SpendingChartFilters } from './spending-chart-filters';
 import { Inbox } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { SpendingChartSkeleton } from '@/components/spending-chart-skeleton';
 
 const formatCurrency = (v: number) =>
     new Intl.NumberFormat('en-KE', {
@@ -44,12 +44,7 @@ export function SpendingChart() {
             );
         }
         if (loading) {
-            return (
-                <div className="space-y-3" aria-busy="true" aria-label="Loading spending data">
-                    <Skeleton className="h-4 w-1/3" />
-                    <Skeleton className="h-[260px] w-full" />
-                </div>
-            );
+            return <SpendingChartSkeleton />;
         }
         if (error) {
             return (
@@ -120,7 +115,7 @@ export function SpendingChart() {
                     years={years}
                 />
             </CardHeader>
-            <CardContent className="flex items-center justify-center min-h-[300px]">
+            <CardContent className="flex items-center justify-center min-h-[320px]">
                 {renderContent()}
             </CardContent>
         </Card>

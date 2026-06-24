@@ -3,8 +3,8 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { TopSpendersTableSkeleton } from '@/components/user-transactions-components/top-spenders-table-skeleton';
 import { CircleAlert, Inbox, TrendingUp } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState, TopSpender, Category } from '@/Interfaces/Interfaces';
@@ -100,16 +100,7 @@ export function TopSpendersList() {
                     </Select>
                 </div>
 
-                {loading && (
-                    <div className="space-y-3" role="status" aria-label="Loading top spenders">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                            <div key={i} className="flex items-center justify-between">
-                                <Skeleton className="h-4 w-1/3" />
-                                <Skeleton className="h-4 w-1/4" />
-                            </div>
-                        ))}
-                    </div>
-                )}
+                {loading && <TopSpendersTableSkeleton count={5} />}
 
                 {error && !loading && (
                     <Alert variant="destructive">

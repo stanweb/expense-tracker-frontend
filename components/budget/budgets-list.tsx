@@ -13,6 +13,7 @@ import {Budget, Category, RootState} from "@/Interfaces/Interfaces"
 import {useEffect, useState} from "react";
 import axioClient from "@/utils/apiClient";
 import { BudgetForm } from "@/components/budget/budget-form";
+import { BudgetsTableSkeleton } from "@/components/budget/budgets-table-skeleton";
 import { Copy, MoreHorizontal, Pencil, Plus, Trash2} from "lucide-react";
 import {
     DropdownMenu,
@@ -40,10 +41,12 @@ export function BudgetsList() {
     const [selectedMonth, setSelectedMonth] = useState<string>(String(new Date().getMonth() + 1));
     const [selectedYear, setSelectedYear] = useState<string>(String(new Date().getFullYear()));
     const [categories, setCategories] = useState<Category[]>([])
+    const [loading, setLoading] = useState(true)
     const userId = useSelector((state: RootState) => state.user.userId);
     const {showToast} = useToast()
 
     const fetchBudgets = async (month: string, year: string) => {
+        setLoading(true);
         try {
             const response = await axioClient.get<Budget[]>(`users/${userId}/budgets?month=${month}&year=${year}`)
             setBudgets(response.data || [])
@@ -52,6 +55,8 @@ export function BudgetsList() {
         } catch (error) {
             console.error("Error fetching budgets:", error)
             setBudgets([])
+        } finally {
+            setLoading(false);
         }
     }
     const fetchCategories = async () => {
@@ -241,7 +246,9 @@ export function BudgetsList() {
                             </Button>
                         </div>
                     </div>
-                    {budgets.length === 0 ? (
+                    {loading ? (
+                        <BudgetsTableSkeleton count={5} />
+                    ) : budgets.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
                             No budgets found for {formatMonth(Number(selectedMonth))} {selectedYear}.
                             Start by adding a new budget or copying from last month.

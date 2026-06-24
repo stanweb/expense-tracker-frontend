@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from "@/components/ui/button";
 import { AddTransactionModal } from "@/components/user-transactions-components/add-transaction-modal";
 import { BulkUploadModal } from "@/components/user-transactions-components/bulk-upload-modal";
+import { TransactionListSkeleton } from "@/components/user-transactions-components/transaction-list-skeleton";
 import { ApiTransaction, AddTransaction, ParsedTransaction, RootState, UiTransaction } from "@/Interfaces/Interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
@@ -13,11 +14,9 @@ import { useEffect, useState } from 'react';
 import axioClient from '@/utils/apiClient';
 import { getIcon, formatDaysAgo } from '@/utils/helpers';
 import ConfirmTransactionModal from "@/components/user-transactions-components/confrim-transaction";
-import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { EditTransactionCategoryModal } from "@/components/user-transactions-components/edit-transaction-category-modal";
 import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-components/confirm-delete-transaction-modal";
 import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Search, Plus, Upload, Sparkles, X, Inbox, Receipt, ChevronLeft, ChevronRight } from 'lucide-react';
 import aiAxioClient from "@/utils/apiClient";
@@ -307,18 +306,10 @@ export function TransactionListBase({ title, description, limit, paginate = fals
         }
     };
 
-    const getLoadingMessage = () => {
-        if (jobs.length>0) return "AI is processing your document...";
-        if (isCategorizing) return "Auto-categorizing transactions...";
-        if (loading) return "Loading...";
-        return "Loading..."
-    };
-
-
-
-    const filteredTransactions = allTransactions.filter(transaction =>
-        transaction.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (transaction.category && transaction.category.toLowerCase().includes(searchQuery.toLowerCase()))
+    const filteredTransactions = allTransactions.filter(
+        (transaction) =>
+            transaction.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (transaction.category && transaction.category.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     // Apply client-side pagination. When `paginate` is false (e.g. dashboard
@@ -391,7 +382,6 @@ export function TransactionListBase({ title, description, limit, paginate = fals
 
     return (
         <Card className="bg-card overflow-hidden">
-            {(isCategorizing || loading || !!jobs[0]?.jobId) && <LoadingOverlay message={getLoadingMessage()} />}
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 {title && (
                     <div className="space-y-1">
@@ -543,20 +533,7 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                 <div className={isDashboard ? 'max-h-[420px] flex flex-col overflow-y-auto' : 'flex-1 min-h-0'}>
                     {isDashboard ? (
                         <>
-                            {loading && (
-                                <div className="space-y-3 py-2" aria-busy="true" aria-label="Loading transactions">
-                                    {Array.from({ length: 4 }).map((_, i) => (
-                                        <div key={i} className="flex items-center gap-3 py-2">
-                                            <Skeleton className="h-9 w-9 rounded-md" />
-                                            <div className="flex-1 space-y-2">
-                                                <Skeleton className="h-3.5 w-1/3" />
-                                                <Skeleton className="h-3 w-1/4" />
-                                            </div>
-                                            <Skeleton className="h-4 w-16" />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                            {loading && <TransactionListSkeleton count={6} compact />}
                             {error && !loading && (
                                 <Alert variant="destructive" className="py-2 my-2">
                                     <AlertDescription className="text-sm">{error}</AlertDescription>
@@ -587,20 +564,7 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                         </>
                     ) : (
                         <ScrollArea className="max-h-[70vh]">
-                            {loading && (
-                                <div className="space-y-3" aria-busy="true" aria-label="Loading transactions">
-                                    {Array.from({ length: 6 }).map((_, i) => (
-                                        <div key={i} className="flex items-center gap-3 p-3 border border-border/60 rounded-lg">
-                                            <Skeleton className="h-10 w-10 rounded-md" />
-                                            <div className="flex-1 space-y-2">
-                                                <Skeleton className="h-4 w-1/3" />
-                                                <Skeleton className="h-3 w-1/4" />
-                                            </div>
-                                            <Skeleton className="h-5 w-20" />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                            {loading && <TransactionListSkeleton count={6} />}
                             {error && (
                                 <Alert variant="destructive" className="py-2">
                                     <AlertDescription className="text-sm">{error}</AlertDescription>

@@ -117,7 +117,7 @@ export function DashboardHeader() {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                  'gap-2 text-foreground/70 hover:text-foreground',
+                  'gap-2 text-foreground/90 hover:text-accent-foreground hover:bg-accent/70',
                   active && 'bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground',
                 )}
               >
@@ -178,7 +178,7 @@ export function DashboardHeader() {
                         href={item.href}
                         aria-current={active ? 'page' : undefined}
                         className={cn(
-                          'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground/70 hover:bg-accent hover:text-foreground',
+                          'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground/50 hover:bg-accent hover:text-foreground/30',
                           active && 'bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground',
                         )}
                       >

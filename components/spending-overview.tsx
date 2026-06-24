@@ -7,6 +7,7 @@ import { RootState, OverviewData } from "@/Interfaces/Interfaces";
 import { ActiveCategoryItem } from "@/components/active-category-item";
 import { useEffect, useState } from 'react';
 import axiosClient from '@/utils/apiClient';
+import { SpendingOverviewSkeleton } from "@/components/spending-overview-skeleton";
 
 const formatKES = (n: number) =>
     new Intl.NumberFormat('en-KE', {
@@ -55,21 +56,7 @@ export function SpendingOverview() {
     }, [fromDate, toDate, effectiveType, userId, transactionTrigger]);
 
     if (loading) {
-        return (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {Array.from({ length: 4 }).map((_, index) => (
-                    <Card key={index} className="bg-card">
-                        <CardContent className="pt-6">
-                            <div className="animate-pulse">
-                                <div className="h-4 bg-muted rounded w-1/2 mb-2"></div>
-                                <div className="h-8 bg-muted rounded w-3/4 mb-2"></div>
-                                <div className="h-3 bg-muted rounded w-1/3"></div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-        )
+        return <SpendingOverviewSkeleton count={4} />
     }
 
     if (!data) {
