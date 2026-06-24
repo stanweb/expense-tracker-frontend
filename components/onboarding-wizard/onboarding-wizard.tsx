@@ -12,7 +12,7 @@ import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import aiAxiosClient from "@/utils/apiClient";
 import {LoadingOverlay} from "@/components/ui/loading-overlay";
-import CategorySuggestions from "@/components/onboarding/CategorySuggestions";
+import CategorySuggestions from "@/components/onboarding/category-suggestions";
 import axios from "axios";
 import axioClient from "@/utils/apiClient";
 import {useSelector} from "react-redux";

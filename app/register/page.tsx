@@ -154,7 +154,7 @@ const RegisterPage = () => {
           <div className="space-y-6">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Free forever — no card required
+              Free forever, no card required
             </span>
             <h1 className="text-balance text-3xl font-semibold leading-tight tracking-tight text-foreground lg:text-4xl">
               Take control of your money, <span className="text-primary">one transaction at a time</span>.
@@ -277,7 +277,7 @@ const RegisterPage = () => {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      placeholder="[email protected]"
+                      placeholder="stan@gmail.com"
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
@@ -314,7 +314,7 @@ const RegisterPage = () => {
                       name="username"
                       type="text"
                       autoComplete="username"
-                      placeholder="your_username"
+                      placeholder="username"
                       value={username}
                       onChange={(e) => {
                         setUsername(e.target.value);

@@ -56,6 +56,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { usePortfolioTypes } from "@/hooks/use-portfolio-types"
 import { PortfolioAnalytics } from "@/components/portfolio/portfolio-analytics"
+import { PortfoliosTableSkeleton } from "@/components/portfolio/portfolios-table-skeleton"
 
 const formatMoney = (value: string | number | null | undefined) => {
     if (value === null || value === undefined || value === "") return "0.00"
@@ -111,6 +112,7 @@ export function PortfoliosList() {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [deleteTarget, setDeleteTarget] = useState<Portfolio | null>(null)
     const [deleting, setDeleting] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     // Per-portfolio transactions expansion
     const [expandedId, setExpandedId] = useState<number | null>(null)
@@ -120,9 +122,17 @@ export function PortfoliosList() {
     const [txFormOpen, setTxFormOpen] = useState<number | null>(null)
 
     const fetchPortfolios = async () => {
-        if (!userId) return
-        const fetched = await getPortfolios(userId)
-        setPortfolios(fetched)
+        if (!userId) {
+            setLoading(false)
+            return
+        }
+        setLoading(true)
+        try {
+            const fetched = await getPortfolios(userId)
+            setPortfolios(fetched)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -351,7 +361,9 @@ export function PortfoliosList() {
                         </div>
                     </div>
 
-                    {filteredPortfolios.length === 0 ? (
+                    {loading ? (
+                        <PortfoliosTableSkeleton count={5} />
+                    ) : filteredPortfolios.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
                             {portfolios.length === 0
                                 ? "No portfolios yet. Start by adding a new portfolio to track your investments."

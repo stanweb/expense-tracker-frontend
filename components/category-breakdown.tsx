@@ -8,11 +8,11 @@ import axioClient from '@/utils/apiClient'
 import { COLORS } from '@/utils/constants'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/Interfaces/Interfaces'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Plus, Inbox, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { CategoryBreakdownSkeleton } from '@/components/category-breakdown-skeleton'
 
 interface CategoryDatum {
     [key: string]: string | number
@@ -90,26 +90,8 @@ export function CategoryBreakdown() {
                 </div>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-                {loading && (
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-4" aria-busy="true" aria-label="Loading category data">
-                        <div className="lg:col-span-2 flex items-center justify-center py-4">
-                            <div className="relative h-[200px] w-[200px]">
-                                <Skeleton className="absolute inset-0 rounded-full" />
-                                <div className="absolute inset-[26%] rounded-full bg-card" />
-                            </div>
-                        </div>
-                        <div className="lg:col-span-3 space-y-3">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                                <div key={i} className="flex items-center gap-3">
-                                    <Skeleton className="h-3 w-3 rounded-sm" />
-                                    <Skeleton className="h-3.5 flex-1" />
-                                    <Skeleton className="h-3.5 w-12" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+            <CardContent className="flex flex-col justify-center space-y-4 min-h-[320px]">
+                {loading && <CategoryBreakdownSkeleton />}
 
                 {error && (
                     <Alert variant="destructive">
@@ -137,8 +119,8 @@ export function CategoryBreakdown() {
                 {!loading && !error && chartData.length > 0 && (
                     <>
                         <ul className="sr-only" aria-label="Top spending categories">
-                            {chartData.map((c) => (
-                                <li key={c.name}>
+                            {chartData.map((c, i) => (
+                                <li key={`${c.name}-${i}`}>
                                     {c.name}: {formatPercent(c.value)}
                                 </li>
                             ))}
@@ -160,12 +142,12 @@ export function CategoryBreakdown() {
                                             onMouseEnter={(_, index) => setActiveIndex(index)}
                                             onMouseLeave={() => setActiveIndex(null)}
                                         >
-                                            {chartData.map((entry) => (
+                                            {chartData.map((entry, i) => (
                                                 <Cell
-                                                    key={entry.name}
+                                                    key={`${entry.name}-${i}`}
                                                     fill={colorFor(entry.name)}
                                                     className="outline-none transition-opacity"
-                                                    fillOpacity={activeIndex === null || activeIndex === chartData.indexOf(entry) ? 1 : 0.45}
+                                                    fillOpacity={activeIndex === null || activeIndex === i ? 1 : 0.45}
                                                 />
                                             ))}
                                         </Pie>
@@ -187,14 +169,14 @@ export function CategoryBreakdown() {
                             </div>
 
                             <ul className="lg:col-span-3 space-y-1.5" aria-hidden>
-                                {chartData.map((c) => {
-                                    const isActive = activeIndex === chartData.indexOf(c)
+                                {chartData.map((c, i) => {
+                                    const isActive = activeIndex === i
                                     const isOthers = c.name === 'Others'
                                     const label = isOthers && othersCount > 0 ? `Others (${othersCount} more)` : c.name
                                     return (
                                         <li
-                                            key={c.name}
-                                            onMouseEnter={() => setActiveIndex(chartData.indexOf(c))}
+                                            key={`${c.name}-${i}`}
+                                            onMouseEnter={() => setActiveIndex(i)}
                                             onMouseLeave={() => setActiveIndex(null)}
                                             className={cn(
                                                 'group flex items-center gap-3 rounded-md px-2 py-1.5 text-sm transition-colors',

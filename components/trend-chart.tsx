@@ -7,9 +7,9 @@ import axioClient from '@/utils/apiClient';
 import { TrendData } from '@/Interfaces/Interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/Interfaces/Interfaces';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Inbox } from 'lucide-react';
+import { TrendChartSkeleton } from '@/components/trend-chart-skeleton';
 
 const formatCurrency = (n: number) =>
     new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES', maximumFractionDigits: 0 }).format(n);
@@ -60,12 +60,7 @@ export function TrendChart() {
                 <CardTitle>Spending Trend</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col min-h-[280px] max-h-[420px]">
-                {loading && (
-                    <div className="space-y-3" aria-busy="true" aria-label="Loading trend data">
-                        <Skeleton className="h-4 w-1/3" />
-                        <Skeleton className="h-[220px] w-full" />
-                    </div>
-                )}
+                {loading && <TrendChartSkeleton />}
                 {error && (
                     <Alert variant="destructive" className="py-2">
                         <AlertDescription className="text-sm">{error}</AlertDescription>
