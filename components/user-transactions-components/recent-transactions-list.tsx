@@ -7,7 +7,7 @@ export function RecentTransactionsList() {
         <TransactionListBase
             title="Recent Transactions"
             description="Your latest spending activities"
-            limit={6}
+            pageSize={6}
             variant="dashboard"
         />
     )

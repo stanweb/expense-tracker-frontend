@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { AddTransactionModal } from "@/components/user-transactions-components/add-transaction-modal";
 import { BulkUploadModal } from "@/components/user-transactions-components/bulk-upload-modal";
 import { TransactionListSkeleton } from "@/components/user-transactions-components/transaction-list-skeleton";
-import { ApiTransaction, AddTransaction, ParsedTransaction, RootState, UiTransaction } from "@/Interfaces/Interfaces";
+import { AddTransaction, ApiTransaction, ParsedTransaction, RootState, UiTransaction } from "@/Interfaces/Interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { TransactionItem } from "@/components/user-transactions-components/transaction-item";
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import axioClient from '@/utils/apiClient';
 import { getIcon, formatDaysAgo } from '@/utils/helpers';
 import ConfirmTransactionModal from "@/components/user-transactions-components/confrim-transaction";
@@ -25,11 +25,20 @@ import axiosClient from "@/utils/apiClient";
 import {setTransactionTrigger, setRange} from "@/store/date-slice";
 import { useToast} from "@/components/ui/ToastProvider";
 import Link from "next/link";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import getPageNumbers from "@/utils/getPageNumbers";
+
+interface PagedResponse<T> {
+    content: T[];
+    currentPage: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+}
 
 interface TransactionListBaseProps {
     title?: string;
     description?: string;
-    limit?: number;
     paginate?: boolean;
     pageSize?: number;
     showAutoCategorizeButton?: boolean;
@@ -37,17 +46,22 @@ interface TransactionListBaseProps {
     children?: React.ReactNode;
 }
 
-export function TransactionListBase({ title, description, limit, paginate = false, pageSize = 25, showAutoCategorizeButton, variant = 'full', children }: TransactionListBaseProps) {
+export function TransactionListBase({ title, description, paginate = false, pageSize = 25, showAutoCategorizeButton, variant = 'full', children }: TransactionListBaseProps) {
     const isDashboard = variant === 'dashboard';
     const { fromDate, toDate, transactionType, transactionTrigger } = useSelector((state: RootState) => state.dateRange);
     const userId = useSelector((state: RootState) => state.user.userId);
     const jobs = useSelector((state: RootState) => state.jobs);
     const dispatch = useDispatch();
-    const [allTransactions, setAllTransactions] = useState<UiTransaction[]>([]);
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const [transactions, setTransactions] = useState<UiTransaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [isCategorizing, setIsCategorizing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [refreshKey, setRefreshKey] = useState(0);
     const [showAddRawTransactionModal, setShowAddRawTransactionModal] = useState(false);
     const [showBulkUploadModal, setShowBulkUploadModal] = useState(false);
     const [showConfirmTransactionModal, setShowConfirmTransactionModal] = useState(false);
@@ -56,8 +70,70 @@ export function TransactionListBase({ title, description, limit, paginate = fals
     const [transactionToEdit, setTransactionToEdit] = useState<UiTransaction | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [transactionToDelete, setTransactionToDelete] = useState<UiTransaction | null>(null);
-    const [searchQuery, setSearchQuery] = useState('');
     const {showToast} = useToast()
+
+    // ---- URL-synced filter & pagination state ----
+    // Page numbers are 1-based to match the backend. For the dashboard variant
+    // (no pagination) we always request page 1, but the URL still reflects the
+    // search query so deep links land in the same view.
+    const page = useMemo(() => {
+        const v = Number(searchParams.get("page"));
+        return Number.isFinite(v) && v >= 1 ? Math.floor(v) : 1;
+    }, [searchParams]);
+
+    const urlQ = searchParams.get("q") ?? "";
+
+    // Local input mirrors `urlQ` but lets us debounce writes back to the URL.
+    const [searchInput, setSearchInput] = useState(urlQ);
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const updateQuery = useCallback(
+        (patch: Record<string, string | undefined>) => {
+            const params = new URLSearchParams(searchParams.toString());
+            // Any non-page filter change resets us to page 1 — keep this in sync
+            // by stripping 'page' unless the patch explicitly sets it.
+            if (!("page" in patch)) {
+                params.delete("page");
+            }
+            for (const [key, value] of Object.entries(patch)) {
+                if (value === undefined || value === "") {
+                    params.delete(key);
+                } else {
+                    params.set(key, value);
+                }
+            }
+            const qs = params.toString();
+            router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+        },
+        [searchParams, router, pathname],
+    );
+
+    const setPage = useCallback(
+        (next: number) => {
+            updateQuery({ page: next <= 1 ? undefined : String(next) });
+        },
+        [updateQuery],
+    );
+
+    // Keep the controlled input in sync when the URL changes externally
+    // (back/forward navigation, clear button in URL).
+    useEffect(() => {
+        setSearchInput(urlQ);
+    }, [urlQ]);
+
+    // Debounce search input → URL writes (300ms feels responsive without
+    // spamming the API on every keystroke).
+    useEffect(() => {
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            const next = searchInput.trim();
+            if (next === urlQ.trim()) return;
+            updateQuery({ q: next === "" ? undefined : next });
+        }, 300);
+        return () => {
+            if (debounceRef.current) clearTimeout(debounceRef.current);
+        };
+    }, [searchInput, urlQ, updateQuery]);
 
     const fetchTransactionsData = async () => {
         if (!userId) return;
@@ -71,46 +147,51 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                 typeParam = 'received';
             }
 
-            // Server-side pagination isn't supported on this endpoint, so we
-            // always fetch the full list. When `paginate` is true, the page
-            // state is applied client-side below.
-            const response = await axioClient.get(`/users/${userId}/transactions`, {
+            const trimmedQ = urlQ.trim();
+
+            const response = await axioClient.get<PagedResponse<ApiTransaction>>(`/users/${userId}/transactions`, {
                 params: {
                     from: fromDate ?? '',
                     to: toDate ?? '',
-                    ...(limit && { limit }),
+                    size: pageSize,
+                    page: isDashboard ? 1 : page,
                     ...(typeParam && { type: typeParam }),
+                    ...(trimmedQ && { q: trimmedQ }),
                 },
             });
             const data = response.data;
-            const rows: ApiTransaction[] = Array.isArray(data) ? data : (data?.content ?? []);
+            const rows = Array.isArray(data?.content) ? data.content : [];
 
             const formatted: UiTransaction[] = rows.map((t) => ({
                 id: t.id,
-                name: t.recipient,
+                name: t.recipient ?? "",
                 category: t.categoryName,
                 amount: t.amount,
                 icon: getIcon(t.categoryIcon),
                 date: formatDaysAgo(t.date),
                 rawDate: t.date,
             }));
-            setAllTransactions(formatted);
+            setTransactions(formatted);
+            setTotalPages(data?.totalPages ?? 0);
+            setTotalElements(data?.totalElements ?? 0);
         } catch (err: any) {
             console.error("Error fetching transactions:", err);
             setError(err.message || 'Failed to fetch transactions');
-            setAllTransactions([]);
+            setTransactions([]);
+            setTotalPages(0);
+            setTotalElements(0);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        // Reset to first page whenever filters change. Page changes are
-        // handled client-side, so the effect doesn't depend on `page`.
-        setPage(0);
+        if (!userId) return;
+        // Filter changes (date, type, search) reset the URL page to 1 via
+        // updateQuery callers, so we can rely on `page` here.
         void fetchTransactionsData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fromDate, toDate, transactionType, limit, userId, transactionTrigger]);
+    }, [userId, fromDate, toDate, transactionType, transactionTrigger, page, pageSize, urlQ, refreshKey]);
 
     useEffect(() => {
         if (jobs.length > 0) {
@@ -144,8 +225,8 @@ export function TransactionListBase({ title, description, limit, paginate = fals
         axioClient
             .post(`/users/${userId}/transactions`, [transaction])
             .then(() => {
-                if (paginate) setPage(0);
-                void fetchTransactionsData();
+                if (paginate) updateQuery({ page: undefined });
+                setRefreshKey((k) => k + 1);
                 setShowAddRawTransactionModal(false);
                 showToast({
                     title: 'Success',
@@ -171,8 +252,8 @@ export function TransactionListBase({ title, description, limit, paginate = fals
         setShowConfirmTransactionModal(false);
         setShowEditCategoryModal(false);
         setShowDeleteModal(false);
-        if (paginate) setPage(0);
-        void fetchTransactionsData();
+        if (paginate) updateQuery({ page: undefined });
+        setRefreshKey((k) => k + 1);
     }
 
     const handleFileSubmit = (file: File) => {
@@ -211,7 +292,7 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                     duration: 5000,
                 })
             })
-            .finally(()=> {
+            .finally(()=>{
                 setLoading(false)
             })
     };
@@ -293,7 +374,7 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                 variant: "success",
                 duration: 5000,
             })
-            await fetchTransactionsData();
+            setRefreshKey((k) => k + 1);
         } catch (error: any) {
             showToast({
                 title: "Error!",
@@ -306,17 +387,12 @@ export function TransactionListBase({ title, description, limit, paginate = fals
         }
     };
 
-    const filteredTransactions = allTransactions.filter(
-        (transaction) =>
-            transaction.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (transaction.category && transaction.category.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-
-    // Apply client-side pagination. When `paginate` is false (e.g. dashboard
-    // "Recent Transactions"), the full filtered list is shown.
+    // For the dashboard variant we want a fixed window of the most recent N
+    // rows. For the full (paginated) variant the server already returned the
+    // current page, so we render it as-is.
     const displayedTransactions = paginate
-        ? filteredTransactions.slice(page * pageSize, (page + 1) * pageSize)
-        : filteredTransactions;
+        ? transactions
+        : transactions.slice(0, pageSize);
 
     // Dashboard summary: count + sum of the displayed rows.
     const dashboardSummaryCount = isDashboard ? displayedTransactions.length : 0;
@@ -327,58 +403,33 @@ export function TransactionListBase({ title, description, limit, paginate = fals
         ? `${dashboardSummaryCount} ${dashboardSummaryCount === 1 ? 'transaction' : 'transactions'} · ${new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES', maximumFractionDigits: 0 }).format(dashboardSummaryTotal)}`
         : '';
 
-    const hasActiveFilters = !!fromDate || !!toDate || transactionType !== 'all' || !!searchQuery;
-    const hasNoDataAtAll = !loading && !error && allTransactions.length === 0 && !hasActiveFilters;
-    const isFilteredEmpty = !loading && !error && allTransactions.length > 0 && filteredTransactions.length === 0;
-    const isEmptyInRange = !loading && !error && allTransactions.length === 0 && hasActiveFilters;
+    const hasActiveFilters = !!fromDate || !!toDate || transactionType !== 'all' || !!urlQ.trim();
+    const hasNoDataAtAll = !loading && !error && totalElements === 0 && !hasActiveFilters;
+    const isFilteredEmpty = !loading && !error && totalElements === 0 && hasActiveFilters;
 
     const handleClearFilters = () => {
-        setSearchQuery('');
+        setSearchInput('');
         dispatch(setRange({
             fromDate: null,
             toDate: null,
             transactionType: 'all',
             transactionTrigger: Date.now().toString(),
         }));
+        updateQuery({ q: undefined, page: undefined });
     };
 
-    // ---- Pagination (client-side) ----
-    // totalPages is computed from the post-search filtered list. The
-    // dashboard's `RecentTransactionsList` doesn't paginate, so totalPages
-    // is 1 and the controls are hidden.
-    const totalPages = paginate ? Math.max(1, Math.ceil(filteredTransactions.length / pageSize)) : 1;
-    const startIndex = paginate && displayedTransactions.length > 0 ? page * pageSize + 1 : 0;
-    const endIndex = paginate && displayedTransactions.length > 0
-        ? page * pageSize + displayedTransactions.length
+    // ---- Pagination (server-side) ----
+    // For the dashboard the controls are hidden, so totalPages is just for
+    // defensive math; the rendered list is capped at `pageSize`.
+    const startIndex = !isDashboard && totalElements > 0 ? (page - 1) * pageSize + 1 : 0;
+    const endIndex = !isDashboard && displayedTransactions.length > 0
+        ? (page - 1) * pageSize + displayedTransactions.length
         : 0;
-    const showingLabel = paginate
-        ? (displayedTransactions.length > 0
-            ? `Showing ${startIndex}–${endIndex} of ${filteredTransactions.length}`
-            : '')
+    const showingLabel = !isDashboard
+        ? (totalElements > 0 ? `Showing ${startIndex}–${endIndex} of ${totalElements}` : '')
         : '';
 
-    // Page-number list with ellipsis. Always show 1 and the last page if they exist,
-    // plus page ± 1 around the current page.
-    const pageNumbers = (() => {
-        if (!paginate) return [] as number[];
-        const current = page + 1; // 1-based
-        const last = totalPages;
-        const set = new Set<number>([1, last, current - 1, current, current + 1]);
-        return Array.from(set)
-            .filter((n) => n >= 1 && n <= last)
-            .sort((a, b) => a - b);
-    })();
-
-    const buildPageList = (): Array<number | 'ellipsis'> => {
-        const list: Array<number | 'ellipsis'> = [];
-        for (let i = 0; i < pageNumbers.length; i++) {
-            if (i > 0 && pageNumbers[i] - pageNumbers[i - 1] > 1) {
-                list.push('ellipsis');
-            }
-            list.push(pageNumbers[i]);
-        }
-        return list;
-    };
+    const pageItems = !isDashboard ? getPageNumbers(page, totalPages || 1) : [];
 
     return (
         <Card className="bg-card overflow-hidden">
@@ -416,18 +467,18 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                                     placeholder="Search transactions..."
                                     aria-label="Search transactions"
                                     className="pl-9 pr-9 w-full"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
                                     onKeyDown={(e) => {
-                                        if (e.key === 'Escape' && searchQuery) {
-                                            setSearchQuery('');
+                                        if (e.key === 'Escape' && searchInput) {
+                                            setSearchInput('');
                                         }
                                     }}
                                 />
-                                {searchQuery && (
+                                {searchInput && (
                                     <button
                                         type="button"
-                                        onClick={() => setSearchQuery('')}
+                                        onClick={() => setSearchInput('')}
                                         aria-label="Clear search"
                                         className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"
                                     >
@@ -593,21 +644,8 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                                 <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
                                     <Inbox className="h-10 w-10 text-muted-foreground/50" />
                                     <div className="space-y-1">
-                                        <p className="text-sm font-medium text-foreground">No transactions match your search.</p>
-                                        <p className="text-xs text-muted-foreground">Try a different keyword or clear the search.</p>
-                                    </div>
-                                    <Button size="sm" variant="outline" onClick={() => setSearchQuery('')}>
-                                        <X className="h-4 w-4" />
-                                        Clear search
-                                    </Button>
-                                </div>
-                            )}
-                            {!loading && !error && isEmptyInRange && (
-                                <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-                                    <Inbox className="h-10 w-10 text-muted-foreground/50" />
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium text-foreground">No transactions in this range.</p>
-                                        <p className="text-xs text-muted-foreground">Try widening the date range or clearing the active filters.</p>
+                                        <p className="text-sm font-medium text-foreground">No transactions match your filters.</p>
+                                        <p className="text-xs text-muted-foreground">Try a different keyword or widen the date range.</p>
                                     </div>
                                     <Button size="sm" variant="outline" onClick={handleClearFilters}>
                                         <X className="h-4 w-4" />
@@ -627,10 +665,10 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                                     ))}
                                 </div>
                             )}
-                            {!loading && !error && paginate && filteredTransactions.length > 0 && displayedTransactions.length === 0 && (
+                            {!loading && !error && paginate && totalElements > 0 && displayedTransactions.length === 0 && (
                                 <div className="flex flex-col items-center justify-center gap-2 py-12 text-center text-muted-foreground">
                                     <p className="text-sm">No transactions on this page.</p>
-                                    <Button size="sm" variant="outline" onClick={() => setPage(0)}>
+                                    <Button size="sm" variant="outline" onClick={() => setPage(1)}>
                                         Go to first page
                                     </Button>
                                 </div>
@@ -667,15 +705,15 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                                disabled={page === 0 || loading}
+                                onClick={() => setPage(Math.max(1, page - 1))}
+                                disabled={page <= 1 || loading}
                                 aria-label="Previous page"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                                 <span className="hidden sm:inline">Previous</span>
                             </Button>
-                            {buildPageList().map((item, idx) =>
-                                item === 'ellipsis' ? (
+                            {pageItems.map((item, idx) =>
+                                item === '…' ? (
                                     <span
                                         key={`ellipsis-${idx}`}
                                         aria-hidden
@@ -686,11 +724,11 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                                 ) : (
                                     <Button
                                         key={item}
-                                        variant={item === page + 1 ? 'outline' : 'ghost'}
+                                        variant={item === page ? 'outline' : 'ghost'}
                                         size="icon"
-                                        onClick={() => setPage(item - 1)}
+                                        onClick={() => setPage(item)}
                                         disabled={loading}
-                                        aria-current={item === page + 1 ? 'page' : undefined}
+                                        aria-current={item === page ? 'page' : undefined}
                                         aria-label={`Go to page ${item}`}
                                     >
                                         {item}
@@ -700,8 +738,8 @@ export function TransactionListBase({ title, description, limit, paginate = fals
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                                disabled={loading || page + 1 >= totalPages}
+                                onClick={() => setPage(Math.min(totalPages || 1, page + 1))}
+                                disabled={loading || page >= (totalPages || 1)}
                                 aria-label="Next page"
                             >
                                 <span className="hidden sm:inline">Next</span>
