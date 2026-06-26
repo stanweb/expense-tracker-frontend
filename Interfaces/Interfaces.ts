@@ -138,7 +138,7 @@ export interface PortfolioType {
 export type InvestmentTransactionType = "BUY" | "SELL" | "INTEREST";
 
 export interface InvestmentTransaction {
-    id: string;
+    transactionId: string ;
     userId: number;
     portfolioId: number;
     portfolioName: string;
