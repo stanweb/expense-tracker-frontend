@@ -98,6 +98,7 @@ export interface Budget {
     userId: number;
     categoryId: number;
     categoryName?: string;
+    totalSpent?: number;
 }
 
 export interface TopSpender {
@@ -134,10 +135,10 @@ export interface PortfolioType {
     active: boolean;
 }
 
-export type InvestmentTransactionType = "BUY" | "SELL";
+export type InvestmentTransactionType = "BUY" | "SELL" | "INTEREST";
 
 export interface InvestmentTransaction {
-    id: string;
+    transactionId: string ;
     userId: number;
     portfolioId: number;
     portfolioName: string;

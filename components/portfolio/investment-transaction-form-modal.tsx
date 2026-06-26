@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from "react"
 import {
     Dialog,
     DialogContent,
@@ -19,23 +20,35 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Portfolio, InvestmentTransactionType } from "@/Interfaces/Interfaces"
-import { useEffect, useState } from "react"
 import { InvestmentTransactionPayload } from "@/components/api-calls/investment-transactions"
+import {
+    InvestmentTransactionType,
+    Portfolio,
+} from "@/Interfaces/Interfaces"
 
-interface InvestmentTransactionFormProps {
+interface InvestmentTransactionFormModalProps {
     isOpen: boolean
     onClose: () => void
-    portfolio: Portfolio | null
+    portfolios: Portfolio[]
+    defaultPortfolioId?: number
     onSubmit: (payload: InvestmentTransactionPayload) => void
 }
 
-export function InvestmentTransactionForm({
+const toLocalInput = (d: Date) => {
+    const pad = (n: number) => String(n).padStart(2, "0")
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+export function InvestmentTransactionFormModal({
     isOpen,
     onClose,
-    portfolio,
+    portfolios,
+    defaultPortfolioId,
     onSubmit,
-}: InvestmentTransactionFormProps) {
+}: InvestmentTransactionFormModalProps) {
+    const [portfolioId, setPortfolioId] = useState<string>(
+        defaultPortfolioId ? String(defaultPortfolioId) : ""
+    )
     const [type, setType] = useState<InvestmentTransactionType>("BUY")
     const [tickerSymbol, setTickerSymbol] = useState("")
     const [units, setUnits] = useState("")
@@ -45,10 +58,14 @@ export function InvestmentTransactionForm({
     const [notes, setNotes] = useState("")
     const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
+    const selectedPortfolio = portfolios.find(
+        (p) => String(p.id) === portfolioId
+    )
+
     useEffect(() => {
         if (isOpen) {
+            setPortfolioId(defaultPortfolioId ? String(defaultPortfolioId) : "")
             setType("BUY")
-            setTickerSymbol(portfolio?.tickerSymbol ?? "")
             setUnits("")
             setPricePerUnit("")
             setAmount("")
@@ -56,16 +73,21 @@ export function InvestmentTransactionForm({
             setNotes("")
             setErrors({})
         }
-    }, [isOpen, portfolio])
+    }, [isOpen, defaultPortfolioId])
 
-    const toLocalInput = (d: Date) => {
-        const pad = (n: number) => String(n).padStart(2, "0")
-        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-    }
+    useEffect(() => {
+        if (!selectedPortfolio) {
+            setTickerSymbol("")
+            return
+        }
+        setTickerSymbol((current) =>
+            current.trim() === "" ? selectedPortfolio.tickerSymbol : current
+        )
+    }, [selectedPortfolio])
 
     const validate = () => {
         const newErrors: { [key: string]: string } = {}
-        if (!portfolio) newErrors.portfolio = "No portfolio selected."
+        if (!portfolioId) newErrors.portfolio = "Portfolio is required."
         if (!type) newErrors.type = "Type is required."
         if (!amount || Number(amount) <= 0)
             newErrors.amount = "Amount must be greater than 0."
@@ -77,10 +99,10 @@ export function InvestmentTransactionForm({
     }
 
     const handleSubmit = () => {
-        if (!validate() || !portfolio) return
+        if (!validate() || !selectedPortfolio) return
         onSubmit({
-            portfolioId: portfolio.id,
-            tickerSymbol: tickerSymbol.trim() || portfolio.tickerSymbol,
+            portfolioId: selectedPortfolio.id,
+            tickerSymbol: tickerSymbol.trim() || selectedPortfolio.tickerSymbol,
             type,
             units: units === "" ? null : Number(units),
             pricePerUnit: pricePerUnit === "" ? null : Number(pricePerUnit),
@@ -96,30 +118,55 @@ export function InvestmentTransactionForm({
                 <DialogHeader>
                     <DialogTitle>Add Investment Transaction</DialogTitle>
                     <DialogDescription>
-                        Record a buy or sell for {portfolio?.name ?? "your portfolio"}.
+                        Record a buy, sell, or interest payment against one of your portfolios.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="type">Type</Label>
+                        <Label htmlFor="tx-portfolio">Portfolio</Label>
+                        <Select
+                            value={portfolioId || "NONE"}
+                            onValueChange={(value) =>
+                                setPortfolioId(value === "NONE" ? "" : value)
+                            }
+                        >
+                            <SelectTrigger id="tx-portfolio" className="bg-input text-foreground border-input">
+                                <SelectValue placeholder="Select portfolio" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="NONE">Select portfolio…</SelectItem>
+                                {portfolios.map((p) => (
+                                    <SelectItem key={p.id} value={String(p.id)}>
+                                        {p.name} ({p.tickerSymbol})
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.portfolio && (
+                            <p className="text-red-500 text-sm mt-1">{errors.portfolio}</p>
+                        )}
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="tx-type">Type</Label>
                         <Select
                             value={type}
                             onValueChange={(value) => setType(value as InvestmentTransactionType)}
                         >
-                            <SelectTrigger className="bg-input text-foreground border-input">
+                            <SelectTrigger id="tx-type" className="bg-input text-foreground border-input">
                                 <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="BUY">Buy</SelectItem>
                                 <SelectItem value="SELL">Sell</SelectItem>
+                                <SelectItem value="INTEREST">Interest</SelectItem>
                             </SelectContent>
                         </Select>
                         {errors.type && <p className="text-red-500 text-sm mt-1">{errors.type}</p>}
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="tickerSymbol">Ticker Symbol</Label>
+                        <Label htmlFor="tx-ticker">Ticker Symbol</Label>
                         <Input
-                            id="tickerSymbol"
+                            id="tx-ticker"
                             value={tickerSymbol}
                             onChange={(e) => setTickerSymbol(e.target.value.toUpperCase())}
                             placeholder="AAPL"
@@ -128,21 +175,23 @@ export function InvestmentTransactionForm({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="units">Units (optional)</Label>
+                            <Label htmlFor="tx-units">Units (optional)</Label>
                             <Input
-                                id="units"
+                                id="tx-units"
                                 type="number"
                                 step="any"
                                 value={units}
                                 onChange={(e) => setUnits(e.target.value)}
                                 className="bg-input text-foreground border-input"
                             />
-                            {errors.units && <p className="text-red-500 text-sm mt-1">{errors.units}</p>}
+                            {errors.units && (
+                                <p className="text-red-500 text-sm mt-1">{errors.units}</p>
+                            )}
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="pricePerUnit">Price / unit (optional)</Label>
+                            <Label htmlFor="tx-price">Price / unit (optional)</Label>
                             <Input
-                                id="pricePerUnit"
+                                id="tx-price"
                                 type="number"
                                 step="any"
                                 value={pricePerUnit}
@@ -150,14 +199,16 @@ export function InvestmentTransactionForm({
                                 className="bg-input text-foreground border-input"
                             />
                             {errors.pricePerUnit && (
-                                <p className="text-red-500 text-sm mt-1">{errors.pricePerUnit}</p>
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.pricePerUnit}
+                                </p>
                             )}
                         </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="amount">Amount</Label>
+                        <Label htmlFor="tx-amount">Amount</Label>
                         <Input
-                            id="amount"
+                            id="tx-amount"
                             type="number"
                             step="any"
                             value={amount}
@@ -165,12 +216,14 @@ export function InvestmentTransactionForm({
                             placeholder="1500.00"
                             className="bg-input text-foreground border-input"
                         />
-                        {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount}</p>}
+                        {errors.amount && (
+                            <p className="text-red-500 text-sm mt-1">{errors.amount}</p>
+                        )}
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="transactionDate">Transaction Date</Label>
+                        <Label htmlFor="tx-date">Transaction Date</Label>
                         <Input
-                            id="transactionDate"
+                            id="tx-date"
                             type="datetime-local"
                             value={transactionDate}
                             onChange={(e) => setTransactionDate(e.target.value)}
@@ -178,9 +231,9 @@ export function InvestmentTransactionForm({
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="notes">Notes</Label>
+                        <Label htmlFor="tx-notes">Notes</Label>
                         <Textarea
-                            id="notes"
+                            id="tx-notes"
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             rows={2}

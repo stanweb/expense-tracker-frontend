@@ -1,0 +1,685 @@
+'use client'
+
+import { useEffect, useState, useCallback, useMemo } from "react"
+import { useRouter, usePathname, useSearchParams } from "next/navigation"
+import { useSelector } from "react-redux"
+import { Inbox, Plus, Trash2, X, ArrowUpRight, ArrowDownRight } from "lucide-react"
+import {
+    InvestmentTransaction,
+    InvestmentTransactionType,
+    Portfolio,
+    RootState,
+} from "@/Interfaces/Interfaces"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
+import { useToast } from "@/components/ui/ToastProvider"
+import {
+    createInvestmentTransaction,
+    deleteInvestmentTransaction,
+    getInvestmentTransactions,
+    InvestmentTransactionPayload,
+} from "@/components/api-calls/investment-transactions"
+import { getPortfolios } from "@/components/api-calls/portfolios"
+import { formatDateTime, formatMoney, formatUnits } from "./format"
+import { InvestmentTypeBadge } from "./investment-type-badge"
+import { InvestmentTransactionFormModal } from "./investment-transaction-form-modal"
+import { TransactionListSkeleton } from "@/components/user-transactions-components/transaction-list-skeleton"
+
+const PAGE_SIZE = 20
+
+const toDateInput = (value: string | undefined): string => {
+    if (!value) return ""
+    const d = new Date(value)
+    if (Number.isNaN(d.getTime())) return ""
+    return d.toISOString().slice(0, 10)
+}
+
+const computeGainPct = (
+    currentValue: string | number | null | undefined,
+    costBasis: string | number | null | undefined
+) => {
+    const value = Number(currentValue ?? 0)
+    const cost = Number(costBasis ?? 0)
+    if (!Number.isFinite(value) || !Number.isFinite(cost) || cost <= 0) return null
+    return ((value - cost) / cost) * 100
+}
+
+const formatGainPct = (pct: number | null) => {
+    if (pct === null) return "—"
+    const sign = pct > 0 ? "+" : ""
+    return `${sign}${pct.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })}%`
+}
+
+export function InvestmentTransactionsList() {
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const reduxRange = useSelector((s: RootState) => s.dateRange)
+    const userId = useSelector((s: RootState) => s.user.userId)
+    const { showToast } = useToast()
+
+    const [portfolios, setPortfolios] = useState<Portfolio[]>([])
+    const [transactions, setTransactions] = useState<InvestmentTransaction[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    const [createOpen, setCreateOpen] = useState(false)
+    const [refreshKey, setRefreshKey] = useState(0)
+    const [deletingId, setDeletingId] = useState<string | null>(null)
+    const [deleteTarget, setDeleteTarget] = useState<InvestmentTransaction | null>(null)
+    const [totalPages, setTotalPages] = useState(0)
+    const [totalElements, setTotalElements] = useState(0)
+
+    const portfolioId = useMemo(() => {
+        const v = searchParams.get("portfolioId")
+        return v ? Number(v) : undefined
+    }, [searchParams])
+
+    const type = useMemo(() => {
+        const v = searchParams.get("type") as InvestmentTransactionType | null
+        return v ?? undefined
+    }, [searchParams])
+
+    const page = useMemo(() => {
+        const v = Number(searchParams.get("page"))
+        return Number.isFinite(v) && v >= 1 ? Math.floor(v) : 1
+    }, [searchParams])
+
+    const fromDate = searchParams.get("fromDate") ?? reduxRange.fromDate ?? undefined
+    const toDate = searchParams.get("toDate") ?? reduxRange.toDate ?? undefined
+
+    const updateQuery = useCallback(
+        (patch: Record<string, string | undefined>) => {
+            const params = new URLSearchParams(searchParams.toString())
+            // Any non-page filter change resets us to page 1 — keep this in sync
+            // by stripping 'page' unless the patch explicitly sets it.
+            if (!("page" in patch)) {
+                params.delete("page")
+            }
+            for (const [key, value] of Object.entries(patch)) {
+                if (value === undefined || value === "" || value === "ALL") {
+                    params.delete(key)
+                } else {
+                    params.set(key, value)
+                }
+            }
+            const qs = params.toString()
+            router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
+        },
+        [searchParams, router, pathname],
+    )
+
+    const setPage = useCallback(
+        (next: number) => {
+            updateQuery({ page: next <= 1 ? undefined : String(next) })
+        },
+        [updateQuery],
+    )
+
+    const clearAllFilters = useCallback(() => {
+        router.replace(pathname, { scroll: false })
+    }, [router, pathname])
+
+    const hasActiveFilter = useMemo(() => {
+        return (
+            searchParams.has("portfolioId") ||
+            searchParams.has("type") ||
+            searchParams.has("fromDate") ||
+            searchParams.has("toDate")
+        )
+    }, [searchParams])
+
+    useEffect(() => {
+        if (!userId) return
+        let cancelled = false
+        getPortfolios(userId)
+            .then((data) => {
+                if (!cancelled) setPortfolios(data)
+            })
+            .catch((err) => console.error("Error fetching portfolios:", err))
+        return () => {
+            cancelled = true
+        }
+    }, [userId])
+
+    useEffect(() => {
+        if (!userId) return
+        let cancelled = false
+        setLoading(true)
+        setError(null)
+        getInvestmentTransactions(userId, {
+            portfolioId,
+            type,
+            fromDate,
+            toDate,
+            sort: "transactionDate,desc",
+            page,
+            size: PAGE_SIZE,
+        })
+            .then((data) => {
+                if (cancelled) return
+                setTransactions(data.content)
+                setTotalPages(data.totalPages)
+                setTotalElements(data.totalElements)
+            })
+            .catch((err: any) => {
+                if (cancelled) return
+                const message = err?.message || "Failed to load transactions"
+                setError(message)
+                showToast({
+                    title: "Error",
+                    description: message,
+                    variant: "error",
+                    duration: 5000,
+                })
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false)
+            })
+        return () => {
+            cancelled = true
+        }
+    }, [userId, portfolioId, type, fromDate, toDate, page, refreshKey, showToast])
+
+    const portfolioName = (id: number) => portfolios.find((p) => p.id === id)?.name ?? "—"
+
+    const selectedPortfolio = useMemo(
+        () => (portfolioId ? portfolios.find((p) => p.id === portfolioId) : undefined),
+        [portfolios, portfolioId]
+    )
+
+    const handleCreate = async (payload: InvestmentTransactionPayload) => {
+        if (!userId) return
+        try {
+            await createInvestmentTransaction(userId, payload)
+            showToast({
+                title: "Success!",
+                description: "Transaction recorded.",
+                variant: "success",
+                duration: 5000,
+            })
+            setCreateOpen(false)
+            setRefreshKey((k) => k + 1)
+        } catch (err: any) {
+            showToast({
+                title: "Error!",
+                description:
+                    err?.response?.data?.message || "An error occurred while saving the transaction.",
+                variant: "error",
+                duration: 5000,
+            })
+        }
+    }
+
+    const confirmDelete = async () => {
+        if (!userId || !deleteTarget) return
+        setDeletingId(deleteTarget.transactionId)
+        try {
+            await deleteInvestmentTransaction(userId, deleteTarget.transactionId)
+            showToast({
+                title: "Success!",
+                description: "Transaction deleted.",
+                variant: "success",
+                duration: 5000,
+            })
+            setDeleteTarget(null)
+            setRefreshKey((k) => k + 1)
+        } catch (err: any) {
+            showToast({
+                title: "Error!",
+                description:
+                    err?.response?.data?.message || "An error occurred while deleting.",
+                variant: "error",
+                duration: 5000,
+            })
+        } finally {
+            setDeletingId(null)
+        }
+    }
+
+    return (
+        <Card className="bg-card">
+            <CardContent className="space-y-4 pt-6">
+                {selectedPortfolio && (
+                    <Card className="bg-muted/30">
+                        <CardHeader className="pb-3">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div className="space-y-1">
+                                    <CardTitle className="text-xl sm:text-2xl font-semibold tracking-tight">
+                                        {selectedPortfolio.name}
+                                    </CardTitle>
+                                    <CardDescription className="text-sm">
+                                        Portfolio details for the transactions shown below.
+                                    </CardDescription>
+                                </div>
+                                <Badge variant="outline" className="font-mono w-fit">
+                                    {selectedPortfolio.tickerSymbol}
+                                </Badge>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                            <dl className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-3 text-sm">
+                                <div className="space-y-1">
+                                    <dt className="text-xs text-muted-foreground">Type</dt>
+                                    <dd>
+                                        {selectedPortfolio.typeName ? (
+                                            <Badge
+                                                variant="secondary"
+                                                className={
+                                                    selectedPortfolio.typeActive === false
+                                                        ? "opacity-60"
+                                                        : ""
+                                                }
+                                            >
+                                                {selectedPortfolio.typeName}
+                                                {selectedPortfolio.typeActive === false && " (inactive)"}
+                                            </Badge>
+                                        ) : (
+                                            <span className="text-muted-foreground">—</span>
+                                        )}
+                                    </dd>
+                                </div>
+                                <div className="space-y-1">
+                                    <dt className="text-xs text-muted-foreground">Broker</dt>
+                                    <dd className="font-medium">
+                                        {selectedPortfolio.broker || (
+                                            <span className="text-muted-foreground">—</span>
+                                        )}
+                                    </dd>
+                                </div>
+                                <div className="space-y-1">
+                                    <dt className="text-xs text-muted-foreground">Units</dt>
+                                    <dd className="font-medium tabular-nums">
+                                        {formatUnits(selectedPortfolio.totalUnits)}
+                                    </dd>
+                                </div>
+                                <div className="space-y-1">
+                                    <dt className="text-xs text-muted-foreground">Cost Basis</dt>
+                                    <dd className="font-medium tabular-nums">
+                                        {formatMoney(selectedPortfolio.totalCostBasis)}
+                                    </dd>
+                                </div>
+                                <div className="space-y-1">
+                                    <dt className="text-xs text-muted-foreground">Gain %</dt>
+                                    <dd>
+                                        {(() => {
+                                            const pct = computeGainPct(
+                                                selectedPortfolio.currentValue,
+                                                selectedPortfolio.totalCostBasis
+                                            )
+                                            if (pct === null)
+                                                return (
+                                                    <span className="text-muted-foreground">—</span>
+                                                )
+                                            const color =
+                                                pct > 0
+                                                    ? "text-emerald-500"
+                                                    : pct < 0
+                                                        ? "text-red-500"
+                                                        : "text-muted-foreground"
+                                            return (
+                                                <span
+                                                    className={`inline-flex items-center gap-1 font-medium ${color}`}
+                                                >
+                                                    {pct > 0 ? (
+                                                        <ArrowUpRight className="h-3.5 w-3.5" />
+                                                    ) : pct < 0 ? (
+                                                        <ArrowDownRight className="h-3.5 w-3.5" />
+                                                    ) : null}
+                                                    {formatGainPct(pct)}
+                                                </span>
+                                            )
+                                        })()}
+                                    </dd>
+                                </div>
+                                <div className="space-y-1">
+                                    <dt className="text-xs text-muted-foreground">Current Value</dt>
+                                    <dd className="font-semibold tabular-nums">
+                                        {formatMoney(selectedPortfolio.currentValue)}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </CardContent>
+                    </Card>
+                )}
+
+                <div className="flex flex-col gap-3 md:flex-row md:items-end md:flex-wrap">
+                    <div className="grid gap-1.5 min-w-[180px]">
+                        <Label htmlFor="tx-portfolio">Portfolio</Label>
+                        <Select
+                            value={portfolioId ? String(portfolioId) : "ALL"}
+                            onValueChange={(value) =>
+                                updateQuery({ portfolioId: value === "ALL" ? undefined : value })
+                            }
+                        >
+                            <SelectTrigger id="tx-portfolio" className="w-full md:w-[200px]">
+                                <SelectValue placeholder="All portfolios" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="ALL">All portfolios</SelectItem>
+                                {portfolios.map((p) => (
+                                    <SelectItem key={p.id} value={String(p.id)}>
+                                        {p.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="grid gap-1.5 min-w-[140px]">
+                        <Label htmlFor="tx-type">Type</Label>
+                        <Select
+                            value={type ?? "ALL"}
+                            onValueChange={(value) =>
+                                updateQuery({ type: value === "ALL" ? undefined : value })
+                            }
+                        >
+                            <SelectTrigger id="tx-type" className="w-full md:w-[160px]">
+                                <SelectValue placeholder="All types" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="ALL">All types</SelectItem>
+                                <SelectItem value="BUY">Buy</SelectItem>
+                                <SelectItem value="SELL">Sell</SelectItem>
+                                <SelectItem value="INTEREST">Interest</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="grid gap-1.5">
+                        <Label htmlFor="tx-from">From</Label>
+                        <Input
+                            id="tx-from"
+                            type="date"
+                            value={toDateInput(fromDate)}
+                            onChange={(e) =>
+                                updateQuery({
+                                    fromDate: e.target.value ? `${e.target.value}T00:00:00.000Z` : undefined,
+                                })
+                            }
+                            className="w-full md:w-[160px]"
+                        />
+                    </div>
+
+                    <div className="grid gap-1.5">
+                        <Label htmlFor="tx-to">To</Label>
+                        <Input
+                            id="tx-to"
+                            type="date"
+                            value={toDateInput(toDate)}
+                            onChange={(e) =>
+                                updateQuery({
+                                    toDate: e.target.value ? `${e.target.value}T23:59:59.999Z` : undefined,
+                                })
+                            }
+                            className="w-full md:w-[160px]"
+                        />
+                    </div>
+
+                    {hasActiveFilter && (
+                        <div className="md:ml-auto">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={clearAllFilters}
+                                className="gap-1 text-muted-foreground"
+                            >
+                                <X className="h-4 w-4" />
+                                Clear filters
+                            </Button>
+                        </div>
+                    )}
+
+                    <div className={hasActiveFilter ? "" : "md:ml-auto"}>
+                        <Button onClick={() => setCreateOpen(true)} className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Add Transaction
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                    <p>
+                        {loading
+                            ? "Loading…"
+                            : `${totalElements} ${totalElements === 1 ? "transaction" : "transactions"}`}
+                    </p>
+                    {totalPages > 1 && (
+                        <p>
+                            Page {page} of {totalPages}
+                        </p>
+                    )}
+                </div>
+
+                {loading ? (
+                    <TransactionListSkeleton count={6} />
+                ) : error ? (
+                    <div className="rounded-md border border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
+                        {error}
+                    </div>
+                ) : transactions.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center gap-2 py-12 text-center text-muted-foreground">
+                        <Inbox className="h-10 w-10 opacity-50" />
+                        <p className="text-sm">No investment transactions found.</p>
+                        {hasActiveFilter && (
+                            <p className="text-xs">Try clearing the filters above.</p>
+                        )}
+                    </div>
+                ) : (
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Date</TableHead>
+                                    <TableHead>Portfolio</TableHead>
+                                    <TableHead>Type</TableHead>
+                                    <TableHead className="text-right">Units</TableHead>
+                                    <TableHead className="text-right">Price / unit</TableHead>
+                                    <TableHead className="text-right">Amount</TableHead>
+                                    <TableHead className="w-[60px]">
+                                        <span className="sr-only">Actions</span>
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {transactions.map((tx) => (
+                                    <TableRow key={tx.transactionId}>
+                                        <TableCell className="whitespace-nowrap text-xs">
+                                            {formatDateTime(tx.transactionDate)}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-col gap-0.5">
+                                                <span className="font-medium text-foreground truncate max-w-[200px]">
+                                                    {portfolioName(tx.portfolioId)}
+                                                </span>
+                                                <Badge variant="outline" className="font-mono w-fit">
+                                                    {tx.tickerSymbol}
+                                                </Badge>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <InvestmentTypeBadge type={tx.type} />
+                                        </TableCell>
+                                        <TableCell className="text-right tabular-nums">
+                                            {formatUnits(tx.units)}
+                                        </TableCell>
+                                        <TableCell className="text-right tabular-nums">
+                                            {formatMoney(tx.pricePerUnit)}
+                                        </TableCell>
+                                        <TableCell className="text-right tabular-nums font-medium">
+                                            {formatMoney(tx.amount)}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => setDeleteTarget(tx)}
+                                                aria-label="Delete transaction"
+                                            >
+                                                <Trash2 className="h-4 w-4 text-red-500/70" />
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
+
+                {!loading && totalPages > 1 && (
+                    <div className="pt-2">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            if (page > 1) setPage(page - 1)
+                                        }}
+                                        aria-disabled={page <= 1}
+                                        className={
+                                            page <= 1
+                                                ? "pointer-events-none opacity-50"
+                                                : "cursor-pointer"
+                                        }
+                                    />
+                                </PaginationItem>
+                                {getPageNumbers(page, totalPages).map((p, idx) =>
+                                    p === "…" ? (
+                                        <PaginationItem key={`ellipsis-${idx}`}>
+                                            <PaginationEllipsis />
+                                        </PaginationItem>
+                                    ) : (
+                                        <PaginationItem key={p}>
+                                            <PaginationLink
+                                                href="#"
+                                                isActive={p === page}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setPage(p)
+                                                }}
+                                                className="cursor-pointer"
+                                            >
+                                                {p}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    )
+                                )}
+                                <PaginationItem>
+                                    <PaginationNext
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            if (page < totalPages) setPage(page + 1)
+                                        }}
+                                        aria-disabled={page >= totalPages}
+                                        className={
+                                            page >= totalPages
+                                                ? "pointer-events-none opacity-50"
+                                                : "cursor-pointer"
+                                        }
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
+                )}
+            </CardContent>
+
+            <InvestmentTransactionFormModal
+                isOpen={createOpen}
+                onClose={() => setCreateOpen(false)}
+                portfolios={portfolios}
+                defaultPortfolioId={portfolioId}
+                onSubmit={(payload) => void handleCreate(payload)}
+            />
+
+            <AlertDialog
+                open={!!deleteTarget}
+                onOpenChange={(open) => {
+                    if (!open) setDeleteTarget(null)
+                }}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete transaction?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This will permanently remove the transaction
+                            {deleteTarget
+                                ? ` for ${portfolioName(deleteTarget.portfolioId)}`
+                                : ""}
+                            . This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={!!deletingId}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={(e) => {
+                                e.preventDefault()
+                                void confirmDelete()
+                            }}
+                            disabled={!!deletingId}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                        >
+                            {deletingId ? "Deleting…" : "Delete"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </Card>
+    )
+}
+
+// Build a windowed page list: 1 … 4 5 6 … 12 — collapses to a shorter list
+// when the total is small enough to render every page.
+function getPageNumbers(current: number, total: number): (number | "…")[] {
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+    const pages: (number | "…")[] = [1]
+    const start = Math.max(2, current - 1)
+    const end = Math.min(total - 1, current + 1)
+    if (start > 2) pages.push("…")
+    for (let i = start; i <= end; i++) pages.push(i)
+    if (end < total - 1) pages.push("…")
+    pages.push(total)
+    return pages
+}

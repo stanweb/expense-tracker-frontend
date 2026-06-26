@@ -1,19 +1,28 @@
 import {
     InvestmentTransaction,
     InvestmentTransactionQuery,
+    InvestmentTransactionType,
 } from "@/Interfaces/Interfaces";
 import axiosClient from "@/utils/apiClient";
 
 export type InvestmentTransactionPayload = {
     portfolioId: number;
     tickerSymbol?: string;
-    type: "BUY" | "SELL";
+    type: InvestmentTransactionType;
     units?: number | string | null;
     amount: number | string;
     pricePerUnit?: number | string | null;
     transactionDate?: string | null;
     notes?: string | null;
 };
+
+export interface PagedResponse<T> {
+    content: T[];
+    currentPage: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+}
 
 const buildQueryString = (params?: InvestmentTransactionQuery): string => {
     if (!params) return "";
@@ -32,15 +41,33 @@ const buildQueryString = (params?: InvestmentTransactionQuery): string => {
 export const getInvestmentTransactions = async (
     userId: number,
     params?: InvestmentTransactionQuery
-): Promise<InvestmentTransaction[]> => {
+): Promise<PagedResponse<InvestmentTransaction>> => {
     try {
-        const response = await axiosClient.get<InvestmentTransaction[]>(
+        const response = await axiosClient.get<PagedResponse<InvestmentTransaction>>(
             `users/${userId}/investment-transactions${buildQueryString(params)}`
         );
-        return response.data || [];
+        // Backend always returns a wrapped paged response; fall back to an empty
+        // page if the server ever sends a raw array (defensive).
+        if (response.data && Array.isArray((response.data as PagedResponse<InvestmentTransaction>).content)) {
+            return response.data;
+        }
+        const raw = response.data as unknown as InvestmentTransaction[];
+        return {
+            content: raw || [],
+            currentPage: params?.page ?? 1,
+            pageSize: raw?.length ?? params?.size ?? 0,
+            totalElements: raw?.length ?? 0,
+            totalPages: 1,
+        };
     } catch (err) {
         console.error("Error fetching investment transactions:", err);
-        return [];
+        return {
+            content: [],
+            currentPage: params?.page ?? 1,
+            pageSize: params?.size ?? 0,
+            totalElements: 0,
+            totalPages: 0,
+        };
     }
 };
 

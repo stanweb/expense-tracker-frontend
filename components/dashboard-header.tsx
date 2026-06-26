@@ -5,6 +5,7 @@ import {
   BarChart3,
   Briefcase,
   LayoutDashboard,
+  LineChart,
   ListCheck,
   LogOut,
   Menu,
@@ -53,6 +54,7 @@ const navItems: NavItem[] = [
   { label: 'Categories', href: '/categories', icon: ListCheck },
   { label: 'Budgets', href: '/budgets', icon: Wallet },
   { label: 'Portfolios', href: '/portfolios', icon: Briefcase },
+  { label: 'Investments', href: '/investment-transactions', icon: LineChart },
   { label: 'Top Spenders', href: '/top-spenders', icon: TrendingUp },
 ]
 
@@ -117,7 +119,7 @@ export function DashboardHeader() {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                  'gap-2 text-foreground/90 hover:text-accent-foreground hover:bg-accent/70',
+                  'gap-2 text-foreground/90 hover:text-accent-foreground hover:bg-accent/90',
                   active && 'bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground',
                 )}
               >
