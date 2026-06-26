@@ -33,6 +33,15 @@ const BudgetTableRowSkeleton = ({ className }: BudgetTableRowSkeletonProps) => (
         <td className="p-3 align-middle">
             <div className={cn('h-4 w-24 rounded bg-gradient-to-r from-primary/20 via-primary/10 to-primary/5')} />
         </td>
+        <td className="hidden p-3 align-middle md:table-cell">
+            <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between gap-2">
+                    <div className="h-3 w-24 rounded bg-gradient-to-r from-primary/15 via-primary/10 to-primary/5" />
+                    <div className="h-3 w-8 rounded bg-gradient-to-r from-primary/15 via-primary/10 to-primary/5" />
+                </div>
+                <div className="h-2 w-full rounded-full bg-gradient-to-r from-primary/10 to-primary/5" />
+            </div>
+        </td>
         <td className="hidden p-3 align-middle sm:table-cell">
             <div className={cn('h-4 w-20 rounded bg-gradient-to-r from-primary/10 via-primary/5 to-transparent')} />
         </td>
@@ -61,6 +70,7 @@ export const BudgetsTableSkeleton = ({ count = 5, className }: BudgetsTableSkele
                 <tr className="border-b border-border/40">
                     <th className="h-10 px-3 text-left align-middle text-xs font-medium text-muted-foreground">Category</th>
                     <th className="h-10 px-3 text-left align-middle text-xs font-medium text-muted-foreground">Amount</th>
+                    <th className="hidden h-10 px-3 text-left align-middle text-xs font-medium text-muted-foreground md:table-cell">Spent</th>
                     <th className="hidden h-10 px-3 text-left align-middle text-xs font-medium text-muted-foreground sm:table-cell">Month</th>
                     <th className="hidden h-10 px-3 text-left align-middle text-xs font-medium text-muted-foreground sm:table-cell">Year</th>
                     <th className="h-10 px-3 text-right align-middle text-xs font-medium text-muted-foreground">Actions</th>

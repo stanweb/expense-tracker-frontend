@@ -14,6 +14,7 @@ import {useEffect, useState} from "react";
 import axioClient from "@/utils/apiClient";
 import { BudgetForm } from "@/components/budget/budget-form";
 import { BudgetsTableSkeleton } from "@/components/budget/budgets-table-skeleton";
+import { BudgetProgressSlider } from "@/components/budget/budget-progress-slider";
 import { Copy, MoreHorizontal, Pencil, Plus, Trash2} from "lucide-react";
 import {
     DropdownMenu,
@@ -301,6 +302,7 @@ export function BudgetsList() {
                                 <TableRow>
                                     <TableHead>Category</TableHead>
                                     <TableHead>Amount</TableHead>
+                                    <TableHead className="hidden md:table-cell">Spent</TableHead>
                                     <TableHead className="hidden sm:table-cell">Month</TableHead>
                                     <TableHead className="hidden sm:table-cell">Year</TableHead>
                                     <TableHead>Actions</TableHead>
@@ -317,6 +319,12 @@ export function BudgetsList() {
                                                 {budget.categoryName}
                                             </TableCell>
                                         <TableCell>{budget.amount}</TableCell>
+                                        <TableCell className="hidden md:table-cell">
+                                            <BudgetProgressSlider
+                                                amount={budget.amount}
+                                                spent={budget.totalSpent ?? 0}
+                                            />
+                                        </TableCell>
                                         <TableCell className="hidden sm:table-cell">{formatMonth(budget.month)}</TableCell>
                                         <TableCell className="hidden sm:table-cell">{budget.year}</TableCell>
                                         <TableCell className="text-right">
@@ -327,19 +335,31 @@ export function BudgetsList() {
                                                         <MoreHorizontal className="h-4 w-4"/>
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                    <DropdownMenuItem onClick={() => handleEdit(budget)}>
-                                                        <Pencil className="mr-2 h-4 w-4"/>
-                                                        Edit
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuSeparator/>
+                                                <DropdownMenuContent align="end" className="min-w-[180px] p-1.5 shadow-lg ring-1 ring-border/40">
+                                                    <DropdownMenuLabel className="px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                                        Budget actions
+                                                    </DropdownMenuLabel>
+                                                    <DropdownMenuSeparator className="my-1" />
                                                     <DropdownMenuItem
-                                                        className="text-red-600 focus:text-red-600"
-                                                        onClick={() => handleDelete(budget.id)}
+                                                        onClick={() => handleEdit(budget)}
+                                                        className="cursor-pointer gap-3 rounded-md px-2.5 py-2 text-sm font-medium focus:bg-accent/70"
                                                     >
-                                                        <Trash2 className="mr-2 h-4 w-4"/>
-                                                        Delete
+                                                        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/10 text-primary">
+                                                            <Pencil className="h-3.5 w-3.5" />
+                                                        </span>
+                                                        <span>Edit</span>
+                                                        <span className="ml-auto text-[11px] font-normal text-muted-foreground">⌘E</span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        variant="destructive"
+                                                        onClick={() => handleDelete(budget.id)}
+                                                        className="cursor-pointer gap-3 rounded-md px-2.5 py-2 text-sm font-medium"
+                                                    >
+                                                        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-red-500/10 text-red-600 dark:text-red-400">
+                                                            <Trash2 className="h-3.5 w-3.5" />
+                                                        </span>
+                                                        <span>Delete</span>
+                                                        <span className="ml-auto text-[11px] font-normal opacity-70">⌘⌫</span>
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>

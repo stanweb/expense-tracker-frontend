@@ -1,13 +1,14 @@
 import {
     InvestmentTransaction,
     InvestmentTransactionQuery,
+    InvestmentTransactionType,
 } from "@/Interfaces/Interfaces";
 import axiosClient from "@/utils/apiClient";
 
 export type InvestmentTransactionPayload = {
     portfolioId: number;
     tickerSymbol?: string;
-    type: "BUY" | "SELL";
+    type: InvestmentTransactionType;
     units?: number | string | null;
     amount: number | string;
     pricePerUnit?: number | string | null;
