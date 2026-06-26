@@ -61,6 +61,7 @@ import { formatDateTime, formatMoney, formatUnits } from "./format"
 import { InvestmentTypeBadge } from "./investment-type-badge"
 import { InvestmentTransactionFormModal } from "./investment-transaction-form-modal"
 import { TransactionListSkeleton } from "@/components/user-transactions-components/transaction-list-skeleton"
+import getPageNumbers from "@/utils/getPageNumbers";
 
 const PAGE_SIZE = 20
 
@@ -672,14 +673,3 @@ export function InvestmentTransactionsList() {
 
 // Build a windowed page list: 1 … 4 5 6 … 12 — collapses to a shorter list
 // when the total is small enough to render every page.
-function getPageNumbers(current: number, total: number): (number | "…")[] {
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
-    const pages: (number | "…")[] = [1]
-    const start = Math.max(2, current - 1)
-    const end = Math.min(total - 1, current + 1)
-    if (start > 2) pages.push("…")
-    for (let i = start; i <= end; i++) pages.push(i)
-    if (end < total - 1) pages.push("…")
-    pages.push(total)
-    return pages
-}
