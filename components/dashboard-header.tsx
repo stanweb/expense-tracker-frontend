@@ -10,6 +10,7 @@ import {
   LogOut,
   Menu,
   Receipt,
+  Target,
   TrendingUp,
   Wallet,
 } from 'lucide-react'
@@ -54,6 +55,7 @@ const navItems: NavItem[] = [
   { label: 'Categories', href: '/categories', icon: ListCheck },
   { label: 'Budgets', href: '/budgets', icon: Wallet },
   { label: 'Portfolios', href: '/portfolios', icon: Briefcase },
+  { label: 'Goals', href: '/goals', icon: Target },
   { label: 'Investments', href: '/investment-transactions', icon: LineChart },
   { label: 'Top Spenders', href: '/top-spenders', icon: TrendingUp },
 ]

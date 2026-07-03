@@ -69,6 +69,7 @@ export interface ApiTransaction {
     recipient: string
     categoryName?: string
     categoryIcon: string
+    transactionId:string
 }
 
 export interface UiTransaction {
@@ -165,4 +166,61 @@ export interface InvestmentTransactionQuery {
 
 export interface PortfolioTypes{
 
+}
+
+export type GoalStatus = "ACTIVE" | "PAUSED" | "COMPLETED" | "CANCELLED";
+
+export interface Goal {
+    id: number;
+    userId: number;
+    name: string;
+    description: string | null;
+    targetAmount: number;
+    savedAmount: number;
+    progress: number;
+    remaining: number;
+    startDate: string;
+    targetDate: string;
+    daysLeft: number;
+    status: GoalStatus;
+}
+
+export interface GoalSummary {
+    activeCount: number;
+    completedCount: number;
+    cancelledCount: number;
+    pausedCount: number;
+    totalTargetAmount: number;
+    totalSavedAmount: number;
+}
+
+export interface GoalPayload {
+    name?: string;
+    description?: string | null;
+    targetAmount?: number;
+    startDate?: string;
+    targetDate?: string;
+    status?: GoalStatus;
+}
+
+export interface GoalQuery {
+    page?: number;
+    size?: number;
+    sort?: string;
+}
+
+export interface GoalContribution {
+    id: number;
+    goalId: number;
+    transactionId: string | null;
+    amount: number;
+    contributedAt: string;
+    note: string | null;
+}
+
+export interface GoalContributionPayload {
+    amount: number;
+    contributedAt?: string;
+    transactionId?: string | null;
+    note?: string | null;
 }
