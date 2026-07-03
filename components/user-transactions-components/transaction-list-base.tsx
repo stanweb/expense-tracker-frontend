@@ -18,7 +18,7 @@ import { EditTransactionCategoryModal } from "@/components/user-transactions-com
 import { ConfirmDeleteTransactionModal } from "@/components/user-transactions-components/confirm-delete-transaction-modal";
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Search, Plus, Upload, Sparkles, X, Inbox, Receipt, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Plus, Upload, Sparkles, X, Inbox, Receipt, ChevronRight } from 'lucide-react';
 import aiAxioClient from "@/utils/apiClient";
 import { addJob, clearJob } from '@/store/jobs-slice';
 import axiosClient from "@/utils/apiClient";
@@ -26,6 +26,15 @@ import {setTransactionTrigger, setRange} from "@/store/date-slice";
 import { useToast} from "@/components/ui/ToastProvider";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
 import getPageNumbers from "@/utils/getPageNumbers";
 
 interface PagedResponse<T> {
@@ -418,19 +427,6 @@ export function TransactionListBase({ title, description, paginate = false, page
         updateQuery({ q: undefined, page: undefined });
     };
 
-    // ---- Pagination (server-side) ----
-    // For the dashboard the controls are hidden, so totalPages is just for
-    // defensive math; the rendered list is capped at `pageSize`.
-    const startIndex = !isDashboard && totalElements > 0 ? (page - 1) * pageSize + 1 : 0;
-    const endIndex = !isDashboard && displayedTransactions.length > 0
-        ? (page - 1) * pageSize + displayedTransactions.length
-        : 0;
-    const showingLabel = !isDashboard
-        ? (totalElements > 0 ? `Showing ${startIndex}–${endIndex} of ${totalElements}` : '')
-        : '';
-
-    const pageItems = !isDashboard ? getPageNumbers(page, totalPages || 1) : [];
-
     return (
         <Card className="bg-card overflow-hidden">
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -614,66 +610,80 @@ export function TransactionListBase({ title, description, paginate = false, page
                             )}
                         </>
                     ) : (
-                        <ScrollArea className="max-h-[70vh]">
-                            {loading && <TransactionListSkeleton count={6} />}
-                            {error && (
-                                <Alert variant="destructive" className="py-2">
-                                    <AlertDescription className="text-sm">{error}</AlertDescription>
-                                </Alert>
-                            )}
-                            {!loading && !error && hasNoDataAtAll && (
-                                <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-                                    <Receipt className="h-10 w-10 text-muted-foreground/50" />
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium text-foreground">No transactions yet.</p>
-                                        <p className="text-xs text-muted-foreground">Add your first transaction or upload a statement to get started.</p>
+                        <>
+                            <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground pb-2">
+                                <p>
+                                    {loading
+                                        ? "Loading…"
+                                        : `${totalElements} ${totalElements === 1 ? "transaction" : "transactions"}`}
+                                </p>
+                                {totalPages > 1 && (
+                                    <p>
+                                        Page {page} of {totalPages}
+                                    </p>
+                                )}
+                            </div>
+                            <ScrollArea className="max-h-[70vh]">
+                                {loading && <TransactionListSkeleton count={6} />}
+                                {error && (
+                                    <Alert variant="destructive" className="py-2">
+                                        <AlertDescription className="text-sm">{error}</AlertDescription>
+                                    </Alert>
+                                )}
+                                {!loading && !error && hasNoDataAtAll && (
+                                    <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                                        <Receipt className="h-10 w-10 text-muted-foreground/50" />
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium text-foreground">No transactions yet.</p>
+                                            <p className="text-xs text-muted-foreground">Add your first transaction or upload a statement to get started.</p>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2 justify-center">
+                                            <Button size="sm" onClick={() => setShowAddRawTransactionModal(true)}>
+                                                <Plus className="h-4 w-4" />
+                                                Add transaction
+                                            </Button>
+                                            <Button size="sm" variant="outline" onClick={() => setShowBulkUploadModal(true)}>
+                                                <Upload className="h-4 w-4" />
+                                                Upload statement
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-wrap gap-2 justify-center">
-                                        <Button size="sm" onClick={() => setShowAddRawTransactionModal(true)}>
-                                            <Plus className="h-4 w-4" />
-                                            Add transaction
+                                )}
+                                {!loading && !error && isFilteredEmpty && (
+                                    <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                                        <Inbox className="h-10 w-10 text-muted-foreground/50" />
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium text-foreground">No transactions match your filters.</p>
+                                            <p className="text-xs text-muted-foreground">Try a different keyword or widen the date range.</p>
+                                        </div>
+                                        <Button size="sm" variant="outline" onClick={handleClearFilters}>
+                                            <X className="h-4 w-4" />
+                                            Clear filters
                                         </Button>
-                                        <Button size="sm" variant="outline" onClick={() => setShowBulkUploadModal(true)}>
-                                            <Upload className="h-4 w-4" />
-                                            Upload statement
+                                    </div>
+                                )}
+                                {!loading && !error && displayedTransactions.length > 0 && (
+                                    <div className="space-y-3">
+                                        {displayedTransactions.map((transaction) => (
+                                            <TransactionItem
+                                                key={transaction.id}
+                                                transaction={transaction}
+                                                onEdit={handleEditClick}
+                                                onDelete={handleDeleteClick}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {!loading && !error && paginate && totalElements > 0 && displayedTransactions.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center gap-2 py-12 text-center text-muted-foreground">
+                                        <p className="text-sm">No transactions on this page.</p>
+                                        <Button size="sm" variant="outline" onClick={() => setPage(1)}>
+                                            Go to first page
                                         </Button>
                                     </div>
-                                </div>
-                            )}
-                            {!loading && !error && isFilteredEmpty && (
-                                <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-                                    <Inbox className="h-10 w-10 text-muted-foreground/50" />
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium text-foreground">No transactions match your filters.</p>
-                                        <p className="text-xs text-muted-foreground">Try a different keyword or widen the date range.</p>
-                                    </div>
-                                    <Button size="sm" variant="outline" onClick={handleClearFilters}>
-                                        <X className="h-4 w-4" />
-                                        Clear filters
-                                    </Button>
-                                </div>
-                            )}
-                            {!loading && !error && displayedTransactions.length > 0 && (
-                                <div className="space-y-3">
-                                    {displayedTransactions.map((transaction) => (
-                                        <TransactionItem
-                                            key={transaction.id}
-                                            transaction={transaction}
-                                            onEdit={handleEditClick}
-                                            onDelete={handleDeleteClick}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                            {!loading && !error && paginate && totalElements > 0 && displayedTransactions.length === 0 && (
-                                <div className="flex flex-col items-center justify-center gap-2 py-12 text-center text-muted-foreground">
-                                    <p className="text-sm">No transactions on this page.</p>
-                                    <Button size="sm" variant="outline" onClick={() => setPage(1)}>
-                                        Go to first page
-                                    </Button>
-                                </div>
-                            )}
-                        </ScrollArea>
+                                )}
+                            </ScrollArea>
+                        </>
                     )}
                 </div>
 
@@ -698,54 +708,63 @@ export function TransactionListBase({ title, description, paginate = false, page
                     </div>
                 )}
 
-                {paginate && (
-                    <div className="mt-4 flex flex-col-reverse items-center justify-between gap-3 border-t pt-4 sm:flex-row">
-                        <p className="text-xs text-muted-foreground">{showingLabel}</p>
-                        <nav aria-label="Pagination" className="flex items-center gap-1">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setPage(Math.max(1, page - 1))}
-                                disabled={page <= 1 || loading}
-                                aria-label="Previous page"
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                                <span className="hidden sm:inline">Previous</span>
-                            </Button>
-                            {pageItems.map((item, idx) =>
-                                item === '…' ? (
-                                    <span
-                                        key={`ellipsis-${idx}`}
-                                        aria-hidden
-                                        className="flex h-9 w-9 items-center justify-center text-muted-foreground"
-                                    >
-                                        …
-                                    </span>
-                                ) : (
-                                    <Button
-                                        key={item}
-                                        variant={item === page ? 'outline' : 'ghost'}
-                                        size="icon"
-                                        onClick={() => setPage(item)}
-                                        disabled={loading}
-                                        aria-current={item === page ? 'page' : undefined}
-                                        aria-label={`Go to page ${item}`}
-                                    >
-                                        {item}
-                                    </Button>
-                                )
-                            )}
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setPage(Math.min(totalPages || 1, page + 1))}
-                                disabled={loading || page >= (totalPages || 1)}
-                                aria-label="Next page"
-                            >
-                                <span className="hidden sm:inline">Next</span>
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </nav>
+                {paginate && !isDashboard && totalPages > 1 && (
+                    <div className="pt-2">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            if (page > 1) setPage(page - 1)
+                                        }}
+                                        aria-disabled={page <= 1 || loading}
+                                        className={
+                                            page <= 1 || loading
+                                                ? "pointer-events-none opacity-50"
+                                                : "cursor-pointer"
+                                        }
+                                    />
+                                </PaginationItem>
+                                {getPageNumbers(page, totalPages).map((p, idx) =>
+                                    p === "…" ? (
+                                        <PaginationItem key={`ellipsis-${idx}`}>
+                                            <PaginationEllipsis />
+                                        </PaginationItem>
+                                    ) : (
+                                        <PaginationItem key={p}>
+                                            <PaginationLink
+                                                href="#"
+                                                isActive={p === page}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setPage(p)
+                                                }}
+                                                className="cursor-pointer"
+                                            >
+                                                {p}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    )
+                                )}
+                                <PaginationItem>
+                                    <PaginationNext
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            if (page < totalPages) setPage(page + 1)
+                                        }}
+                                        aria-disabled={page >= totalPages || loading}
+                                        className={
+                                            page >= totalPages || loading
+                                                ? "pointer-events-none opacity-50"
+                                                : "cursor-pointer"
+                                        }
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
                     </div>
                 )}
 
